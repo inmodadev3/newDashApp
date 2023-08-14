@@ -1,0 +1,41 @@
+.HeaderContainer{
+    position: absolute;
+    background-color: #2f3c87;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: white;
+    box-sizing: border-box;
+    padding: 1rem 3rem;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+}
+
+.HeaderBasicInfo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.HeaderNombreUsuario{
+    margin-left: 5rem;
+    font-size: 12px;
+}
+
+.HeaderBurguerOptions{
+    display: none;
+}
+
+@media(max-width:650px){
+    .HeaderBasicInfo{
+        display: none;
+    }
+
+    .HeaderBurguerOptions{
+        display: inline;
+    }
+}

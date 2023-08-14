@@ -1,0 +1,116 @@
+.Gestiones_Container{
+    display: flex;
+    position:fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    animation: loadComponent;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+}
+
+.Gestiones_Blur{
+    display: flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #2f3c87 ;
+    opacity: 0.5;
+    z-index: 1;
+}
+
+.Gestiones_info_Container{
+    width: 70%;
+    height: 70%;
+    background-color: white;
+    z-index: 2;
+    padding: 2rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px 0px black;
+}
+
+.containerTableGestiones{
+    overflow-y: scroll;
+    max-height: 80%;
+}
+
+.containerTableGestiones::-webkit-scrollbar{
+    width: 5px;
+}
+
+.containerTableGestiones::-webkit-scrollbar-thumb{
+    background-color: #2f3c87;
+}
+
+.tableGestiones td {
+    font-size: 14px;
+}
+
+.AgregarGestionesContainer{
+    display: flex;
+    width: 100% ;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.fixed_gestion{
+    width: 150px;
+}
+
+.inputGestion{
+    flex: 1;
+}
+
+.inputGestion > input {
+    width: 90%;
+    padding: 0.625rem 0.625rem;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid gray;
+}
+
+.inputGestion > input:focus {
+   box-shadow: 0 0 5px 1px #2f3c87;
+}
+
+.fixed_gestion > select {
+    width: 90%;
+    padding: 0.625rem 1rem;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid gray;
+}
+
+.fixed_gestion:last-child{
+    display: flex;
+    justify-content: center;
+}
+
+.fixed_gestion:last-child > button{
+    width: 120px;
+    padding: 0.625rem 0;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid gray;
+    background-color: #2f3c87;
+    color: white;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.fixed_gestion:last-child > :hover{
+    transform: scale(1.05);
+}
+
+@keyframes loadComponent {
+    0%{
+        opacity:0
+    }
+    100%{
+        opacity: 1;
+    }
+}

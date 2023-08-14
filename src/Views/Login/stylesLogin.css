@@ -1,0 +1,131 @@
+.loginContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 3rem 1rem;
+    padding-bottom: 10rem;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.loginFormContainer{
+    border-radius: 10px;
+    border: 2px solid #2f3c87;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    height: 70vh;
+    background-color: #fcfcfc;
+}
+
+.loginFormHeader{
+    width: 100%;
+    text-align: center;
+    background-color: #2f3c87;
+    color: white;
+    font-weight: bold;
+    padding: 1rem 0;
+   
+}
+
+.loginInputContainer{
+    position: relative;
+    overflow: hidden;
+    padding: 1rem 0;
+    width: 80%;
+    margin-top: 1rem;
+}
+
+label{
+    cursor: default;
+}
+
+.loginTxtLabel{
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    transition: 0.1s all ease-in-out;
+    padding-left: .3rem;
+    font-size: 16px;
+    color: #434343;
+}
+
+.widthContainer{
+    width: 40%;
+}
+
+.loginTxtLabel > span{
+    display: block;
+    transform-origin: bottom left;
+}
+
+.loginInput{
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #4e7fb5;
+    width: 100%;
+    padding-bottom: 0.5rem;
+    position: relative;
+    background: transparent;
+    font-size: 16px;
+    padding-left: 0.3rem;
+    
+}
+
+.loginTxtLabel--focus{
+    transform: translateY(-1.01rem);
+    font-size: 12px;
+    color: #616161;
+    padding-left: 0;
+
+}
+
+.loginFocus{
+    border-bottom: 2px solid #ed6c08;
+}
+
+.bntLogin{
+    background-color: #2f3c87;
+    color: #FFFFFF;
+    outline: none;
+    border: none;
+    margin: 1rem 0;
+    padding: 0.825rem 1.25rem;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.bntLogin:hover{
+    opacity: 0.8;
+}
+
+@media(max-width:1200px){
+    .widthContainer{
+        width: 60%;
+    }
+
+}
+
+@media(max-width:800px){
+    .widthContainer{
+        width: 80%;
+    }
+
+    .loginContainer{
+        padding: 5rem 0;
+    }
+}
+
+@media(max-width:600px){
+    .widthContainer{
+        width: 90%;
+    }
+
+}

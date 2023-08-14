@@ -1,0 +1,95 @@
+.btnContainer{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    
+}
+
+.btnContainer > button{
+    padding: 1rem;
+    border-radius: 3px;
+    outline: none;
+    border: 1px solid gray;
+    cursor: pointer;
+    margin-top: 1rem;
+    background-color: #2f3c87;
+    color: white;
+    transition: transform .3s ease;
+}
+
+.btnContainer > button:hover{
+    transform: scale(1.2);
+}
+
+.compra_contenedor{
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border: 1px solid gray;
+    padding: 5rem ;
+    background-color: #5d9ac5;
+    color: #FFFFFF;
+}
+
+.btnCargar_contenedor{
+    margin-top: 20px;
+}
+
+.btnCargar_contenedor button{
+    background-color: #2f3c87;
+    color: white;
+    padding: 0.625rem;
+    border: none;
+    outline: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: transform .3s ease;
+    display: block;
+    width: 100%
+}
+
+.btnCargar_contenedor > button:hover{
+    transform: scale(1.2);
+}
+
+
+.compra_contenedor input{
+    width: 95% !important;
+}
+
+.inputFile{
+    position: relative;
+    display: inline-block;
+}
+
+.inputFile::before{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    content: 'Seleccionar';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    cursor: pointer;
+
+}
+
+.inputFile input[type="file"]{
+    opacity: 0;
+    width: 200px;
+    height: 32px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+:root{
+    --fn:"Seleccionar Archivo"
+}
+
+.inputFile::before{
+    white-space: nowrap;
+    content: var(--fn);
+}

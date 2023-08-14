@@ -1,0 +1,15 @@
+.table_portafolio th, .table_portafolio td {
+    min-width: 1px !important;
+  }
+
+.portafolio_options{
+    cursor: pointer;
+}
+
+.optionP{
+    transition: transform .15s ease-in;
+}
+
+.optionP:hover{
+    transform: scale(1.4);
+}

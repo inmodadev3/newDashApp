@@ -1,0 +1,202 @@
+.MenuContainer{
+    height: 100vh;
+    background-color: #2f3c87;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 260px;
+    box-sizing: border-box;
+    overflow-y: scroll;
+    font-size: 14px;
+    color: white;
+    transition: all .5s ease-in;
+    z-index: 100;
+}
+
+.MenuContainer::-webkit-scrollbar{
+    width: 0px;
+}
+
+/* .MenuContainer::-webkit-scrollbar-thumb{
+    background-color:#75b628 ;
+} */
+
+.NameEmpleado{
+    font-size: 10px;
+    margin-top: 1rem;
+    text-decoration: underline;
+}
+
+.MenuHeader{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+    background-color: #2f3c87;
+    color: white;
+    font-weight: bold;
+    flex-direction: column;
+    height: auto;
+}
+
+.logoInmodaFantasy{
+    border-radius: 100%;
+    width: 140px;
+    height: 140px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.logoInmodaFantasy >img{
+    width: 80%;
+}
+
+nav > div{
+    padding: 1.5rem 1rem;
+}
+
+nav>div:hover{
+    background-color: #5d9ac5;
+    cursor: pointer;
+}
+
+.MenuOption{
+    display: flex;
+    align-items: center;
+}
+
+.MenuOption > span{
+    padding-left: 1rem;
+}
+
+.CerrarSesion{
+    display: flex;
+    padding: 1rem 0;
+    justify-content: center;
+}
+
+.CerrarSesion >span{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.dpNone{
+    display: none;
+}
+
+.MenuSelect{
+    background-color: #75b628;
+}
+
+.SubMenuSelect{
+    background-color: #75b628 !important;
+    color: white !important;
+}
+
+.SubMenuOption:hover{
+    background-color: #5d9ac5 !important;
+    cursor: pointer;
+}
+
+.burguerView{
+    cursor: pointer;
+}
+
+.containerBurguer{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2f3c87;
+    height: 60px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all .5s ease-in;
+    transform: translateY(0);
+    padding: 0 3rem;
+    box-sizing: border-box;
+    z-index: 100;
+
+}
+
+.containerBurguerClose{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2f3c87;
+    height: 60px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all .5s ease-in;
+    transform: translateY(-100%);
+    padding: 0 3rem;
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+.arrowCloseView{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+}
+
+.ViewMenu{
+    transform: translateX(0);
+}
+
+.CloseMenu{
+    transform: translateX(-100%);
+}
+
+.DashNameMenuClose{
+    z-index: 99;
+    color: white;
+    font-size:20px ;
+    font-weight: bold;
+}
+
+.NameEmpleadoMenuClose{
+    top: 10px;
+    z-index: 99;
+    color: white;
+    font-size:12px ;
+    font-weight: bold;
+}
+
+.SubMenuOption {
+    padding: 20px 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  
+  .SubMenuOption > svg {
+    margin-right: 10px;
+  }
+  
+  .SubMenuOption > span {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+
+
+
+@media(max-width:650px){
+    .MenuContainer{
+        width: 100%;
+    }
+
+    .NameEmpleadoMenuClose{
+        display: none;
+    }
+}
+

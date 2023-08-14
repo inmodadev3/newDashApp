@@ -1,0 +1,35 @@
+.TablePedidosContainer{
+    overflow-y: scroll;
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 150px);
+}
+
+.TablePedidosContainer::-webkit-scrollbar{
+    width: 8px;
+}
+
+.TablePedidosContainer::-webkit-scrollbar-thumb{
+    background-color: #2f3c87 ;
+}
+
+.buscadorPedidosContainer{
+    padding: 1rem 0;
+}
+
+.buscadorPedidos{
+    padding: 0.45rem 0.625rem;
+    width: 350px;
+    outline: none;
+    border-radius: 5px;
+    font-size: 16px;
+
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+input[type=number] { -moz-appearance:textfield; }
