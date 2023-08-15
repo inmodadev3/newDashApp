@@ -27,7 +27,7 @@ export const ProductoCard: React.FC<{ producto: IArrayProductos }> = ({ producto
         <>
             <div className="flex flex-col lg:flex-row w-full max-w-2xl h-full justify-between border-2 border-gray-300 rounded">
                 <figure
-                    className="bg-white w-full h-80 lg:w-1/2 cursor-pointer flex border-gray-400 border-b-2 lg:border-r-2 lg:border-b-0 "
+                    className="bg-white w-full lg:w-1/2 cursor-pointer flex border-gray-400 border-b-2 lg:border-r-2 lg:border-b-0 h-full"
                     onClick={() => {
                         setViewImage(true)
                         setimagenCount(producto.productoImg !== null ? URLIMAGENESPRODUCTOS + producto.productoImg : ImagenNotFound)
@@ -97,7 +97,7 @@ export const ProductoCard: React.FC<{ producto: IArrayProductos }> = ({ producto
                                 <div
                                     key={imagen.StrArchivo}
                                     onClick={() => { setimagenCount(URLIMAGENESPRODUCTOS + imagen.StrArchivo) }}
-                                    className={`imagenDiv ${URLIMAGENESPRODUCTOS + imagen.StrArchivo === imagenCount ? "selected" : ""}`}
+                                    className={`imagenDiv ${URLIMAGENESPRODUCTOS + imagen.StrArchivo === imagenCount ? "selected" : "bg-slate-700 border-slate-300"} `}
                                 >
                                 </div>
                             ))

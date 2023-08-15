@@ -79,8 +79,7 @@ export const InfoClientesPortafolio: React.FC<InfoProps> = ({ setviewInfoCliente
                         <p className='font-bold text-lg'>{dataCliente.nombre}</p>
                         <div className='flex items-center mt-5'>
                             <span className='mr-5'><HiIdentification size={20} /></span>
-                            <span className='mr-0 text-sm'>{dataCliente.tipoId}</span>
-                            <span>-{dataCliente.idTercero}</span>
+                            <span>{dataCliente.tipoId} - {dataCliente.idTercero}</span>
                         </div>
                         {/* {
                             (dataCliente.nomCcial).toString().trim() !== "" &&(

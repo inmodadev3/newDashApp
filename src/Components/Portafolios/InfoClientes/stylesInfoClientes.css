@@ -9,6 +9,10 @@
     justify-content: space-between;
 }
 
+.infoCliente_Container::-webkit-scrollbar{
+    width: 1px;
+}
+
 
 .User_Photo{
     width: 90px;
