@@ -1,4 +1,4 @@
-import { BrowserRouter,Routes,Route } from "react-router-dom"
+import { HashRouter,Routes,Route } from "react-router-dom"
 import { Login } from "../Views/Login/Login"
 import App from "../App"
 import Home from "../Views/home/Home"
@@ -10,7 +10,7 @@ import { CargarContenedor } from "../Views/Compras/CargarContenedor/CargarConten
 
 const MainRouters = () => {
     return(
-        <BrowserRouter>
+        <HashRouter>
             <Routes>
                 <Route path="/" Component={App}/>
                 <Route path="/login" Component={Login}/>
@@ -22,7 +22,7 @@ const MainRouters = () => {
 
                 <Route path="/pedidos/pdf/:pedidoId" Component={PedidosPDF}/>
             </Routes>
-        </BrowserRouter>
+        </HashRouter>
     )
 }
 
