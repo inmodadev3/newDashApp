@@ -28,7 +28,7 @@ export const Portafolios: React.FC = () => {
     const [viewGestionesCliente, setviewGestionesCliente] = useState(false)
     const [viewInfoCliente, setviewInfoCliente] = useState(false)
     const [idClienteGestiones, setidClienteGestiones] = useState('')
-    const { setMenuSelected,setSubmenuSelected } = useContext(MenuSelectedContext)
+    const { setMenuSelected, setSubmenuSelected } = useContext(MenuSelectedContext)
     const navigate = useNavigate();
 
     if (userData) {
@@ -47,7 +47,7 @@ export const Portafolios: React.FC = () => {
             ConsultarPrimeraListaClientesXVendedor()
         }
     }, [userInfo])
-    
+
 
     const ConsultarPrimeraListaClientesXVendedor = () => {
         if (userInfo !== null) {
@@ -58,7 +58,6 @@ export const Portafolios: React.FC = () => {
                 }).catch((err) => {
                     console.error(err)
                 })
-
         }
     }
 
@@ -67,11 +66,11 @@ export const Portafolios: React.FC = () => {
         <AppLayout>
             {
                 !loadingData ? (
-                    datosClientes !== null && userInfo !== null? (
+                    datosClientes !== null && userInfo !== null ? (
                         <>
-                            <BuscadorPortafolios setdatosClientes={setdatosClientes} cedulaVendedor={userInfo.strIdVendedor}/>
+                            <BuscadorPortafolios setdatosClientes={setdatosClientes} cedulaVendedor={userInfo.strIdVendedor} />
                             <div className='TablePedidosContainer'>
-                                <TablePortafolios data={datosClientes} setviewGestionesCliente={setviewGestionesCliente} setidClienteGestiones={setidClienteGestiones} setviewInfoCliente={setviewInfoCliente}/>
+                                <TablePortafolios data={datosClientes} setviewGestionesCliente={setviewGestionesCliente} setidClienteGestiones={setidClienteGestiones} setviewInfoCliente={setviewInfoCliente} />
                             </div>
                         </>
                     ) :
@@ -82,12 +81,12 @@ export const Portafolios: React.FC = () => {
             }
             {
                 viewGestionesCliente && (
-                    <GestionesClientes cedula={idClienteGestiones} setviewGestionesCliente={setviewGestionesCliente} idLogin={userInfo !== null ? userInfo.idLogin:75}/>
+                    <GestionesClientes cedula={idClienteGestiones} setviewGestionesCliente={setviewGestionesCliente} idLogin={userInfo !== null ? userInfo.idLogin : 75} />
                 )
             }
             {
-                viewInfoCliente&&(
-                    <InfoClientesPortafolio setviewInfoCliente={setviewInfoCliente} cedula={idClienteGestiones}/>
+                viewInfoCliente && (
+                    <InfoClientesPortafolio setviewInfoCliente={setviewInfoCliente} cedula={idClienteGestiones} />
                 )
             }
 
