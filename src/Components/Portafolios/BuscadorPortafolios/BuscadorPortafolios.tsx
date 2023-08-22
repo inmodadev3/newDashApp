@@ -75,12 +75,11 @@ export const BuscadorPortafolios: React.FC<propsBuscador> = ({ setdatosClientes,
             }).catch((err) => {
                 console.error(err)
             })
-        }else{
+        } else {
             consultarListaClientesXVendedorXNombre()
         }
 
     }
-
 
     const BuscarCliente = () => {
         switch (selectValue) {
@@ -97,6 +96,16 @@ export const BuscadorPortafolios: React.FC<propsBuscador> = ({ setdatosClientes,
                 break;
         }
     }
+
+    arrayCiudades?.sort((a, b) => {
+        if (a.StrDescripcion < b.StrDescripcion) {
+            return -1;
+        }
+        if (a.StrDescripcion > b.StrDescripcion) {
+            return 1;
+        }
+        return 0;
+    });
 
     return (
         <section className='pt-4'>
