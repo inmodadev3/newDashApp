@@ -1,0 +1,10 @@
+.container-catalogo{
+    overflow-y: scroll;
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 20px);
+}
+
+.container-catalogo::-webkit-scrollbar{
+    width: 0px;
+}

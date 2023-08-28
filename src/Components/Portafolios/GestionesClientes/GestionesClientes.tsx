@@ -30,7 +30,6 @@ export const GestionesClientes: React.FC<PropsGestiones> = ({ cedula, setviewGes
     const ConsultarGestionesClientes = () => {
         axios.get(`/portafolios/gestiones/${cedula}`)
             .then((response) => {
-                console.log(response)
                 setgestionesCliente(response.data.data)
             }).catch((err) => {
                 console.log(err)

@@ -1,5 +1,5 @@
 import axios from '../../Utils/BaseUrlAxio.ts'
-import { AiOutlineHome, AiOutlineSetting, AiOutlineShopping, AiOutlineShop, AiOutlineWallet, AiOutlineUser, AiOutlineSearch, AiOutlineArrowLeft, AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+import { AiOutlineHome,AiOutlineFilePdf, AiOutlineSetting, AiOutlineShopping, AiOutlineShop, AiOutlineWallet, AiOutlineUser, AiOutlineSearch, AiOutlineArrowLeft, AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GoContainer } from "react-icons/go";
 import { HiOutlineDocumentReport, HiOutlineBriefcase } from "react-icons/hi";
@@ -93,7 +93,9 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
     VENDEDORES: 6,
     INFORMES: 7,
     PORTAFOLIOS: 8,
-    PRODUCTOS: 9
+    PRODUCTOS: 9,
+    CATALOGOS_PDF:10,
+    VER_CATALOGOS_PDF:11,
   }
 
   const SubMenuSections = {
@@ -115,7 +117,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
 
           <MenuItemRender
               icon={<AiOutlineHome size={22} />}
-              label="Inicio"
+              label="INICIO"
               selected={menuSelected === MenuSections.INICIO}
               onClick={() => {
                 navigate('/home')
@@ -234,10 +236,34 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
               <MenuItemRender
                 icon={<HiOutlineBriefcase size={22} />}
-                label="Portafolios"
+                label="PORTAFOLIOS"
                 selected={menuSelected === MenuSections.PORTAFOLIOS}
                 onClick={() => {
                   navigate('/portafolios')
+                }}
+              />
+            )
+          }
+          {
+            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
+              <MenuItemRender
+                icon={<AiOutlineFilePdf size={22} />}
+                label="CATALOGOS PDF'S"
+                selected={menuSelected === MenuSections.CATALOGOS_PDF}
+                onClick={() => {
+                  navigate('/catalogos')
+                }}
+              />
+            )
+          }
+          {
+            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
+              <MenuItemRender
+                icon={<AiOutlineFilePdf size={22} />}
+                label="VER PDFS"
+                selected={menuSelected === MenuSections.VER_CATALOGOS_PDF}
+                onClick={() => {
+                  navigate('/ver/catalogos')
                 }}
               />
             )
@@ -247,7 +273,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 43) && (
               <MenuItemRender
                 icon={<AiOutlineSearch size={22} />}
-                label="Productos"
+                label="PRODUCTOS"
                 selected={menuSelected === MenuSections.PRODUCTOS}
                 onClick={() => {
                   navigate('/productos')

@@ -10,7 +10,6 @@ interface IDatosPropsTemplatePedidos {
 
 export const TemplatePedidos: React.FC<IDatosPropsTemplatePedidos> = ({ datos }) => {
 
-    console.log(datos)
     return (
         <Document>
             <Page size={'LETTER'} style={styles.page}>

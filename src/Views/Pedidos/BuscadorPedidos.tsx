@@ -13,7 +13,6 @@ export const BuscadorPedidos: React.FC<IBuscadorProps> = ({ ConsultarPedidosEnPr
     const [nroPedido, setnroPedido] = useState<string>('')
 
     const validarId = () => {
-        console.log(nroPedido)
         if (nroPedido.toString().trim() !== "") {
             ConsultarPedidosXId()
         } else {

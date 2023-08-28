@@ -7,6 +7,8 @@ import { Pedidos } from "../Views/Pedidos/Pedidos"
 import { PedidosPDF } from "../Views/pdfs/pedidos/PedidosPDF"
 import { Portafolios } from "../Views/Portafolios/Portafolios"
 import { CargarContenedor } from "../Views/Compras/CargarContenedor/CargarContenedor"
+import { Catalogos } from "../Views/Catalogos_Pdf/Catalogos"
+import { Ver_Catalogos } from "../Views/VerCatalogos/Ver_Catalogos"
 
 const MainRouters = () => {
     return(
@@ -19,6 +21,8 @@ const MainRouters = () => {
                 <Route path="/Pedidos" Component={Pedidos}/>
                 <Route path="/portafolios" Component={Portafolios}/>
                 <Route path="/compras/cargar" Component={CargarContenedor}/>
+                <Route path="/catalogos" Component={Catalogos}/>
+                <Route path="/ver/catalogos" Component={Ver_Catalogos}/>
 
                 <Route path="/pedidos/pdf/:pedidoId" Component={PedidosPDF}/>
             </Routes>
