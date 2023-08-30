@@ -31,8 +31,12 @@
   }
   
   .table tr:nth-child(even) {
-    background-color: #75b628;
-    color: white;
+    background-color: #b7ff62;
+    color: black;
+  }
+
+  .table tr:hover{
+    background-color: #bec8ff;
   }
 
 .ViewPedido{

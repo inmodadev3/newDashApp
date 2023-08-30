@@ -2,7 +2,7 @@ import NotFound from '../../assets/img/img-no-disponible.jpg'
 import * as XLSX from 'xlsx';
 
 
-export const URLAPI = 'http://localhost:3000/api/v1'/* 'http://192.168.1.174:8083/api/v1' */
+export const URLAPI = 'http://192.168.1.174:8083/api/v1'
 export const URLIMAGENESPRODUCTOS = 'http://10.10.10.128/ownCloud/fotos_nube/FOTOS%20%20POR%20SECCION%20CON%20PRECIO'
 export const ImagenNotFound = NotFound
 
