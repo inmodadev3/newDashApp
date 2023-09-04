@@ -36,7 +36,7 @@ export const GestionesClientes: React.FC<PropsGestiones> = ({ cedula, setviewGes
             })
     }
 
-    const Gestiones = ["Llamada", "Envio de Fotos", "Envio de Portafolio", "Venta en sala", "Venta en Dash", "Visita a cliente", "Pos venta", "Deshabilitar", "Varios"]
+    const Gestiones = ["Llamada", "Envio de Fotos", "Envio de Portafolio", "Venta en sala", "Venta en Dash", "Visita a cliente", "Pos venta", "Deshabilitar", "Varios","Mensajes"]
 
 
     return (

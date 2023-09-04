@@ -8,6 +8,7 @@ import { MenuSelectedContext } from '../../Utils/UseContextProviders.tsx';
 import { MdAttachMoney } from "react-icons/md";
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState, useContext } from 'react'
+import logo from '../../../assets/img/INMODA.png'
 import './stylesMenu.css'
 
 interface IFilterPermisos {
@@ -108,7 +109,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
       <div className={`MenuContainer ${menuView ? "ViewMenu" : "CloseMenu"}`}>
         <div className='MenuHeader'>
           <div className='w-36 h-36 bg-white rounded-full mb-6 flex items-center justify-center'>
-            <img src="http://10.10.10.128/ownCloud/fotos_nube/INMODA.png" alt='logoInmoda' className="w-28"/>
+            <img src={logo} alt='logoInmoda' className="w-28"/>
           </div>
           <span>DASH</span>
           <span className='NameEmpleado'>{userInfo?.strNombreEmpleado}</span>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './stylesLogin.css'
 import axios from '../../Utils/BaseUrlAxio.ts'
 import { useNavigate } from 'react-router-dom'
+import logo from '../../../assets/img/INMODA.png'
 
 interface IUserInfoData {
     data: IDataResponseUser,
@@ -78,7 +79,7 @@ export const Login = () => {
                         <span>DASHBOARD</span>
                     </div>
                     <div style={{ width: '50%', display: 'flex', justifyContent: 'center', padding: '1rem 0' }}>
-                        <img src="http://10.10.10.128/ownCloud/fotos_nube/INMODA.png" alt='logoInmoda' width={'250px'} />
+                        <img src={logo} alt='logoInmoda' width={'250px'} />
                     </div>
                     <div className='loginInputContainer'>
                         <label>

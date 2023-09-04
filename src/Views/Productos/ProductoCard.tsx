@@ -23,6 +23,8 @@ export const ProductoCard: React.FC<{ producto: IArrayProductos }> = ({ producto
             })
     }
 
+    console.log(URLIMAGENESPRODUCTOS)
+
     return (
         <>
             <div className="flex flex-col lg:flex-row w-full max-w-2xl h-full justify-between border-2 border-gray-300 rounded">

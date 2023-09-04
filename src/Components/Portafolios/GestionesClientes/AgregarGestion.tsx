@@ -59,6 +59,7 @@ export const AgregarGestion: React.FC<PropsAddGestion> = ({ cedula, idLogin, Con
                         <option value={6}>Pos venta</option>
                         <option value={7}>Deshabilitar</option>
                         <option value={8}>Varios</option>
+                        <option value={9}>Mensajes</option>
                     </select>
                 </div>
                 <div className='fixed_gestion'>
