@@ -1,13 +1,18 @@
 .childrenContainer{
     margin-left: 280px;
     margin-right: 30px;
-    min-height: 100vh;
+    max-height: 100vh;
     transition: all .5s ease-in;
 }
+
 
 .menuCloseContainer{
     margin-left: 30px;
     margin-top: 65px;
+}
+
+*::-webkit-scrollbar{
+    width: 0px;
 }
 
 @media(max-width:400px){

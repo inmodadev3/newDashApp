@@ -1,5 +1,5 @@
 import axios from '../../Utils/BaseUrlAxio.ts'
-import { AiOutlineHome,AiOutlineFilePdf, AiOutlineSetting, AiOutlineShopping, AiOutlineShop, AiOutlineWallet, AiOutlineUser, AiOutlineSearch, AiOutlineArrowLeft, AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineFilePdf, AiOutlineSetting, AiOutlineShopping, AiOutlineShop, AiOutlineWallet, AiOutlineUser, AiOutlineSearch, AiOutlineArrowLeft, AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GoContainer } from "react-icons/go";
 import { HiOutlineDocumentReport, HiOutlineBriefcase } from "react-icons/hi";
@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect, useState, useContext } from 'react'
 import logo from '../../../assets/img/INMODA.png'
 import './stylesMenu.css'
+import { MenuSections, SubMenuSections } from './MenuSections.ts';
+import ROUTES_PATHS from '../../routers/Paths.ts';
 
 interface IFilterPermisos {
   idPermiso: number
@@ -20,15 +22,40 @@ interface MenuLateralProps {
   setmenuView: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const MenuItemRender = ({ icon, label, selected, onClick, iconOptional }: { icon: React.ReactNode, label: string, selected: boolean, onClick: () => any, iconOptional?: React.ReactNode }) => {
+  return (
+    <div className={`MenuOption ${selected ? 'MenuSelect' : ''}`} onClick={onClick}>
+      {icon}
+      <span>{label}</span>
+      <span style={{ marginLeft: '10px' }}>{iconOptional}</span>
+
+    </div>
+  )
+}
+
+const SubMenuItemRender = ({ icon, label, submenuSelected, onClick }: { icon: React.ReactNode, label: string, submenuSelected: boolean, onClick: () => any }) => {
+  return (
+    <div className={`SubMenuOption hover:bg-blue-700 ${submenuSelected ? 'bg-lime-700' : ""}`} onClick={onClick}>
+      {icon}
+      <span>{label}</span>
+    </div>
+  )
+
+}
+
+
 export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView }) => {
 
   const userData: string | null = localStorage.getItem('dataUser');
   let userInfo: IDataUser | null = null!;
   const [permisosArray, setpermisosArray] = useState([])
-  const navigate = useNavigate();
   const { menuSelected, submenuSelected } = useContext(MenuSelectedContext);
+  const navigate = useNavigate();
+
+  //VISUALIZACION DE SUBMENUS
   const [showAdminMenu, setShowAdminMenu] = useState(false);
   const [showComprasMenu, setShowComprasMenu] = useState(false);
+  const [showCatalogosMenu, setshowCatalogosMenu] = useState(false)
 
   if (userData) {
     userInfo = JSON.parse(userData);
@@ -64,77 +91,45 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
     navigate("/")
   }
 
-  const MenuItemRender = ({ icon, label, selected, onClick, iconOptional }: { icon: React.ReactNode, label: string, selected: boolean, onClick: () => any, iconOptional?: React.ReactNode }) => {
-    return (
-      <div className={`MenuOption ${selected ? 'MenuSelect' : ''}`} onClick={onClick}>
-        {icon}
-        <span>{label}</span>
-        <span style={{marginLeft:'10px'}}>{iconOptional}</span>
-  
-      </div>
-    )
-  }
-
-  const SubMenuItemRender = ({ icon, label, submenuSelected, onClick }: { icon: React.ReactNode, label: string, submenuSelected: boolean, onClick: () => any }) => {
-    return (
-      <div className={`SubMenuOption ${submenuSelected ? 'SubMenuSelect' : ""}`} onClick={onClick}>
-        {icon}
-        <span>{label}</span>
-      </div>
-    )
-
-  }
-
-  const MenuSections = {
-    INICIO: 1,
-    ADMINISTRADOR: 2,
-    COMPRAS: 3,
-    PEDIDOS: 4,
-    CARTERA: 5,
-    VENDEDORES: 6,
-    INFORMES: 7,
-    PORTAFOLIOS: 8,
-    PRODUCTOS: 9,
-    CATALOGOS_PDF:10,
-    VER_CATALOGOS_PDF:11,
-  }
-
-  const SubMenuSections = {
-    CARGAR_CONTENEDOR: 31,
-    LIQUIDAR: 32
-  }
-
   return (
     <>
       <div className={`MenuContainer ${menuView ? "ViewMenu" : "CloseMenu"}`}>
+
+        <div className='arrowCloseView' onClick={() => { setmenuView(false) }}>
+          <AiOutlineArrowLeft size={24} />
+        </div>
+
         <div className='MenuHeader'>
           <div className='w-36 h-36 bg-white rounded-full mb-6 flex items-center justify-center'>
-            <img src={logo} alt='logoInmoda' className="w-28"/>
+            <img src={logo} alt='logoInmoda' className="w-28" />
           </div>
           <span>DASH</span>
           <span className='NameEmpleado'>{userInfo?.strNombreEmpleado}</span>
         </div>
+
         <nav>
 
+          {/*MENU INICIO*/}
           <MenuItemRender
-              icon={<AiOutlineHome size={22} />}
-              label="INICIO"
-              selected={menuSelected === MenuSections.INICIO}
-              onClick={() => {
-                navigate('/home')
-              }}
+            icon={<AiOutlineHome size={22} />}
+            label="INICIO"
+            selected={menuSelected === MenuSections.INICIO}
+            onClick={() => {
+              navigate(ROUTES_PATHS.HOME)
+            }}
           />
 
+          {/*MENU ADMINISTRACION*/}
           {
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 19) && (
               <MenuItemRender
-                  icon={<AiOutlineSetting size={22} />}
-                  label="Administrador"
-                  selected={menuSelected === MenuSections.ADMINISTRADOR}
-                  onClick={() => {
-                    setShowAdminMenu(!showAdminMenu);
-                  }}
-                  iconOptional={showAdminMenu ? <AiFillCaretUp size={22} /> : <AiFillCaretDown size={22} />}
+                icon={<AiOutlineSetting size={22} />}
+                label="ADMINISTRADOR"
+                selected={menuSelected === MenuSections.ADMINISTRADOR}
+                onClick={() => {
+                  setShowAdminMenu(!showAdminMenu);
+                }}
+                iconOptional={showAdminMenu ? <AiFillCaretUp size={22} /> : <AiFillCaretDown size={22} />}
               />
             )
           }
@@ -146,93 +141,99 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
             </>
           )}
 
+          {/*MENU COMPRAS*/}
           {
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 1) && (
               <MenuItemRender
-                  icon={<AiOutlineShop size={22} />}
-                  label="Compras"
-                  selected={menuSelected === MenuSections.COMPRAS}
-                  onClick={() => {
-                    setShowComprasMenu(!showComprasMenu)
-                  }}
-                  iconOptional={showComprasMenu ? <AiFillCaretUp size={22} /> : <AiFillCaretDown size={22} />}
+                icon={<AiOutlineShop size={22} />}
+                label="COMPRAS"
+                selected={menuSelected === MenuSections.COMPRAS}
+                onClick={() => {
+                  setShowComprasMenu(!showComprasMenu)
+                }}
+                iconOptional={showComprasMenu ? <AiFillCaretUp size={22} /> : <AiFillCaretDown size={22} />}
               />
             )
           }
           {showComprasMenu && (
             <>
               <SubMenuItemRender
-                  icon={<GoContainer size={22} />}
-                  label={"Cargar Contenedor"}
-                  submenuSelected={submenuSelected === SubMenuSections.CARGAR_CONTENEDOR}
-                  onClick={() => {
-                    navigate('/compras/cargar')
-                  }}
+                icon={<GoContainer size={22} />}
+                label={"Cargar Contenedor"}
+                submenuSelected={submenuSelected === SubMenuSections.CARGAR_CONTENEDOR}
+                onClick={() => {
+                  navigate(ROUTES_PATHS.CARGAR_COMPRAS)
+                }}
               />
               <SubMenuItemRender
-                  icon={<MdAttachMoney size={22} />}
-                  label={"Liquidar"}
-                  submenuSelected={submenuSelected === SubMenuSections.LIQUIDAR}
-                  onClick={() => {
-                    navigate('/compras/cargar')
-                  }}
+                icon={<MdAttachMoney size={22} />}
+                label={"Liquidar"}
+                submenuSelected={submenuSelected === SubMenuSections.LIQUIDAR}
+                onClick={() => {
+                  navigate(ROUTES_PATHS.CARGAR_COMPRAS)
+                }}
               />
 
             </>
           )}
 
+          {/*MENU PEDIDOS*/}
           {
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 5) && (
               <MenuItemRender
                 icon={<AiOutlineShopping size={22} />}
-                label="Pedidos"
+                label="PEDIDOS"
                 selected={menuSelected === MenuSections.PEDIDOS}
                 onClick={() => {
-                  navigate('/pedidos')
+                  navigate(ROUTES_PATHS.PEDIDOS)
                 }}
               />
             )
           }
 
+          {/*MENU CARTERA*/}
           {
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 8) && (
               <MenuItemRender
                 icon={<AiOutlineWallet size={22} />}
-                label="Cartera"
+                label="CARTERA"
                 selected={menuSelected === MenuSections.CARTERA}
                 onClick={() => {
-                  navigate('/cartera')
+                  navigate(ROUTES_PATHS.HOME)
                 }}
               />
             )
           }
 
+          {/*MENU VENDEDORES*/}
           {
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 11) && (
               <MenuItemRender
                 icon={<AiOutlineUser size={22} />}
-                label="Vendedores"
+                label="VENDEDORES"
                 selected={menuSelected === MenuSections.VENDEDORES}
                 onClick={() => {
-                  navigate('/vendedores')
+                  navigate(ROUTES_PATHS.HOME)
                 }}
               />
             )
           }
 
+          {/*MENU INFORMES*/}
           {
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 15) && (
               <MenuItemRender
                 icon={<HiOutlineDocumentReport size={22} />}
-                label="Informes"
+                label="INFORMES"
                 selected={menuSelected === MenuSections.INFORMES}
                 onClick={() => {
-                  navigate('/informes')
+                  navigate(ROUTES_PATHS.HOME)
                 }}
               />
             )
           }
 
+          {/*MENU PORTAFOLIOS*/}
           {
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
               <MenuItemRender
@@ -240,36 +241,57 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
                 label="PORTAFOLIOS"
                 selected={menuSelected === MenuSections.PORTAFOLIOS}
                 onClick={() => {
-                  navigate('/portafolios')
+                  navigate(ROUTES_PATHS.PORTAFOLIOS)
                 }}
               />
             )
           }
+
+          {/*MENU CATALOGOS*/}
           {
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
               <MenuItemRender
                 icon={<AiOutlineFilePdf size={22} />}
-                label="CATALOGOS PDF'S"
-                selected={menuSelected === MenuSections.CATALOGOS_PDF}
+                label="CATALOGOS"
+                selected={menuSelected === MenuSections.CATALOGOS}
                 onClick={() => {
-                  navigate('/catalogos')
+                  setshowCatalogosMenu(!showCatalogosMenu)
                 }}
+                iconOptional={showCatalogosMenu ? <AiFillCaretUp size={22} /> : <AiFillCaretDown size={22} />}
               />
             )
           }
+
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
-              <MenuItemRender
-                icon={<AiOutlineFilePdf size={22} />}
-                label="VER PDFS"
-                selected={menuSelected === MenuSections.VER_CATALOGOS_PDF}
-                onClick={() => {
-                  navigate('/ver/catalogos')
-                }}
-              />
+            showCatalogosMenu && (
+              <>
+                {
+                  permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
+                    <SubMenuItemRender
+                      icon={<AiOutlineFilePdf size={22} />}
+                      label="Generar PDF'S"
+                      submenuSelected={submenuSelected === SubMenuSections.CATALOGOS_PDF}
+                      onClick={() => {
+                        navigate(ROUTES_PATHS.CATALOGOS)
+                      }}
+                    />
+                  )
+                }
+                {
+                  permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
+                    <SubMenuItemRender
+                      icon={<AiOutlineFilePdf size={22} />}
+                      label="Ver PDFS"
+                      submenuSelected={submenuSelected === SubMenuSections.VER_CATALOGOS_PDF}
+                      onClick={() => {
+                        navigate(ROUTES_PATHS.VER_CATALOGOS)
+                      }}
+                    />
+                  )
+                }
+              </>
             )
           }
-          
           {
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 43) && (
               <MenuItemRender
@@ -277,18 +299,15 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
                 label="PRODUCTOS"
                 selected={menuSelected === MenuSections.PRODUCTOS}
                 onClick={() => {
-                  navigate('/productos')
+                  navigate(ROUTES_PATHS.PRODUCTOS)
                 }}
               />
             )
           }
         </nav>
+
         <div className='CerrarSesion'>
           <span onClick={cerrarSesion}>Cerrar Sesion</span>
-        </div>
-
-        <div className='arrowCloseView' onClick={() => { setmenuView(false) }}>
-          <AiOutlineArrowLeft size={24} />
         </div>
       </div>
 

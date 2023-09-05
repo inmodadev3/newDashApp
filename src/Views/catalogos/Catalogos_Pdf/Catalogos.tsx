@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
-import axios from '../../Utils/BaseUrlAxio'
-import { AiFillFolderOpen, AiOutlineArrowLeft } from "react-icons/ai";
-import { AppLayout } from '../../Components/AppLayout/AppLayout'
-import { MenuSelectedContext } from '../../Utils/UseContextProviders'
-import { Loader } from '../../Components/LoadingPage/Loader';
-import { IDataUser } from '../../Utils/GlobalInterfaces.ts';
+import axios from '../../../Utils/BaseUrlAxio.ts'
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import { FcOpenedFolder } from "react-icons/fc";
+import { AppLayout } from '../../../Components/AppLayout/AppLayout.tsx'
+import { MenuSelectedContext } from '../../../Utils/UseContextProviders.tsx'
+import { Loader } from '../../../Components/LoadingPage/Loader.tsx';
+import { IDataUser } from '../../../Utils/GlobalInterfaces.ts';
 import { useNavigate } from 'react-router-dom';
-import { AgregarAlerta } from '../../Utils/Helpers';
-import { useAlert } from '../../hooks/useAlert';
+import { AgregarAlerta } from '../../../Utils/Helpers.ts';
+import { useAlert } from '../../../hooks/useAlert.tsx';
+import { MenuSections, SubMenuSections } from '../../../Components/MenuLateral/MenuSections.ts';
 import './styles.css'
 
 export const Catalogos: React.FC = () => {
@@ -34,8 +36,8 @@ export const Catalogos: React.FC = () => {
   }
 
   useEffect(() => {
-    setMenuSelected(10)
-    setSubmenuSelected(0)
+    setMenuSelected(MenuSections.CATALOGOS)
+    setSubmenuSelected(SubMenuSections.CATALOGOS_PDF)
   }, [])
 
   useEffect(() => {
@@ -151,7 +153,7 @@ export const Catalogos: React.FC = () => {
                   arrayPaths.map((path, index) => (
                     <div className='flex flex-col items-center relative' key={index}>
                       <input checked={checkedRoutes.includes(path)} onChange={(e) => { addRoutePDF(e.target.checked, path) }} type='checkbox' className='absolute left-0 lg:left-20 top-0 bottom-0 w-6' />
-                      <span onClick={() => { changeFolderRouteNext(path) }} className='max-w-sm flex justify-center items-center'><span className='cursor-pointer hover:scale-125 transition-all duration-300'><AiFillFolderOpen size={80} /></span></span>
+                      <span onClick={() => { changeFolderRouteNext(path) }} className='max-w-sm flex justify-center items-center'><span className='cursor-pointer hover:scale-125 transition-all duration-300'><FcOpenedFolder size={80} /></span></span>
                       <h1 className='text-center' key={index}>{path.replace(/%20/g, ' ').replace('/', '')}</h1>
                     </div>
                   ))

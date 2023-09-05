@@ -7,22 +7,23 @@ import { Pedidos } from "../Views/Pedidos/Pedidos"
 import { PedidosPDF } from "../Views/pdfs/pedidos/PedidosPDF"
 import { Portafolios } from "../Views/Portafolios/Portafolios"
 import { CargarContenedor } from "../Views/Compras/CargarContenedor/CargarContenedor"
-import { Catalogos } from "../Views/Catalogos_Pdf/Catalogos"
-import { Ver_Catalogos } from "../Views/VerCatalogos/Ver_Catalogos"
+import { Catalogos } from "../Views/catalogos/Catalogos_Pdf/Catalogos"
+import { Ver_Catalogos } from "../Views/catalogos/VerCatalogos/Ver_Catalogos"
+import ROUTES_PATHS from "./Paths"
 
 const MainRouters = () => {
     return(
         <HashRouter>
             <Routes>
                 <Route path="/" Component={App}/>
-                <Route path="/login" Component={Login}/>
-                <Route path="/home" Component={Home}/>
-                <Route path="/productos" Component={Productos}/>
-                <Route path="/Pedidos" Component={Pedidos}/>
-                <Route path="/portafolios" Component={Portafolios}/>
-                <Route path="/compras/cargar" Component={CargarContenedor}/>
-                <Route path="/catalogos" Component={Catalogos}/>
-                <Route path="/ver/catalogos" Component={Ver_Catalogos}/>
+                <Route path={ROUTES_PATHS.LOGIN} Component={Login}/>
+                <Route path={ROUTES_PATHS.HOME} Component={Home}/>
+                <Route path={ROUTES_PATHS.PRODUCTOS} Component={Productos}/>
+                <Route path={ROUTES_PATHS.PEDIDOS} Component={Pedidos}/>
+                <Route path={ROUTES_PATHS.PORTAFOLIOS} Component={Portafolios}/>
+                <Route path={ROUTES_PATHS.CARGAR_COMPRAS} Component={CargarContenedor}/>
+                <Route path={ROUTES_PATHS.CATALOGOS} Component={Catalogos}/>
+                <Route path={ROUTES_PATHS.VER_CATALOGOS} Component={Ver_Catalogos}/>
 
                 <Route path="/pedidos/pdf/:pedidoId" Component={PedidosPDF}/>
             </Routes>

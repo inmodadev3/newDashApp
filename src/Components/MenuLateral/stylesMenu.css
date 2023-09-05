@@ -1,5 +1,5 @@
 .MenuContainer{
-    height: 100vh;
+   height: 100vh;
     background-color: #2f3c87;
     position: absolute;
     left: 0;
@@ -96,10 +96,10 @@ nav>div:hover{
     color: white !important;
 }
 
-.SubMenuOption:hover{
+/* .SubMenuOption:hover{
     background-color: #5d9ac5 !important;
     cursor: pointer;
-}
+} */
 
 .burguerView{
     cursor: pointer;

@@ -1,13 +1,14 @@
-import axios from '../../Utils/BaseUrlAxio'
+import axios from '../../../Utils/BaseUrlAxio'
 import React, { useContext, useEffect, useState } from 'react'
-import { AppLayout } from '../../Components/AppLayout/AppLayout'
-import { MenuSelectedContext } from '../../Utils/UseContextProviders'
-import { IDataUser } from '../../Utils/GlobalInterfaces'
+import { AppLayout } from '../../../Components/AppLayout/AppLayout'
+import { MenuSelectedContext } from '../../../Utils/UseContextProviders'
+import { IDataUser } from '../../../Utils/GlobalInterfaces'
 import { useNavigate } from 'react-router-dom'
 import { PiFilePdfFill } from 'react-icons/pi'
 import { AiOutlineDownload } from 'react-icons/ai'
-import { URLAPI } from '../../Utils/Helpers'
+import { URLAPI } from '../../../Utils/Helpers'
 import moment from 'moment'
+import { MenuSections, SubMenuSections } from '../../../Components/MenuLateral/MenuSections'
 
 
 type TPDFSData = {
@@ -23,7 +24,7 @@ export const Ver_Catalogos: React.FC = () => {
 
     const [fileList, setfileList] = useState<TPDFSData[] | null>([])
 
-    const { setMenuSelected } = useContext(MenuSelectedContext)
+    const { setMenuSelected, setSubmenuSelected } = useContext(MenuSelectedContext)
     const navigate = useNavigate()
 
     if (userData) {
@@ -33,7 +34,8 @@ export const Ver_Catalogos: React.FC = () => {
     }
 
     useEffect(() => {
-        setMenuSelected(11)
+        setMenuSelected(MenuSections.CATALOGOS)
+        setSubmenuSelected(SubMenuSections.VER_CATALOGOS_PDF)
         consultarPDFSVendedor()
     }, [])
 

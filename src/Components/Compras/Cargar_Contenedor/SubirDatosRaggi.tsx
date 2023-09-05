@@ -33,25 +33,24 @@ export const SubirDatosRaggi: React.FC = () => {
 
 
   return (
-    <div className='h-full w-full flex items-center justify-center flex-col'>
-      <h2 className='pb-4 text-2xl font-bold'>Datos para subir contenedor</h2>
-      <div 
-        className='flex flex-col box-border border-2 border-gray-600 w-9/12 h-auto rounded-xl bg-[#2f3c87] px-12 py-16 text-white'
+    <section className='h-full w-full flex items-center justify-center flex-col px-2'>
+      {/* <h2 className='pb-4 text-2xl font-bold'>Datos para subir contenedor</h2> */}
+      <article 
+        className='flex flex-col my-4 box-border border-2 border-gray-600 h-auto rounded bg-gray-900 py-16 text-white px-6 lg:w-7/12 lg:px-12'
       >
-        <h3 className='mb-4 text-xl'>Archivo</h3>
-        <div className='inputFile bg-[#75b628]'>
-          <input type={'file'} onChange={(e) => {
+        <div className=' bg-sky-600'>
+          <input className='w-full' type={'file'} onChange={(e) => {
             const file = e.target.files && e.target.files[0];
             if (file) {
               setdocumento(file);
             }
           }} />
         </div>
-        {
+        {/* {
           documento?.name && (
             <p className='font-bold underline text-sm'>{documento.name}</p>
           )
-        }
+        } */}
         <div className='flex flex-col mt-6'>
           <span className='font-bold mb-2 text-xl'>Importación</span>
           <input 
@@ -73,13 +72,13 @@ export const SubirDatosRaggi: React.FC = () => {
         <div className='mt-12 flex justify-center items-center'>
           <button 
             onClick={CargarContenedor} 
-            className='bg-[#75b628] px-6 py-3 rounded border-none hover:translate-y-2 transition-all duration-300'
+            className='bg-[#de2479] px-6 py-3 rounded border-none hover:translate-y-1 transition-all duration-300'
           >
             Cargar Contenedor
           </button>
         </div>
-      </div>
+      </article>
       {alerts}
-    </div>
+    </section>
   )
 }

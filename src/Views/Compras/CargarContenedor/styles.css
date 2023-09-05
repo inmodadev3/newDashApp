@@ -1,0 +1,4 @@
+.cargar_contenedor_container{
+    max-height: 100vh;
+    overflow-y: scroll;
+}
