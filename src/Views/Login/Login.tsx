@@ -46,28 +46,34 @@ export const Login = () => {
 
 
     const LoginAction = () => {
-        if (usuario.trim() !== "" && password.trim() !== "") {
-            axios.post(`/usuarios/login`, {
-                strUsuario: usuario.toUpperCase(),
-                strClave: password.toUpperCase()
-            }).then((response) => {
-                if (response.status === 200) {
-                    let data: IUserInfoData = response.data.data
-                    let token: string = response.data.token
-                    let user: IUserInfoData = { ...data, token }
-                    localStorage.setItem('dataUser', JSON.stringify(user))
-                    navigate('/')
-                } else {
-                    console.log(response)
-                }
-            }).catch((err) => {
-                if(err.response.status === 404){
-                    alert("Usuario o contraseña incorrectos")
-                }
-            })
-        } else {
-            alert("Usuario y contraseña requeridos")
+        try {
+            if (usuario.trim() !== "" && password.trim() !== "") {
+                axios.post(`/usuarios/login`, {
+                    strUsuario: usuario.toUpperCase(),
+                    strClave: password.toUpperCase()
+                }).then((response) => {
+                    if (response.status === 200) {
+                        let data: IUserInfoData = response.data.data
+                        let token: string = response.data.token
+                        let user: IUserInfoData = { ...data, token }
+                        localStorage.setItem('dataUser', JSON.stringify(user))
+                        navigate('/')
+                    } else {
+                        console.log(response)
+                    }
+                }).catch((err) => {
+                    if (err.response.status === 404) {
+                        alert("Usuario o contraseña incorrectos")
+                    }
+                })
+            } else {
+                alert("Usuario y contraseña requeridos")
+            }
+        } catch (error) {
+            console.error(error)
+            alert("Ha ocurrido un error " + error)
         }
+
     }
 
     return (
