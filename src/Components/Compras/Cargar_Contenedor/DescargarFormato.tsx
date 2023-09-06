@@ -11,7 +11,7 @@ export const DescargarFormato: React.FC = () => {
 
 
     return (
-        <div className='flex justify-center lg:justify-end lg:px-4 lg:py-2'>
+        <div className='absolute w-auto lg:right-4 lg:top-3'>
             <button className='bg-[#de2479] px-6 py-3 text-white rounded hover:scale-110 transition-all duration-300' onClick={DescargarFormatoContenedor}>Descargar formato contenedor</button>
         </div>
     )

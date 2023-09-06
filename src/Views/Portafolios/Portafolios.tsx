@@ -40,6 +40,7 @@ export const Portafolios: React.FC = () => {
     useEffect(() => {
         setMenuSelected(8)
         setSubmenuSelected(0)
+        window.document.title = "Panel - Portafolio"
     }, [])
 
     useEffect(() => {

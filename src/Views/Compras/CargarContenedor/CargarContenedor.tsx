@@ -18,7 +18,7 @@ export const CargarContenedor: React.FC = () => {
 
   return (
     <AppLayout>
-      <section className='cargar_contenedor_container'>
+      <section className='relative max-h-screen overflow-y-scroll'>
         <DescargarFormato />
         <SubirDatosRaggi />
       </section>

@@ -73,20 +73,21 @@
     top: 0;
     bottom: 0;
     cursor: pointer;
+    width: 100%;
+    height: 100%;
 
 }
 
 .inputFile input[type="file"]{
     opacity: 0;
-    width: 200px;
     height: 32px;
     display: inline-block;
     cursor: pointer;
 }
 
-:root{
+/* :root{
     --fn:"Seleccionar Archivo"
-}
+} */
 
 .inputFile::before{
     white-space: nowrap;
