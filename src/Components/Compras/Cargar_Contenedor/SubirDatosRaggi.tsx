@@ -20,7 +20,7 @@ const ModalRaggi: React.FC<PropsModalRaggi> = ({ setviewModalDataRaggi, importac
   return (
 
     <ModalsLayout CloseEvent={setviewModalDataRaggi}>
-      <section className='flex flex-col bg-white z-20 w-1/4 h-2/4 justify-evenly items-center rounded-lg'>
+      <section className='flex flex-col bg-white z-20 w-10/12 sm:w-2/4 lg:w-2/6 h-2/4 justify-evenly items-center rounded-lg'>
         <div className='flex flex-col mt-6'>
           <span className='font-bold mb-2 text-xl'>Importación</span>
           <input
@@ -69,6 +69,11 @@ export const SubirDatosRaggi: React.FC = () => {
         datosContenedor.append('importacion', importacion);
         datosContenedor.append('raggi', raggi);
         const cargarDatosContenedor = await axios.post(`/compras/cargar/detalles`, datosContenedor);
+        console.log(cargarDatosContenedor.data)
+        setviewModalDataRaggi(false)
+        setRaggi("")
+        setImportacion("")
+        setdocumento(null)
         AgregarAlerta(createToast, cargarDatosContenedor.data.message, 'success')
       } else {
         AgregarAlerta(createToast, 'No se ha seleccionado ningún archivo', 'danger')
