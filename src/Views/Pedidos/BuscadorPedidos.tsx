@@ -24,13 +24,12 @@ export const BuscadorPedidos: React.FC<IBuscadorProps> = ({ ConsultarPedidosEnPr
         setloadData(true)
         axios.get(`/pedidos/id/${nroPedido}`)
             .then((response) => {
-                console.log(response)
                 if (response.data.success) {
                     setdatos(response.data.data)
                     setloadData(false)
                 }
             }).catch((err) => {
-                console.log(err)
+                console.error(err)
             })
     }
 

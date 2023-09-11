@@ -170,7 +170,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
                 label={"Liquidar"}
                 submenuSelected={submenuSelected === SubMenuSections.LIQUIDAR}
                 onClick={() => {
-                  navigate(ROUTES_PATHS.CARGAR_COMPRAS)
+                  navigate(ROUTES_PATHS.LIQUIDACION)
                 }}
               />
 

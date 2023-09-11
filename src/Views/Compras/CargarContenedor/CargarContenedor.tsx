@@ -4,14 +4,15 @@ import { MenuSelectedContext } from '../../../Utils/UseContextProviders'
 import { DescargarFormato } from '../../../Components/Compras/Cargar_Contenedor/DescargarFormato'
 import { SubirDatosRaggi } from '../../../Components/Compras/Cargar_Contenedor/SubirDatosRaggi'
 import './styles.css'
+import { MenuSections, SubMenuSections } from '../../../Components/MenuLateral/MenuSections'
 
 export const CargarContenedor: React.FC = () => {
 
   const { setMenuSelected, setSubmenuSelected } = useContext(MenuSelectedContext)
 
   useEffect(() => {
-    setMenuSelected(0)
-    setSubmenuSelected(31)
+    setMenuSelected(MenuSections.COMPRAS)
+    setSubmenuSelected(SubMenuSections.CARGAR_CONTENEDOR )
   }, [])
 
 

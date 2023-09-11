@@ -32,7 +32,7 @@ export const GestionesClientes: React.FC<PropsGestiones> = ({ cedula, setviewGes
             .then((response) => {
                 setgestionesCliente(response.data.data)
             }).catch((err) => {
-                console.log(err)
+                console.error(err)
             })
     }
 

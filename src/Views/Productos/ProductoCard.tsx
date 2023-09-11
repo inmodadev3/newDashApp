@@ -19,11 +19,9 @@ export const ProductoCard: React.FC<{ producto: IArrayProductos }> = ({ producto
             .then((response) => {
                 setarrayImagenes(response.data.data)
             }).catch((err) => {
-                console.log(err)
+                console.error(err)
             })
     }
-
-    console.log(URLIMAGENESPRODUCTOS)
 
     return (
         <>

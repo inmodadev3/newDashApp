@@ -69,7 +69,6 @@ export const SubirDatosRaggi: React.FC = () => {
         datosContenedor.append('importacion', importacion);
         datosContenedor.append('raggi', raggi);
         const cargarDatosContenedor = await axios.post(`/compras/cargar/detalles`, datosContenedor);
-        console.log(cargarDatosContenedor.data)
         setviewModalDataRaggi(false)
         setRaggi("")
         setImportacion("")

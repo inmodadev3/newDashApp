@@ -6,6 +6,7 @@ const ROUTES_PATHS = {
     PEDIDOS_PDF:'/pedidos/pdf/:pedidoId',
     PORTAFOLIOS:'/portafolios',
     CARGAR_COMPRAS:'/compras/cargar',
+    LIQUIDACION:'/compras/liquidar',
     CATALOGOS:'/catalogos',
     VER_CATALOGOS:'/catalogos/view',
 

@@ -10,6 +10,7 @@ import { CargarContenedor } from "../Views/Compras/CargarContenedor/CargarConten
 import { Catalogos } from "../Views/catalogos/Catalogos_Pdf/Catalogos"
 import { Ver_Catalogos } from "../Views/catalogos/VerCatalogos/Ver_Catalogos"
 import ROUTES_PATHS from "./Paths"
+import { Liquidacion } from "../Views/Compras/Liquidar/Liquidacion"
 
 const MainRouters = () => {
     return(
@@ -24,6 +25,7 @@ const MainRouters = () => {
                 <Route path={ROUTES_PATHS.CARGAR_COMPRAS} Component={CargarContenedor}/>
                 <Route path={ROUTES_PATHS.CATALOGOS} Component={Catalogos}/>
                 <Route path={ROUTES_PATHS.VER_CATALOGOS} Component={Ver_Catalogos}/>
+                <Route path={ROUTES_PATHS.LIQUIDACION} Component={Liquidacion}/>
 
                 <Route path="/pedidos/pdf/:pedidoId" Component={PedidosPDF}/>
             </Routes>
