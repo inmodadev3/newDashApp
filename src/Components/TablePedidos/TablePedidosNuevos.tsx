@@ -34,7 +34,7 @@ export const TablePedidosNuevos:React.FC<Idata> = ({datos}) => {
                         <td>{moment(pedido.dtFechaEnvio).format("DD-MM-yy")}</td>
                         <td>${ FormateoNumberInt((pedido.intValorTotal).toString())}</td>
                         <td>
-                            <div className="ViewPedido"><a title="Ver" target="_blank" href={`/pedidos/pdf/${pedido.intIdPedido}`}><AiOutlineEye size={24} /></a></div>
+                            <div className="ViewPedido"><a title="Ver" target="_blank" href={`/#/pedidos/pdf/${pedido.intIdPedido}`}><AiOutlineEye size={24} /></a></div>
                             <div className="ViewPedido"><span title="Finalizar"><AiOutlineCheck size={24}/></span></div>
                         </td>
                     </tr>

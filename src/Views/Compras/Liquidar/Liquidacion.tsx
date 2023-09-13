@@ -287,6 +287,7 @@ export const Liquidacion: React.FC = () => {
 
                     return prevData.filter(item => item.id !== datosLiquidarProducto.intIdDetalle);
                 });
+                setlistaProductosLiquidados(response.data.liquidados)
                 AgregarAlerta(createToast, "Liquidado correctamente", "success")
 
             }
@@ -295,29 +296,6 @@ export const Liquidacion: React.FC = () => {
             AgregarAlerta(createToast, err, "danger")
 
         })
-        /* console.log({
-            intIdDetalle: datosLiquidarProducto?.intIdDetalle,
-            strDescripcion: LDescripcion,
-            intPrecioUno: parseInt(LPrecio1.toString()) ,
-            intPrecioDos: parseInt(LPrecio2.toString()),
-            intPrecioTres: parseInt(LPrecio3.toString()),
-            intPrecioCuatro: parseInt(LPrecio4.toString()),
-            intPrecioCinco: 0,
-            strReferencia: datosLiquidarProducto?.strReferencia,
-            intCantidad: LCantidad == 0 ? datosLiquidarProducto?.intCantidad : parseInt(LCantidad.toString()),
-            strUDM: "",
-            intEstado: 2,
-            strDimension: LDimension,
-            intCxU: LCxU,
-            strUnidadMedida: LUnidades,
-            intCantidadPaca: parseInt(LCantidadPaca.toString()),
-            strMaterial: LMaterial,
-            strObservacion: Lobservacion,
-            strSexo: LGenero,
-            strMarca: LMarca,
-            strColor: LColor,
-
-        }) */
     }
 
     //FUNCION QUE BUSCA LOS PRECIOS de "tblpreciosempresa" EN BASE AL PRECIO 1
@@ -381,7 +359,7 @@ export const Liquidacion: React.FC = () => {
 
     const Modificar_Producto_Liquidado = async (id: number) => {
         axios.put(`/compras/modificar_liquidado/${id}`) // Utiliza el id como parte de la URL
-            .then(async() => {
+            .then(async(response) => {
                 await ConsultarDatosParaLiquidar();
                 setlistaProductosLiquidados((prevData)=>{
                     if(prevData === null || listaProductosLiquidados === null || prevData === undefined){
@@ -389,6 +367,8 @@ export const Liquidacion: React.FC = () => {
                     }
                     return prevData.filter(item => item.id !== id)
                 })
+
+                setdatosLiquidar(response.data.data)
             })
             .catch((err) => {
                 console.error(err);
