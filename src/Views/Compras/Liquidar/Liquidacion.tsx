@@ -375,6 +375,23 @@ export const Liquidacion: React.FC = () => {
             });
     }
 
+    const Buscar_Referencia = async (ref: string) => {
+        let data: TDataBaseLiquidacion[] = await ConsultarDatosParaLiquidar() as TDataBaseLiquidacion[];
+      
+        if (ref !== "") {
+          ref = ref.toLowerCase(); // Convertir ref a minúsculas
+          let buscar: TDataBaseLiquidacion[] | undefined = data
+            .filter((item: TDataBaseLiquidacion) =>
+              item.strReferencia.toLowerCase().includes(ref)
+            );
+      
+          if (buscar !== undefined) {
+            setdatosLiquidar(buscar);
+          }
+        } else {
+          setdatosLiquidar(data);
+        }
+      }
     return (
         <AppLayout>
             <div className='relative max-h-screen overflow-y-scroll pb-5'>
@@ -382,9 +399,16 @@ export const Liquidacion: React.FC = () => {
                     <div className='flex bg-[#2f3c87] text-white justify-center items-center py-2'>
                         <h1 className='text-2xl mt-2 italic font-bold'>Liquidar Productos</h1>
                     </div>
-
+                    <div className='my-6'>
+                        <input 
+                            type='text' 
+                            placeholder='Buscar Referencia...' 
+                            className='w-1/2 outline-none border-2 border-black rounded px-4 py-2'
+                            onChange={(e)=>{Buscar_Referencia(e.target.value)}}    
+                        />
+                    </div>
                     <section>
-                        <table className='w-full mt-6'>
+                        <table className='w-full'>
                             <thead className='bg-[#75b628] text-white'>
                                 <tr className='h-12 [&>th]:border-2 [&>th]:border-gray-700'>
                                     <th>#</th>
