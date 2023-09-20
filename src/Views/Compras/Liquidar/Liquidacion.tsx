@@ -910,7 +910,7 @@ export const Liquidacion: React.FC = () => {
                                                 />
                                                 <FormLine
                                                     nameLabel1={`CxU`}
-                                                    nameLabel2={`Cantidad`}
+                                                    nameLabel2={`Cantidad : ${Datos_Producto_Modificar.intCantidad} / ${Datos_Producto_Modificar.strUnidadMedida}`}
                                                     inputValue1={LCxU}
                                                     inputValue2={LCantidad}
                                                     changeInputValue1={setLCxU}
