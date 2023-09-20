@@ -1,9 +1,11 @@
 import { PDFViewer } from '@react-pdf/renderer'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useContext } from 'react'
 import { TemplatePedidos } from '../../../templates/pedidos/TemplatePedidos'
 import './stylesPDF.css'
 import { useParams } from 'react-router-dom'
 import axios from '../../../Utils/BaseUrlAxio'
+import { AppLayout } from '../../../Components/AppLayout/AppLayout'
+import { MenuSelectedContext } from '../../../Utils/UseContextProviders'
 
 interface IHeaderPdf {
     dtFechaEnvio: string
@@ -13,9 +15,9 @@ interface IHeaderPdf {
     strNombCliente: string
     strNombVendedor: string
     strTelefonoClienteAct: string
-    strCorreoClienteAct:string
-    strObservacion:string
-    intValorTotal:number
+    strCorreoClienteAct: string
+    strObservacion: string
+    intValorTotal: number
 }
 
 interface IDataProductosPdf {
@@ -44,9 +46,11 @@ export const PedidosPDF: React.FC = () => {
     const { pedidoId } = useParams()
     const [dataPedido, setdataPedido] = useState<IDataPDF>()
     const [loadingData, setloadingData] = useState(true)
+    const { setMenuSelected} = useContext(MenuSelectedContext)
 
     useEffect(() => {
         GetInfoPedido()
+        setMenuSelected(4)
     }, [])
 
     const GetInfoPedido = () => {
@@ -67,15 +71,20 @@ export const PedidosPDF: React.FC = () => {
 
     return (
 
-        <div className='PDFViewer'>
-            {
-                !loadingData &&  dataPedido &&
-                (
-                    <PDFViewer style={{ flex: 1, width: '99%', height: '99%' }}>
-                        <TemplatePedidos datos={dataPedido} />
-                    </PDFViewer>
-                )
-            }
-        </div>
+        <AppLayout>
+            <section>
+                <div className='w-full h-screen py-2'>
+                    {
+                        !loadingData && dataPedido &&
+                        (
+                            <PDFViewer style={{ flex: 1, width: '99%', height: '99%' }}>
+                                <TemplatePedidos datos={dataPedido} />
+                            </PDFViewer>
+                        )
+                    }
+                </div>
+            </section>
+
+        </AppLayout>
     )
 }

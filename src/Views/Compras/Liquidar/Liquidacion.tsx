@@ -90,14 +90,14 @@ type TProps_Unidades_HGI = {
 
 type TProps_Productos_Liquidados = {
     id: number,
-    strReferencia: string,
-    strDescripcion: string,
-    intPrecio1: number,
-    intPrecio2: number,
-    intPrecio3: number,
-    intPrecio4: number,
-    raggi: string,
-    strUnidadMedida:string
+    strReferencia: string | number,
+    strDescripcion: string | number,
+    intPrecio1: number | string,
+    intPrecio2: number | string,
+    intPrecio3: number | string,
+    intPrecio4: number | string,
+    raggi: string | number,
+    strUnidadMedida: string | number
 }
 
 const FormLine: React.FC<PropsFormLine> = ({
@@ -135,6 +135,7 @@ export const Liquidacion: React.FC = () => {
     const [listaProductosLiquidados, setlistaProductosLiquidados] = useState<TProps_Productos_Liquidados[]>([] as TProps_Productos_Liquidados[])
 
     //Estados para datos de liquidacion
+    const [LReferencia, setLReferencia] = useState<string | number>('')
     const [LDescripcion, setLDescripcion] = useState<string | number>('')
     const [LDimension, setLDimension] = useState<string | number>('')
     const [LCxU, setLCxU] = useState<string | number>(0)
@@ -150,6 +151,10 @@ export const Liquidacion: React.FC = () => {
     const [LMarca, setLMarca] = useState<string | number>(0)
     const [LUnidades, setLUnidades] = useState<string | number>(0)
     const [Lobservacion, setLobservacion] = useState<string | number>('')
+
+    //DATOS DE MODIFICACION
+    const [Datos_Producto_Modificar, setDatos_Producto_Modificar] = useState<TProps_Productos_DASH>({} as TProps_Productos_DASH)
+    const [viewModallModificar, setviewModallModificar] = useState(false)
 
     //CARGAR LOS DATOS INICIACILES DE LA LIQUIDACION 
     useEffect(() => {
@@ -258,10 +263,10 @@ export const Liquidacion: React.FC = () => {
         axios.post('/compras/liquidar', {
             intIdDetalle: datosLiquidarProducto?.intIdDetalle,
             strDescripcion: LDescripcion,
-            intPrecioUno: parseInt(LPrecio1.toString()) !== 0 ?parseInt(LPrecio1.toString()) : datosExistentesProducto?.precio1,
-            intPrecioDos: parseInt(LPrecio2.toString()) !== 0 ?parseInt(LPrecio2.toString()) : datosExistentesProducto?.precio2,
-            intPrecioTres: parseInt(LPrecio3.toString()) !== 0 ?parseInt(LPrecio3.toString()) : datosExistentesProducto?.precio3,
-            intPrecioCuatro: parseInt(LPrecio4.toString()) !== 0 ?parseInt(LPrecio4.toString()) : datosExistentesProducto?.precio4,
+            intPrecioUno: parseInt(LPrecio1.toString()) !== 0 ? parseInt(LPrecio1.toString()) : datosExistentesProducto?.precio1,
+            intPrecioDos: parseInt(LPrecio2.toString()) !== 0 ? parseInt(LPrecio2.toString()) : datosExistentesProducto?.precio2,
+            intPrecioTres: parseInt(LPrecio3.toString()) !== 0 ? parseInt(LPrecio3.toString()) : datosExistentesProducto?.precio3,
+            intPrecioCuatro: parseInt(LPrecio4.toString()) !== 0 ? parseInt(LPrecio4.toString()) : datosExistentesProducto?.precio4,
             intPrecioCinco: 0,
             strReferencia: datosLiquidarProducto?.strReferencia,
             intCantidad: LCantidad == 0 ? datosLiquidarProducto?.intCantidad : parseInt(LCantidad.toString()),
@@ -348,6 +353,7 @@ export const Liquidacion: React.FC = () => {
         setdatosExistentesProducto(null)
     }
 
+    //FUNCION QUE SE ENCARGA DE TRAER LOS PRODUCTOS CON ESTADO 2 ES DECIR PRODUCTOS QUE YA HAN SIDO LIQUIDADOS
     const Consultar_Productos_Liquidados = async () => {
         try {
             let { data: { data: data } } = await axios.get('/compras/liquidados')
@@ -357,12 +363,12 @@ export const Liquidacion: React.FC = () => {
         }
     }
 
-    const Modificar_Producto_Liquidado = async (id: number) => {
+    /* const Modificar_Producto_Liquidado = async (id: number) => {
         axios.put(`/compras/modificar_liquidado/${id}`) // Utiliza el id como parte de la URL
-            .then(async(response) => {
+            .then(async (response) => {
                 await ConsultarDatosParaLiquidar();
-                setlistaProductosLiquidados((prevData)=>{
-                    if(prevData === null || listaProductosLiquidados === null || prevData === undefined){
+                setlistaProductosLiquidados((prevData) => {
+                    if (prevData === null || listaProductosLiquidados === null || prevData === undefined) {
                         return prevData
                     }
                     return prevData.filter(item => item.id !== id)
@@ -373,25 +379,129 @@ export const Liquidacion: React.FC = () => {
             .catch((err) => {
                 console.error(err);
             });
-    }
+    } */
 
+    //FUNCION PARA BUSCAR UNA REFERENCIA DENTRO DEL ARRAY DE PRODUCTOS POR LIQUIDAR
     const Buscar_Referencia = async (ref: string) => {
         let data: TDataBaseLiquidacion[] = await ConsultarDatosParaLiquidar() as TDataBaseLiquidacion[];
-      
+
         if (ref !== "") {
-          ref = ref.toLowerCase(); // Convertir ref a minúsculas
-          let buscar: TDataBaseLiquidacion[] | undefined = data
-            .filter((item: TDataBaseLiquidacion) =>
-              item.strReferencia.toLowerCase().includes(ref)
-            );
-      
-          if (buscar !== undefined) {
-            setdatosLiquidar(buscar);
-          }
+            ref = ref.toLowerCase(); // Convertir ref a minúsculas
+            let buscar: TDataBaseLiquidacion[] | undefined = data
+                .filter((item: TDataBaseLiquidacion) =>
+                    item.strReferencia.toLowerCase().includes(ref)
+                );
+
+            if (buscar !== undefined) {
+                setdatosLiquidar(buscar);
+            }
         } else {
-          setdatosLiquidar(data);
+            setdatosLiquidar(data);
         }
-      }
+    }
+
+    //FUNCION PARA BUSCAR REFERENCIAS DENTRO DEL ARRAY DEPRODUCTOS YA LIQUIDADOS
+    const Buscar_Referencia_Liquidada = async (ref: string) => {
+        let { data: { data: data } } = await axios.get('/compras/liquidados');
+
+        if (ref !== "") {
+            ref = ref.toLowerCase(); // Convertir ref a minúsculas
+            let buscar: TProps_Productos_Liquidados[] | undefined = data
+                .filter((item: TProps_Productos_Liquidados) =>
+                    (item.strReferencia).toString().toLowerCase().includes(ref)
+                );
+
+            if (buscar !== undefined) {
+                setlistaProductosLiquidados(buscar);
+            }
+        } else {
+            setlistaProductosLiquidados(data);
+        }
+    }
+
+    //FUNCION QUE SE ENCARGA DE RECOGER TODOS LOS DATOS REGISTRADOS EN EL DASH PARA MODIFICAR
+    const Consultar_Informacion_Producto_Modificar = async (id: number) => {
+        let data: any = await axios.get(`compras/modificar_liquidado/${id}`)
+        let info: TProps_Productos_DASH = data.data.producto
+        setDatos_Producto_Modificar(info)
+        setLReferencia(info.strReferenciaM)
+        setLDescripcion(info.strDescripcion)
+        setLDimension(info.strDimesion)
+        setLCxU(info.intCxU)
+        setLCantidadPaca(info.intCantidadPaca)
+        setLGenero(info.strSexo)
+        setLPrecio1(info.intPrecio1)
+        setLPrecio2(info.intPrecio2)
+        setLPrecio3(info.intPrecio3)
+        setLPrecio4(info.intPrecio4)
+        setLColor(info.strColor)
+        setLCantidad(info.intCantidadM)
+        setLMaterial(info.strMaterial)
+        setLMarca(info.strMarca)
+        setLUnidades(info.strUnidadMedidaM)
+        setLobservacion(info.strObservacion)
+
+    }
+
+    console.log(listaProductosLiquidados)
+    const Actualizar_Producto_Liquidado = (id: number) => {
+        
+        axios.post('/compras/liquidar', {
+            intIdDetalle: Datos_Producto_Modificar.intIdDetalle,
+            strDescripcion: LDescripcion,
+            intPrecioUno: parseInt(LPrecio1.toString()) !== 0 ? parseInt(LPrecio1.toString()) : Datos_Producto_Modificar.intPrecio1,
+            intPrecioDos: parseInt(LPrecio2.toString()) !== 0 ? parseInt(LPrecio2.toString()) : Datos_Producto_Modificar.intPrecio2,
+            intPrecioTres: parseInt(LPrecio3.toString()) !== 0 ? parseInt(LPrecio3.toString()) : Datos_Producto_Modificar.intPrecio3,
+            intPrecioCuatro: parseInt(LPrecio4.toString()) !== 0 ? parseInt(LPrecio4.toString()) : Datos_Producto_Modificar.intPrecio4,
+            intPrecioCinco: 0,
+            strReferencia: LReferencia,
+            intCantidad: LCantidad == 0 ? Datos_Producto_Modificar.intCantidadM : parseInt(LCantidad.toString()),
+            strUDM: Datos_Producto_Modificar.strUnidadMedidaM,
+            intEstado: 2,
+            strDimension: LDimension,
+            intCxU: LCxU,
+            strUnidadMedida: LUnidades,
+            intCantidadPaca: parseInt(LCantidadPaca.toString()),
+            strMaterial: LMaterial,
+            strObservacion: Lobservacion,
+            strSexo: LGenero,
+            strMarca: LMarca,
+            strColor: LColor,
+        }).then((response) => {
+            if (response.data.success) {
+                setviewModallModificar(false)
+                setlistaProductosLiquidados((prevData) => {
+                    return prevData.map((Producto) => (
+                      Producto.id === id
+                        ? {
+                            id: Producto.id,
+                            strReferencia: LReferencia,
+                            strDescripcion: LDescripcion,
+                            intPrecio1: LPrecio1,
+                            intPrecio2: LPrecio2,
+                            intPrecio3: LPrecio3,
+                            intPrecio4: LPrecio4,
+                            raggi: listaProductosLiquidados[0].raggi,
+                            strUnidadMedida: LUnidades
+                          }
+                        : Producto
+                    ));
+                  });
+                AgregarAlerta(createToast, "Actualizado correctamente", "success")
+                Limpiar_Datos()
+
+            }
+        }).catch((err) => {
+            console.error(err)
+            AgregarAlerta(createToast, err, "danger")
+
+        })
+
+
+        Limpiar_Datos()
+    }
+
+
     return (
         <AppLayout>
             <div className='relative max-h-screen overflow-y-scroll pb-5'>
@@ -400,11 +510,11 @@ export const Liquidacion: React.FC = () => {
                         <h1 className='text-2xl mt-2 italic font-bold'>Liquidar Productos</h1>
                     </div>
                     <div className='my-6'>
-                        <input 
-                            type='text' 
-                            placeholder='Buscar Referencia...' 
+                        <input
+                            type='text'
+                            placeholder='Buscar Referencia...'
                             className='w-1/2 outline-none border-2 border-black rounded px-4 py-2'
-                            onChange={(e)=>{Buscar_Referencia(e.target.value)}}    
+                            onChange={(e) => { Buscar_Referencia(e.target.value) }}
                         />
                     </div>
                     <section>
@@ -452,7 +562,14 @@ export const Liquidacion: React.FC = () => {
                     <div className='flex bg-[#2f3c87] text-white justify-center items-center py-2'>
                         <h1 className='text-2xl mt-2 italic font-bold'>Productos liquidados</h1>
                     </div>
-
+                    <div className='my-6'>
+                        <input
+                            type='text'
+                            placeholder='Buscar Referencia...'
+                            className='w-1/2 outline-none border-2 border-black rounded px-4 py-2'
+                            onChange={(e) => { Buscar_Referencia_Liquidada(e.target.value) }}
+                        />
+                    </div>
                     <section>
                         <table className='w-full mt-6'>
                             <thead className='bg-[#75b628] text-white'>
@@ -484,7 +601,9 @@ export const Liquidacion: React.FC = () => {
                                             <td>$ {FormateoNumberInt((producto.intPrecio4).toString())}</td>
                                             <td className='flex justify-center items-center h-12 w-full'>
                                                 <span onClick={() => {
-                                                    Modificar_Producto_Liquidado(producto.id)
+                                                    /* Modificar_Producto_Liquidado(producto.id) */
+                                                    Consultar_Informacion_Producto_Modificar(producto.id)
+                                                    setviewModallModificar(true)
                                                 }} className='bg-lime-500 px-2 py-1 rounded cursor-pointer hover:bg-lime-700 text-white'>Modificar</span>
                                             </td>
                                         </tr>
@@ -648,6 +767,7 @@ export const Liquidacion: React.FC = () => {
                                                     inputValue2={FormateoNumberInt(`${datosExistentesProducto.precio1}`)}
                                                     disabled1={true}
                                                     disabled2={true}
+
                                                 />
                                                 <FormLine
                                                     nameLabel1={"Descripcion"}
@@ -719,6 +839,144 @@ export const Liquidacion: React.FC = () => {
             }
             {
                 <h1>{errorsMessage}</h1>
+            }
+            {
+                viewModallModificar && (
+                    <ModalsLayout CloseEvent={setviewModallModificar}>
+                        <section className={`text-xl flex h-full z-10 bg-gray-100 ${datosExistentesProducto == null ? "w-auto" : "w-full "}`}>
+                            <div className={` overflow-y-scroll pb-2 bg-lime-800/80 text-white border-r-lime-400 border-r-2 flex-1`}>
+                                <div className='bg-blue-500'>
+                                    <h1 className='text-center text-2xl py-2 text-white italic font-bold'>DATOS PARA ACTUALIZAR</h1>
+                                </div>
+
+                                <hr className='border-white' />
+                                {
+                                    Datos_Producto_Modificar !== null ? (
+                                        <div>
+                                            <div className=''>
+                                                <FormLine
+                                                    nameLabel1={"Referencia"}
+                                                    nameLabel2={"precio 1"}
+                                                    inputValue1={LReferencia}
+                                                    inputValue2={LPrecio1}
+                                                    changeInputValue1={setLReferencia}
+                                                    changeInputValue2={setLPrecio1}
+                                                />
+                                                <FormLine
+                                                    nameLabel1={`Descripcion`}
+                                                    nameLabel2={"precio 2"}
+                                                    inputValue1={LDescripcion}
+                                                    inputValue2={LPrecio2}
+                                                    changeInputValue1={setLDescripcion}
+                                                    changeInputValue2={setLPrecio2}
+
+                                                />
+                                                <FormLine
+                                                    nameLabel1={"Estimado Uno"}
+                                                    nameLabel2={"precio 3"}
+                                                    inputValue1={FormateoNumberInt(Datos_Producto_Modificar.intValor)}
+                                                    inputValue2={LPrecio3}
+                                                    changeInputValue2={setLPrecio3}
+                                                    disabled1={true}
+                                                />
+                                                <FormLine
+                                                    nameLabel1={"Estimado Dos"}
+                                                    nameLabel2={"Precio 4"}
+                                                    inputValue1={CalcularEstimadoDos(parseFloat(Datos_Producto_Modificar.intValor))}
+                                                    inputValue2={LPrecio4}
+                                                    changeInputValue2={setLPrecio4}
+                                                    disabled1={true}
+                                                />
+                                                <div>
+                                                    <div className='w-full px-4 my-2'>
+                                                        <p className='py-2 font-bold text-slate-200'>Unidad de medida</p>
+                                                        <select value={LUnidades} onChange={(e) => { setLUnidades(e.target.value) }} className='w-full px-2 py-2 rounded-lg outline-none border-gray-400 border-2 text-black'>
+                                                            <option value={0} disabled className='text-gray-400 text-sm'>Seleccione UDM</option>
+                                                            {
+                                                                listaUnidades.map((unidad, index) => (
+                                                                    <option key={index} value={unidad.StrIdUnidad}>{unidad.StrIdUnidad}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <FormLine
+                                                    nameLabel1={"Dimension"}
+                                                    nameLabel2={`Color`}
+                                                    inputValue1={LDimension}
+                                                    inputValue2={LColor}
+                                                    changeInputValue1={setLDimension}
+                                                    changeInputValue2={setLColor}
+                                                />
+                                                <FormLine
+                                                    nameLabel1={`CxU`}
+                                                    nameLabel2={`Cantidad`}
+                                                    inputValue1={LCxU}
+                                                    inputValue2={LCantidad}
+                                                    changeInputValue1={setLCxU}
+                                                    changeInputValue2={setLCantidad}
+                                                />
+                                                <FormLine
+                                                    nameLabel1={"Cantidad Paca"}
+                                                    nameLabel2={`Material`}
+                                                    inputValue1={LCantidadPaca}
+                                                    inputValue2={LMaterial}
+                                                    changeInputValue1={setLCantidadPaca}
+                                                    changeInputValue2={setLMaterial}
+                                                />
+                                                <div className='flex justify-center gap-x-12 my-2'>
+                                                    <div className='w-full px-4 my-2'>
+                                                        <p className='py-2 font-bold text-slate-200'>Género</p>
+                                                        <select value={LGenero} onChange={(e) => { setLGenero(e.target.value) }} className='w-full px-2 py-2 rounded-lg outline-none border-gray-400 border-2 text-black'>
+                                                            <option value={0} disabled className='text-gray-400 text-sm'>Seleccione Genero</option>
+                                                            {
+                                                                listaGeneros.map((genero, index) => (
+                                                                    <option key={index} value={genero.id} >{genero.descripcion}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    </div>
+
+                                                    <div className='w-full px-4 my-2'>
+                                                        <p className='py-2 font-bold text-slate-200'>Marca</p>
+                                                        <select value={LMarca} onChange={(e) => { setLMarca(e.target.value) }} className='w-full px-2 py-2 rounded-lg outline-none border-gray-400 border-2 text-black'>
+                                                            <option value={0} disabled className='text-gray-400 text-sm'>Seleccione Marca</option>
+                                                            {
+                                                                listaMarcas.map((marca, index) => (
+                                                                    <option key={index} value={marca.id}>{marca.descripcion}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div className='w-full px-4 my-4'>
+                                                    <textarea value={Lobservacion} onChange={(e) => { setLobservacion(e.target.value) }} className='w-full h-20 outline-none resize-none text-black px-4 py-2 rounded' placeholder='Digite la observacion' />
+                                                </div>
+
+                                                <div className='px-4 flex justify-evenly pb-4'>
+                                                    <button className='bg-lime-600 px-4 py-2 rounded hover:bg-lime-700' onClick={()=>{Actualizar_Producto_Liquidado(Datos_Producto_Modificar.intIdDetalle)}}>Actualizar</button>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.preventDefault()
+                                                            setviewModalLiquidacion(false)
+                                                            Limpiar_Datos()
+                                                        }}
+                                                        className='bg-red-400/80 px-4 py-2 rounded hover:bg-red-500/80'>Cerrar
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <h1></h1>
+                                    )
+                                }
+                            </div>
+                        </section>
+
+                    </ModalsLayout>
+                )
             }
             {alerts}
         </AppLayout>
