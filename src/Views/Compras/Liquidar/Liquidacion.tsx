@@ -247,7 +247,7 @@ export const Liquidacion: React.FC = () => {
                 setdatosExistentesProducto(data.data.hgi)
             }
             setdatosLiquidarProducto(data.data.dash)
-
+            setLReferencia(data.data.dash.strReferencia)
             setLDescripcion(data.data.hgi ? data.data.hgi.Descripcion : "")
             setLDimension(data.data.dash.strDimesion)
             setLCantidadPaca(data.data.dash.intCantidadPaca)
@@ -268,7 +268,7 @@ export const Liquidacion: React.FC = () => {
             intPrecioTres: parseInt(LPrecio3.toString()) !== 0 ? parseInt(LPrecio3.toString()) : datosExistentesProducto?.precio3,
             intPrecioCuatro: parseInt(LPrecio4.toString()) !== 0 ? parseInt(LPrecio4.toString()) : datosExistentesProducto?.precio4,
             intPrecioCinco: 0,
-            strReferencia: datosLiquidarProducto?.strReferencia,
+            strReferencia: LReferencia,
             intCantidad: LCantidad == 0 ? datosLiquidarProducto?.intCantidad : parseInt(LCantidad.toString()),
             strUDM: "",
             intEstado: 2,
@@ -632,10 +632,10 @@ export const Liquidacion: React.FC = () => {
                                                 <FormLine
                                                     nameLabel1={"Referencia"}
                                                     nameLabel2={"precio 1"}
-                                                    inputValue1={datosLiquidarProducto.strReferencia}
+                                                    inputValue1={LReferencia}
                                                     inputValue2={LPrecio1}
+                                                    changeInputValue1={setLReferencia}
                                                     changeInputValue2={setLPrecio1}
-                                                    disabled1={true}
                                                 />
                                                 <FormLine
                                                     nameLabel1={`Descripcion: ${datosLiquidarProducto.strDescripcion}`}
