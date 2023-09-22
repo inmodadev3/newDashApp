@@ -9,6 +9,8 @@ import { Loader } from '../../Components/LoadingPage/Loader';
 import { MenuSelectedContext } from '../../Utils/UseContextProviders'
 import { TablePortafolios } from '../../Components/Portafolios/TablePortafolios/TablePortafolios';
 import { useNavigate } from 'react-router-dom';
+import '../../Components/TablePedidos/stylesTablePedidos.css'
+import '../Pedidos/styles/styles.css'
 
 interface IDataPropsPortafolio {
     Estado: string
