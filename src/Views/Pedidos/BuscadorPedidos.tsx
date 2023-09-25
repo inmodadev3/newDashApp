@@ -1,9 +1,9 @@
 import axios from '../../Utils/BaseUrlAxio'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 
 interface IBuscadorProps {
     ConsultarPedidosEnProceso: () => void
-    setdatos: React.Dispatch<React.SetStateAction<TPedidosProps[]>> 
+    setdatos: React.Dispatch<React.SetStateAction<TPedidosProps[]>>
     setloadData: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -21,6 +21,7 @@ type TPedidosProps = {
 export const BuscadorPedidos: React.FC<IBuscadorProps> = ({ ConsultarPedidosEnProceso, setdatos, setloadData }) => {
 
     const [nroPedido, setnroPedido] = useState<string>('')
+    const typingTime = useRef<any>(null)
 
     const validarId = () => {
         if (nroPedido.toString().trim() !== "") {
@@ -43,6 +44,15 @@ export const BuscadorPedidos: React.FC<IBuscadorProps> = ({ ConsultarPedidosEnPr
             })
     }
 
+    const handleInputChange = () => {
+        if (typingTime.current) {
+            clearTimeout(typingTime.current);
+        }
+
+        typingTime.current = setTimeout(() => {
+            validarId()
+        }, 1000);
+    }
 
     return (
         <div className='buscadorPedidosContainer'>
@@ -51,11 +61,14 @@ export const BuscadorPedidos: React.FC<IBuscadorProps> = ({ ConsultarPedidosEnPr
                 placeholder='Buscar Nro de pedido'
                 className="w-1/2 border-2 border-gray-400 outline-none mx-4 my-2 py-2 px-4 rounded focus:border-sky-500"
                 value={nroPedido}
-                onChange={(e) => { setnroPedido(e.target.value) }}
+                onChange={(e)=>{
+                    setnroPedido(e.target.value)
+                }}
                 onKeyUp={() => {
-                    validarId()
+                    handleInputChange()
                 }}
                 min={1}
+                ref={typingTime}
             />
         </div>
     )

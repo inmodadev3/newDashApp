@@ -1,12 +1,12 @@
 import React from 'react'
 import './stylesDescargarFormato.css'
-import { ExportarExcel } from '../../../Utils/Helpers'
+import { Excel_Formatos } from '../../../Utils/excelTemplates/ExcelFormats'
 
 export const DescargarFormato: React.FC = () => {
 
     const DescargarFormatoContenedor = () => {
         const data = [ ['Caja', 'Referencia', 'Descripcion', 'Cantidad', 'Unidad de Medida', 'Valor', 'Color', 'Dimension', 'CxU', 'Estilo', 'Cantidad por paca', 'Material']]
-        ExportarExcel(data,"FORMATO CONTENEDOR","Formato_Contenedor")
+        Excel_Formatos(data,"FORMATO CONTENEDOR","Formato_Contenedor")
     }
 
 
