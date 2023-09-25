@@ -58,6 +58,7 @@ export const Excel_Pedidos = (data: any[], bookName: string, documentName: strin
 
     // Aplicar estilo a las celdas de encabezado
     headers.forEach((header, index) => {
+        console.log(header)
         const cell = XLSX.utils.encode_cell({ r: 0, c: index });
         ws[cell].s = cellStyle;
     });

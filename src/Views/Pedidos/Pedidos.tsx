@@ -6,7 +6,7 @@ import { MenuSelectedContext } from "../../Utils/UseContextProviders"
 import { AppLayout } from "../../Components/AppLayout/AppLayout"
 import { useAlert } from "../../hooks/useAlert";
 import { AgregarAlerta, FormateoNumberInt } from "../../Utils/Helpers";
-import { AiOutlineMore, AiOutlineFileExcel, AiOutlinePrinter, AiOutlineSend, AiOutlineDelete } from 'react-icons/ai'
+import { AiOutlineMore, AiOutlineFileExcel, AiOutlinePrinter, AiOutlineDelete } from 'react-icons/ai'
 import { BuscadorPedidos } from "./BuscadorPedidos";
 import { Excel_Pedidos } from '../../Utils/excelTemplates/ExcelFormats';
 /* import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'; */
