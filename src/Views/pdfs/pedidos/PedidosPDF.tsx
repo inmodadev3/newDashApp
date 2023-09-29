@@ -34,6 +34,7 @@ interface IDataProductosPdf {
     strTalla: string
     strUnidadMedida: string
     ubicaciones: string
+    precio_cambio:boolean
 }
 
 export interface IDataPDF {
@@ -57,6 +58,7 @@ export const PedidosPDF: React.FC = () => {
         axios.get(`/pedidos/detalle_pedido/${pedidoId}`)
             .then((response) => {
                 if (response.data.success) {
+                    console.log(response)
                     setdataPedido(response.data)
                     setloadingData(false)
                 } else {

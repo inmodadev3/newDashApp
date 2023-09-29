@@ -110,7 +110,8 @@ export const TemplatePedidos: React.FC<IDatosPropsTemplatePedidos> = ({ datos })
                                     <Text style={[styles.tableBody, styles.lblUnidadMed]}>{item.strUnidadMedida}</Text>
                                     <Text style={[styles.tableBody, styles.lblCantidad]}>{item.intCantidad}</Text>
                                     <Text style={[styles.tableBody, styles.lblPrecio]}>{FormateoNumberInt((item.intPrecio).toString())}</Text>
-                                    <Text style={[styles.tableBody, styles.lblValorTotal]}>{FormateoNumberInt((item.intCantidad * item.intPrecio).toString())}</Text>
+                                    <Text style={[styles.tableBody, styles.lblValorTotal]}>{FormateoNumberInt((item.intCantidad * item.intPrecio).toString())} 
+                                    <Text style={styles.lblCambioPrecio}>{item.precio_cambio && " * "}</Text></Text>
                                 </View>
                             )
                         })
@@ -236,6 +237,10 @@ const styles = StyleSheet.create({
     },
     lblValorTotal: {
         width: '9%'
+    },
+    lblCambioPrecio: {
+        color:'red',
+        fontSize: 12
     },
     footerContainer: {
         position: 'relative',
