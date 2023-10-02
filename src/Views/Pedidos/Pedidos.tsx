@@ -9,6 +9,7 @@ import { AgregarAlerta, FormateoNumberInt } from "../../Utils/Helpers";
 import { AiOutlineMore, AiOutlineFileExcel, AiOutlinePrinter, AiOutlineDelete } from 'react-icons/ai'
 import { BuscadorPedidos } from "./BuscadorPedidos";
 import { Excel_Pedidos } from '../../Utils/excelTemplates/ExcelFormats';
+import { IDataProductosPdf } from '../pdfs/pedidos/PedidosPDF';
 /* import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'; */
 /* import { PedidosNuevos } from "./PedidosNuevos";
 import { PedidosProceso } from "./PedidosProceso";
@@ -110,6 +111,10 @@ export const Pedidos = () => {
 
     }
 
+    const compararNombresAZ = (a:IDataProductosPdf,b:IDataProductosPdf) =>{
+        return a.strIdProducto.localeCompare(b.strIdProducto)
+    }
+
     const Descargar_excel_pedido = async (pedidoId: number) => {
 
         try {
@@ -117,6 +122,7 @@ export const Pedidos = () => {
             const data_Pedido: IpropsArrayExcel[] = []
             if (data.data.success) {
                 let response = data.data.data
+                response.sort(compararNombresAZ)
                 if (response) {
                     response.forEach(( item:IProps, index:number ) => {
                         data_Pedido.push({

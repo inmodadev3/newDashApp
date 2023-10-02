@@ -20,7 +20,7 @@ interface IHeaderPdf {
     intValorTotal: number
 }
 
-interface IDataProductosPdf {
+export interface IDataProductosPdf {
     intCantidad: number
     intEstado: number
     intIdPedDetalle: number
@@ -58,7 +58,7 @@ export const PedidosPDF: React.FC = () => {
         axios.get(`/pedidos/detalle_pedido/${pedidoId}`)
             .then((response) => {
                 if (response.data.success) {
-                    console.log(response)
+                    response.data.data.sort(compararNombresAZ)
                     setdataPedido(response.data)
                     setloadingData(false)
                 } else {
@@ -68,6 +68,10 @@ export const PedidosPDF: React.FC = () => {
                 alert("HA OCURRIDO UN ERROR AL CARGAR EL PDF")
                 console.error(err)
             })
+    }
+
+    const compararNombresAZ = (a:IDataProductosPdf,b:IDataProductosPdf) =>{
+        return a.strIdProducto.localeCompare(b.strIdProducto)
     }
 
 
