@@ -71,7 +71,10 @@ export const Portafolios: React.FC = () => {
                 !loadingData ? (
                     datosClientes !== null && userInfo !== null ? (
                         <>
-                            <BuscadorPortafolios setdatosClientes={setdatosClientes} cedulaVendedor={userInfo.strIdVendedor} />
+                            <BuscadorPortafolios 
+                                setdatosClientes={setdatosClientes} 
+                                cedulaVendedor={userInfo.strIdVendedor} 
+                            />
                             <div className='TablePedidosContainer'>
                                 <TablePortafolios data={datosClientes} setviewGestionesCliente={setviewGestionesCliente} setidClienteGestiones={setidClienteGestiones} setviewInfoCliente={setviewInfoCliente} />
                             </div>

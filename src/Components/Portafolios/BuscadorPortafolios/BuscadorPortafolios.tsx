@@ -27,6 +27,8 @@ export const BuscadorPortafolios: React.FC<propsBuscador> = ({ setdatosClientes,
     const [inputValue, setinputValue] = useState('')
     const [selectValue, setselectValue] = useState<string>("0")
     const [arrayCiudades, setarrayCiudades] = useState<Tciudades[] | null>(null)
+    const [ciudadSelected, setciudadSelected] = useState("")
+    const [selectValueSegmentos, setselectValueSegmentos] = useState("0")
 
     useEffect(() => {
         if (cedulaVendedor) {
@@ -66,10 +68,11 @@ export const BuscadorPortafolios: React.FC<propsBuscador> = ({ setdatosClientes,
         })
     }
 
-    const consultarClientesXciudad = (ciudadId: string) => {
+    const consultarClientesXciudad = (ciudadId: string, segmentoInt: string | number = 0) => {
         if (ciudadId !== "0") {
             axios.post('/portafolios/clientes_ciudades', {
-                ciudadId
+                ciudadId,
+                segmentoInt
             }).then((response) => {
                 setdatosClientes(response.data.data)
             }).catch((err) => {
@@ -118,7 +121,15 @@ export const BuscadorPortafolios: React.FC<propsBuscador> = ({ setdatosClientes,
                 {
                     arrayCiudades !== null && (
                         <>
-                            <select defaultValue={0} onChange={(e) => { consultarClientesXciudad(e.target.value) }} className='py-2 px-4 my-2 w-full md:w-1/2 border border-sky-950 rounded-3xl relative items-center'>
+                            <select
+                                defaultValue={0}
+                                className='py-2 px-4 my-2 w-full md:w-1/2 border border-sky-950 rounded-3xl relative items-center'
+                                onChange={(e) => {
+                                    consultarClientesXciudad(e.target.value)
+                                    setciudadSelected(e.target.value)
+                                    setselectValueSegmentos("0")
+                                }}
+                            >
                                 <option value={0}>Todas</option>
                                 {
                                     arrayCiudades.map((ciudad) => (
@@ -130,24 +141,42 @@ export const BuscadorPortafolios: React.FC<propsBuscador> = ({ setdatosClientes,
                     )
                 }
             </div>
+            <div className='flex items-center gap-x-4'>
+                <div className='flex my-4 w-full md:w-1/2 border border-sky-950 rounded-3xl relative items-center'>
+                    <input
+                        type='text'
+                        className='w-full px-4 py-2 bg-transparent outline-none'
+                        onKeyUp={(e) => {
+                            if (e.keyCode === 13) {
+                                BuscarCliente()
+                            }
+                        }}
+                        value={inputValue}
+                        onChange={(e) => {
+                            setinputValue(e.target.value)
+                        }}
+                        placeholder={`Digite ${selectValue === "0" ? "un nombre" : "una cedula"}`}
+                    />
+                    <span className='absolute right-3 p-2 cursor-pointer hover:text-lime-500 transition-all duration-300' onClick={BuscarCliente}><AiOutlineSearch size={24} /></span>
+                </div>
 
-            <div className='flex my-4 w-full md:w-1/2 border border-sky-950 rounded-3xl relative items-center'>
-                <input
-                    type='text'
-                    className='w-full px-4 py-2 bg-transparent outline-none'
-                    onKeyUp={(e) => {
-                        if (e.keyCode === 13) {
-                            BuscarCliente()
-                        }
-                    }}
-                    value={inputValue}
-                    onChange={(e) => {
-                        setinputValue(e.target.value)
-                    }}
-                    placeholder={`Digite ${selectValue === "0" ? "un nombre" : "una cedula"}`}
-                />
-                <span className='absolute right-3 p-2 cursor-pointer hover:text-lime-500 transition-all duration-300' onClick={BuscarCliente}><AiOutlineSearch size={24} /></span>
+                {
+                    (ciudadSelected.toString() !== "" && ciudadSelected !== "0") &&
+                    (
+                        <select value={selectValueSegmentos} onChange={(e) => { 
+                            setselectValueSegmentos(e.target.value)
+                            consultarClientesXciudad(ciudadSelected, e.target.value) 
+                        }} className='py-2 px-4 my-2 w-full md:w-1/2 border border-sky-950 rounded-3xl relative items-center'>
+                            <option disabled value={0} className='text-gray-400'>Seleccione un segmento</option>
+                            <option value={"0"}>Todos los segmentos</option>
+                            <option value={"01"}>Segmento 1</option>
+                            <option value={"02"}>Segmento 2</option>
+                            <option value={"03"}>Segmento 3</option>
+                        </select>
+                    )
+                }
             </div>
+
 
         </section>
     )
