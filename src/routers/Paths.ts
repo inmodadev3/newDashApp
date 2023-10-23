@@ -9,7 +9,8 @@ const ROUTES_PATHS = {
     LIQUIDACION:'/compras/liquidar',
     CATALOGOS:'/catalogos',
     VER_CATALOGOS:'/catalogos/view',
-
+    REGISTRO_CLIENTES:'/clientes/registro',
+    CLIENTES_WEB_REGISTRADOS:'/clientes_web/registrados'
 }
 
 export default ROUTES_PATHS

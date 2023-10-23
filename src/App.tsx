@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
-import axios from 'axios'
-import {URLAPI} from './Utils/Helpers' 
 import { useNavigate } from 'react-router-dom'
+import axios from './Utils/BaseUrlAxio'
 
 interface IDataUser {
   idLogin: number,
@@ -21,7 +20,7 @@ const App = () => {
   useEffect(() => {
     if(userData){
       userInfo = JSON.parse(userData)
-      axios.get(`${URLAPI}/usuarios`,{
+      axios.get(`/usuarios`,{
         headers:{
           Authorization:`Bearer ${userInfo?.token}`
         }

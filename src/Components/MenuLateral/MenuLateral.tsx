@@ -1,5 +1,5 @@
 import axios from '../../Utils/BaseUrlAxio.ts'
-import { AiOutlineHome, AiOutlineFilePdf, AiOutlineSetting, AiOutlineShopping, AiOutlineShop, AiOutlineWallet, AiOutlineUser, AiOutlineSearch, AiOutlineArrowLeft, AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineFilePdf, AiOutlineSetting, AiOutlineShopping, AiOutlineShop, AiOutlineWallet, AiOutlineUser, AiOutlineSearch, AiOutlineArrowLeft, AiFillCaretDown, AiFillCaretUp, AiOutlineUserAdd } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GoContainer } from "react-icons/go";
 import { HiOutlineDocumentReport, HiOutlineBriefcase } from "react-icons/hi";
@@ -200,6 +200,19 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
                 selected={menuSelected === MenuSections.CARTERA}
                 onClick={() => {
                   navigate(ROUTES_PATHS.HOME)
+                }}
+              />
+            )
+          }
+
+          {
+            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 8) && (
+              <MenuItemRender
+                icon={<AiOutlineUserAdd size={22} />}
+                label="REGISTRO USUARIOS WEB"
+                selected={menuSelected === MenuSections.USUARIOS_REGISTRADOS}
+                onClick={() => {
+                  navigate(ROUTES_PATHS.CLIENTES_WEB_REGISTRADOS)
                 }}
               />
             )

@@ -1,6 +1,6 @@
 import NotFound from '../../assets/img/img-no-disponible.jpg'
 
-export const URLAPI = 'https://localhost:8083/api/v1' //'https://panel.inmodafantasy.com.co:8083/api/v1'
+export const URLAPI = 'https://panel.inmodafantasy.com.co:8083/api'
 export const URLIMAGENESPRODUCTOS = import.meta.env.VITE_HTTPSURLIMAGENES || '/owncloud'
 export const ImagenNotFound = NotFound
 
