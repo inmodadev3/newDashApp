@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../../Utils/BaseUrlAxio'
 import React, { useEffect, useState } from 'react'
 import { AiFillHome, AiFillPhone, AiOutlineUser, AiTwotoneMail } from 'react-icons/ai'
 import { BiSolidCity } from 'react-icons/bi'
@@ -7,7 +7,6 @@ import { HiIdentification } from 'react-icons/hi'
 import { ModalsLayout } from '../../Modals/ModalsLayout'
 import { ResponsiveContainer, PieChart, Pie, Tooltip, Cell, BarChart, CartesianGrid, XAxis, YAxis, Legend, Bar } from 'recharts'
 import { RiCellphoneFill } from 'react-icons/ri'
-import { URLAPI } from '../../../Utils/Helpers'
 import './stylesInfoClientes.css'
 
 type InfoProps = {
@@ -55,7 +54,7 @@ export const InfoClientesPortafolio: React.FC<InfoProps> = ({ setviewInfoCliente
 
 
     const GetDataClientes = () => {
-        axios.get(`${URLAPI}/portafolios/data/Cliente/${cedula}`)
+        axios.get(`/portafolios/data/Cliente/${cedula}`)
             .then((response) => {
                 setTopComprados(response.data.topComprados)
                 setdataCliente(response.data.data)
