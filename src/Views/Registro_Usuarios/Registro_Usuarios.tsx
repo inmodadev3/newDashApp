@@ -3,7 +3,7 @@ import { AppLayout } from '../../Components/AppLayout/AppLayout'
 import { MenuSelectedContext } from '../../Utils/UseContextProviders'
 import AxiosTienda from '../../Utils/AxiosTienda'
 import { useAlert } from '../../hooks/useAlert'
-import { AgregarAlerta} from '../../Utils/Helpers'
+import { AgregarAlerta } from '../../Utils/Helpers'
 import moment from 'moment'
 import { ModalsLayout } from '../../Components/Modals/ModalsLayout'
 import { BsClipboardCheck } from 'react-icons/bs'
@@ -126,30 +126,30 @@ export const Registro_Usuarios: React.FC = () => {
         }
     }
 
-    const Descargar_Ruth = async (ruta: string,nombre:string) => {
+    const Descargar_Ruth = async (ruta: string, nombre: string) => {
         try {
-          const response = await AxiosTienda.get(`/registro_usuarios/descargar/${ruta}`, {
-            responseType: 'blob', // Indicar que esperamos un archivo binario
-          });
-      
-          // Crear una URL para el archivo
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-      
-          // Crear un enlace (a) para descargar el archivo
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = nombre;
-          document.body.appendChild(a);
-      
-          // Simular un clic en el enlace para iniciar la descarga
-          a.click();
-      
-          // Liberar la URL del objeto Blob
-          window.URL.revokeObjectURL(url);
+            const response = await AxiosTienda.get(`/registro_usuarios/descargar/${ruta}`, {
+                responseType: 'blob', // Indicar que esperamos un archivo binario
+            });
+
+            // Crear una URL para el archivo
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+
+            // Crear un enlace (a) para descargar el archivo
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = nombre;
+            document.body.appendChild(a);
+
+            // Simular un clic en el enlace para iniciar la descarga
+            a.click();
+
+            // Liberar la URL del objeto Blob
+            window.URL.revokeObjectURL(url);
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
-      };
+    };
 
     return (
         <AppLayout>
@@ -167,7 +167,7 @@ export const Registro_Usuarios: React.FC = () => {
                                 </article>
                             </div>
                             <div className='flex flex-col py-4 gap-y-4'>
-                                <button onClick={()=>{Descargar_Ruth(item.strRutaDocumento,`${item.strNombCliente}-RUT.pdf`)}} className='bg-blue-600 text-white w-52 py-2 rounded hover:bg-blue-800'>Descargar RUT</button>
+                                <button onClick={() => { Descargar_Ruth(item.strRutaDocumento, `${item.strNombCliente}-RUT.pdf`) }} className='bg-blue-600 text-white w-52 py-2 rounded hover:bg-blue-800'>Descargar RUT</button>
                                 <button onClick={() => { informacion_usuario(item) }} className='bg-blue-600 text-white w-52 py-2 rounded hover:bg-blue-800'>Ver toda la informacion</button>
 
                             </div>
@@ -185,6 +185,11 @@ export const Registro_Usuarios: React.FC = () => {
                             <DataFormUsuario
                                 text='Identificacion'
                                 value={`${usuario_seleccionado.strTipoDocCliente} ${usuario_seleccionado.strIdCliente}`}
+                            />
+
+                            <DataFormUsuario
+                                text='Nombre'
+                                value={`${usuario_seleccionado.strNombCliente}`}
                             />
 
                             <DataFormUsuario

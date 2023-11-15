@@ -1,5 +1,6 @@
 import axios from '../../Utils/BaseUrlAxio.ts'
-import { AiOutlineHome, AiOutlineFilePdf, AiOutlineSetting, AiOutlineShopping, AiOutlineShop, AiOutlineWallet, AiOutlineUser, AiOutlineSearch, AiOutlineArrowLeft, AiFillCaretDown, AiFillCaretUp, AiOutlineUserAdd } from "react-icons/ai";
+import ROUTES_PATHS from '../../routers/Paths.ts';
+import { AiOutlineHome, AiOutlineFilePdf, AiOutlineSetting, AiOutlineShopping, AiOutlineShop, AiOutlineWallet, AiOutlineUser, AiOutlineSearch, AiOutlineArrowLeft, AiFillCaretDown, AiFillCaretUp, AiOutlineUserAdd, AiOutlineFile } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GoContainer } from "react-icons/go";
 import { HiOutlineDocumentReport, HiOutlineBriefcase } from "react-icons/hi";
@@ -9,9 +10,8 @@ import { MdAttachMoney } from "react-icons/md";
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState, useContext } from 'react'
 import logo from '../../../assets/img/INMODA.png'
-import './stylesMenu.css'
 import { MenuSections, SubMenuSections } from './MenuSections.ts';
-import ROUTES_PATHS from '../../routers/Paths.ts';
+import './stylesMenu.css'
 
 interface IFilterPermisos {
   idPermiso: number
@@ -305,6 +305,21 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
               </>
             )
           }
+
+          {/*MENU MOVIMIENTOS*/}
+          {
+            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
+              <MenuItemRender
+                icon={<AiOutlineFile size={22} color={'white'} />}
+                label="MOVIMIENTOS"
+                selected={menuSelected === MenuSections.MOVIMIENTOS}
+                onClick={() => {
+                  navigate(ROUTES_PATHS.MOVIMIENTOS)
+                }}
+              />
+            )
+          }
+
           {
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 43) && (
               <MenuItemRender

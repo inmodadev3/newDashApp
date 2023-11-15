@@ -10,7 +10,8 @@ const ROUTES_PATHS = {
     CATALOGOS:'/catalogos',
     VER_CATALOGOS:'/catalogos/view',
     REGISTRO_CLIENTES:'/clientes/registro',
-    CLIENTES_WEB_REGISTRADOS:'/clientes_web/registrados'
+    CLIENTES_WEB_REGISTRADOS:'/clientes_web/registrados',
+    MOVIMIENTOS:'/movimientos'
 }
 
 export default ROUTES_PATHS

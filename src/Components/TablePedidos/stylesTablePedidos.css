@@ -34,12 +34,13 @@ a:active {
 }
 
 .table tr:nth-child(even) {
-  background-color: #b7ff62;
+  background-color: #cbcbcb;
   color: black;
 }
 
 .table tr:hover {
-  background-color: #bec8ff;
+  background-color: #6e6e6e;
+  color: #FFFFFF;
 }
 
 .ViewPedido {
