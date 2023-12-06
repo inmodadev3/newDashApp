@@ -1,6 +1,6 @@
 import axios from '../../Utils/BaseUrlAxio.ts'
 import ROUTES_PATHS from '../../routers/Paths.ts';
-import { AiOutlineHome, AiOutlineFilePdf, AiOutlineSetting, AiOutlineShopping, AiOutlineShop, AiOutlineWallet, AiOutlineUser, AiOutlineSearch, AiOutlineArrowLeft, AiFillCaretDown, AiFillCaretUp, AiOutlineUserAdd, AiOutlineFile } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineFilePdf, AiOutlineSetting, AiOutlineShopping, AiOutlineShop, AiOutlineWallet, AiOutlineUser, AiOutlineSearch, AiOutlineArrowLeft, AiFillCaretDown, AiFillCaretUp, AiOutlineUserAdd, AiOutlineFile, AiOutlineInfoCircle } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GoContainer } from "react-icons/go";
 import { HiOutlineDocumentReport, HiOutlineBriefcase } from "react-icons/hi";
@@ -260,6 +260,19 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
             )
           }
 
+          {/* MENU DE PEDIDOS EN PROCESO TIENDA */}
+          {
+            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
+              <MenuItemRender
+                icon={<AiOutlineInfoCircle size={22} />}
+                label="PROCESO DE PEDIDOS"
+                selected={menuSelected === MenuSections.PROCESO_PEDIDOS}
+                onClick={() => {
+                  navigate(ROUTES_PATHS.PROCESO_PEDIDOS)
+                }}
+              />
+            )
+          }
           {/*MENU CATALOGOS*/}
           {
             permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (

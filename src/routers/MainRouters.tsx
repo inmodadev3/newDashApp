@@ -14,6 +14,7 @@ import { Liquidacion } from "../Views/Compras/Liquidar/Liquidacion"
 import { Registro } from "../Views/Clientes/Registro/Registro"
 import { Registro_Usuarios } from "../Views/Registro_Usuarios/Registro_Usuarios"
 import { Movimientos } from "../Views/Movimientos/Movimientos"
+import { Proceso_Pedidos } from "../Views/Proceso_pedidos/Proceso_Pedidos"
 
 const MainRouters = () => {
     return(
@@ -32,6 +33,7 @@ const MainRouters = () => {
                 <Route path={ROUTES_PATHS.REGISTRO_CLIENTES} Component={Registro} />
                 <Route path={ROUTES_PATHS.CLIENTES_WEB_REGISTRADOS} Component={Registro_Usuarios}/>
                 <Route path={ROUTES_PATHS.MOVIMIENTOS} Component={Movimientos}/>
+                <Route path={ROUTES_PATHS.PROCESO_PEDIDOS} Component={Proceso_Pedidos} />
 
                 <Route path="/pedidos/pdf/:pedidoId" Component={PedidosPDF}/>
             </Routes>
