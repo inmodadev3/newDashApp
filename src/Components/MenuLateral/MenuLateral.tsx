@@ -1,7 +1,7 @@
 import axios from '../../Utils/BaseUrlAxio.ts'
 import ROUTES_PATHS from '../../routers/Paths.ts';
 import { AiOutlineHome, AiOutlineFilePdf, AiOutlineSetting, AiOutlineShopping, AiOutlineShop, AiOutlineWallet, AiOutlineUser, AiOutlineSearch, AiOutlineArrowLeft, AiFillCaretDown, AiFillCaretUp, AiOutlineUserAdd, AiOutlineFile, AiOutlineInfoCircle } from "react-icons/ai";
-import { GiHamburgerMenu } from "react-icons/gi";
+import { GiHamburgerMenu, GiNotebook } from "react-icons/gi";
 import { GoContainer } from "react-icons/go";
 import { HiOutlineDocumentReport, HiOutlineBriefcase } from "react-icons/hi";
 import { IDataUser } from '../../Utils/GlobalInterfaces.ts';
@@ -136,8 +136,22 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
           {showAdminMenu && (
             <>
 
-              <div className={`SubMenuOption `}>item 1</div>
-              <div className={`SubMenuOption `}>item 2</div>
+              <SubMenuItemRender
+                icon={<AiOutlineUser size={22} />}
+                label={"Empleados"}
+                submenuSelected={submenuSelected === SubMenuSections.CREAR_EMPLEADO}
+                onClick={() => {
+                  navigate(ROUTES_PATHS.CREAR_EMPLEADOS)
+                }}
+              />
+              <SubMenuItemRender
+                icon={<GiNotebook size={22} />}
+                label={"Permisos"}
+                submenuSelected={submenuSelected === SubMenuSections.PERMISOS_EMPLEADO}
+                onClick={() => {
+                  navigate(ROUTES_PATHS.PERMISOS_EMPLEADOS)
+                }}
+              />
             </>
           )}
 

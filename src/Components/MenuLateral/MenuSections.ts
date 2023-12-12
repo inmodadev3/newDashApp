@@ -21,4 +21,6 @@ export const SubMenuSections = {
     LIQUIDAR: 32,
     CATALOGOS_PDF: 101,
     VER_CATALOGOS_PDF: 102,
+    CREAR_EMPLEADO:191,
+    PERMISOS_EMPLEADO:192
 }

@@ -15,25 +15,29 @@ import { Registro } from "../Views/Clientes/Registro/Registro"
 import { Registro_Usuarios } from "../Views/Registro_Usuarios/Registro_Usuarios"
 import { Movimientos } from "../Views/Movimientos/Movimientos"
 import { Proceso_Pedidos } from "../Views/Proceso_pedidos/Proceso_Pedidos"
+import { Crear_empleados } from "../Views/Administrador/Crear_empleados/Crear_empleados"
+import { Permisos_Empleados } from "../Views/Administrador/Permisos_Empleados/Permisos_Empleados"
 
 const MainRouters = () => {
     return(
         <HashRouter>
             <Routes>
-                <Route path="/" Component={App}/>
-                <Route path={ROUTES_PATHS.LOGIN} Component={Login}/>
-                <Route path={ROUTES_PATHS.HOME} Component={Home}/>
-                <Route path={ROUTES_PATHS.PRODUCTOS} Component={Productos}/>
-                <Route path={ROUTES_PATHS.PEDIDOS} Component={Pedidos}/>
-                <Route path={ROUTES_PATHS.PORTAFOLIOS} Component={Portafolios}/>
-                <Route path={ROUTES_PATHS.CARGAR_COMPRAS} Component={CargarContenedor}/>
-                <Route path={ROUTES_PATHS.CATALOGOS} Component={Catalogos}/>
-                <Route path={ROUTES_PATHS.VER_CATALOGOS} Component={Ver_Catalogos}/>
-                <Route path={ROUTES_PATHS.LIQUIDACION} Component={Liquidacion}/>
+                <Route path="/" Component={App} />
+                <Route path={ROUTES_PATHS.LOGIN} Component={Login} />
+                <Route path={ROUTES_PATHS.HOME} Component={Home} />
+                <Route path={ROUTES_PATHS.PRODUCTOS} Component={Productos} />
+                <Route path={ROUTES_PATHS.PEDIDOS} Component={Pedidos} />
+                <Route path={ROUTES_PATHS.PORTAFOLIOS} Component={Portafolios} />
+                <Route path={ROUTES_PATHS.CARGAR_COMPRAS} Component={CargarContenedor} />
+                <Route path={ROUTES_PATHS.CATALOGOS} Component={Catalogos} />
+                <Route path={ROUTES_PATHS.VER_CATALOGOS} Component={Ver_Catalogos} />
+                <Route path={ROUTES_PATHS.LIQUIDACION} Component={Liquidacion} />
                 <Route path={ROUTES_PATHS.REGISTRO_CLIENTES} Component={Registro} />
-                <Route path={ROUTES_PATHS.CLIENTES_WEB_REGISTRADOS} Component={Registro_Usuarios}/>
-                <Route path={ROUTES_PATHS.MOVIMIENTOS} Component={Movimientos}/>
+                <Route path={ROUTES_PATHS.CLIENTES_WEB_REGISTRADOS} Component={Registro_Usuarios} />
+                <Route path={ROUTES_PATHS.MOVIMIENTOS} Component={Movimientos} />
                 <Route path={ROUTES_PATHS.PROCESO_PEDIDOS} Component={Proceso_Pedidos} />
+                <Route path={ROUTES_PATHS.CREAR_EMPLEADOS} Component={Crear_empleados} />
+                <Route path={ROUTES_PATHS.PERMISOS_EMPLEADOS} Component={Permisos_Empleados} />
 
                 <Route path="/pedidos/pdf/:pedidoId" Component={PedidosPDF}/>
             </Routes>

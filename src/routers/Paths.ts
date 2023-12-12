@@ -12,7 +12,9 @@ const ROUTES_PATHS = {
     REGISTRO_CLIENTES:'/clientes/registro',
     CLIENTES_WEB_REGISTRADOS:'/clientes_web/registrados',
     MOVIMIENTOS:'/movimientos',
-    PROCESO_PEDIDOS:'/pedidos/proceso'
+    PROCESO_PEDIDOS:'/pedidos/proceso',
+    CREAR_EMPLEADOS:'/administrador/crear_empleados',
+    PERMISOS_EMPLEADOS:'/administrador/permisos',
 }
 
 export default ROUTES_PATHS
