@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ModalsLayout } from './ModalsLayout'
 import { BsClipboardCheck } from 'react-icons/bs'
 import { useAlert } from '../../hooks/useAlert'
@@ -25,7 +25,11 @@ export const Modal_GenerarLinksTienda: React.FC<PropsModalGenerarLinks> = ({ Clo
     const [precio, setprecio] = useState(1)
     const [LinkTienda, setLinkTienda] = useState('')
     const { alerts, createToast } = useAlert()
-    const urlTienda = 'https://URL/#/'
+    const urlTienda = 'https://tienda.inmodafantasy.com.co/#/'
+
+    useEffect(()=>{
+        setLinkTienda("")
+    },[tipoTienda,precio])
     
     const handleChangeTipoTienda = (e: React.ChangeEvent<HTMLSelectElement>) => {
         settipoTienda(parseInt(e.target.value))
@@ -52,7 +56,7 @@ export const Modal_GenerarLinksTienda: React.FC<PropsModalGenerarLinks> = ({ Clo
             if (tipoTienda == 0) {
                 link = `${urlTienda}?pr=${precio}&seller=${seller.idLogin}`
             } else if (tipoTienda == 1) {
-                link = `${urlTienda}?seller=${seller.idLogin}`
+                link = `${urlTienda}login/?seller=${seller.idLogin}`
             }
 
             setLinkTienda(link)
