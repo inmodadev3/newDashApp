@@ -6,7 +6,7 @@ import { AgregarAlerta } from '../../Utils/Helpers'
 
 interface PropsModalGenerarLinks {
     CloseEvent: React.Dispatch<React.SetStateAction<boolean>>
-    vendedor:IPropsVendedor
+    vendedor: IPropsVendedor
 }
 
 export interface IPropsVendedor {
@@ -20,17 +20,29 @@ export interface IPropsVendedor {
     "token": string
 }
 
-export const Modal_GenerarLinksTienda: React.FC<PropsModalGenerarLinks> = ({ CloseEvent,vendedor }) => {
-    const [tipoTienda, settipoTienda] = useState(0)
+export const Modal_GenerarLinksTienda: React.FC<PropsModalGenerarLinks> = ({ CloseEvent, vendedor }) => {
+    const [tipoTienda, settipoTienda] = useState(1)
     const [precio, setprecio] = useState(1)
     const [LinkTienda, setLinkTienda] = useState('')
     const { alerts, createToast } = useAlert()
     const urlTienda = 'https://tienda.inmodafantasy.com.co/#/'
 
-    useEffect(()=>{
+    useEffect(() => {
         setLinkTienda("")
-    },[tipoTienda,precio])
-    
+    }, [tipoTienda, precio])
+
+    useEffect(() => {
+        let seller: IPropsVendedor;
+
+        if (vendedor) {
+            seller = vendedor
+            if (tipoTienda == 1) {
+                setLinkTienda(`${urlTienda}login/?seller=${seller.idLogin}`)
+            }
+        }
+    }, [])
+
+
     const handleChangeTipoTienda = (e: React.ChangeEvent<HTMLSelectElement>) => {
         settipoTienda(parseInt(e.target.value))
     }
@@ -98,7 +110,7 @@ export const Modal_GenerarLinksTienda: React.FC<PropsModalGenerarLinks> = ({ Clo
                     )
                 }
 
-                <button 
+                <button
                     className='bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700'
                     onClick={generarLink}
                 >Generar link</button>
