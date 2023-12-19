@@ -29,6 +29,8 @@ export const Facturas_Movimientos: React.FC<PropsFacturas> = ({ setLoadingMovimi
 
     const { alerts, createToast } = useAlert()
     const [facturas, setfacturas] = useState<Facturas[]>([] as Facturas[])
+    const [facturasCopy, setfacturasCopy] = useState<Facturas[]>([] as Facturas[])
+    const [texto_buscador, settexto_buscador] = useState('')
 
     useEffect(() => {
         if (mes !== 0 && año !== 0) {
@@ -37,11 +39,16 @@ export const Facturas_Movimientos: React.FC<PropsFacturas> = ({ setLoadingMovimi
     }, [mes, año])
 
     useEffect(() => {
-        if(facturas.length > 0){
+        if (facturas.length > 0) {
             Calcular_Total()
         }
     }, [facturas])
-    
+
+    useEffect(() => {
+        Buscar()
+    }, [texto_buscador])
+
+
 
 
     const ConsultarFacturas = async () => {
@@ -51,6 +58,7 @@ export const Facturas_Movimientos: React.FC<PropsFacturas> = ({ setLoadingMovimi
                 if (response.status == 200) {
                     setLoadingMovimiento(false)
                     setfacturas(response.data.data)
+                    setfacturasCopy(response.data.data)
                 }
             } else {
                 AgregarAlerta(createToast, `Ha ocurrido un error con la cedula del vendedor`, 'warning')
@@ -61,7 +69,7 @@ export const Facturas_Movimientos: React.FC<PropsFacturas> = ({ setLoadingMovimi
         }
     }
 
-    const Calcular_Total = () =>{
+    const Calcular_Total = () => {
         try {
             let total = 0;
             facturas.forEach(element => {
@@ -70,14 +78,35 @@ export const Facturas_Movimientos: React.FC<PropsFacturas> = ({ setLoadingMovimi
 
             setTotal(total)
         } catch (error) {
-            AgregarAlerta(createToast, `${error}`, 'danger') 
+            AgregarAlerta(createToast, `${error}`, 'danger')
         }
     }
 
+    const handleChangeBuscador = (e: React.ChangeEvent<HTMLInputElement>) => {
+        settexto_buscador(e.target.value)
+    }
 
+    const Buscar = () => {
+        const data: Facturas[] = facturasCopy
+        const encontradas: Facturas[] = data.filter((item) =>
+            item.StrNombre.toLowerCase().includes(texto_buscador.toLowerCase())||
+            item.IntDocumento.toString().includes(texto_buscador)
+        );
+        setfacturas(encontradas)
+
+    }
 
     return (
         <div className='min-w-full'>
+
+            <input
+                type='text'
+                placeholder='Buscar por nombre o numero de documento'
+                aria-label='Buscar factura por nombre o numero de documento'
+                className='w-full border-2 border-slate-700 outline-none px-4 py-2 rounded my-2'
+                value={texto_buscador}
+                onChange={handleChangeBuscador}
+            />
             {
                 LoadingMovimiento ? (
                     <div className='flex items-center w-full mt-32 flex-col space-y-2'>

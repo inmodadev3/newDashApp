@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { LoaderInfo } from '../../Components/LoaderInfo/LoaderInfo'
 import { useAlert } from '../../hooks/useAlert'
-import { AgregarAlerta, FormateoNumberInt } from '../../Utils/Helpers'
+import { AgregarAlerta, FormateoNumberInt, quitarAcentos } from '../../Utils/Helpers'
 import axios from '../../Utils/BaseUrlAxio'
 import moment from 'moment'
 
@@ -44,7 +44,12 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
 
     const { alerts, createToast } = useAlert()
     const [cartera, setcartera] = useState<Cartera[]>([] as Cartera[])
+    const [carteraCopy, setcarteraCopy] = useState<Cartera[]>([] as Cartera[])
+    const [texto_buscador, settexto_buscador] = useState('')
+
     const [cartera_ciudades, setcartera_ciudades] = useState<Cartera[]>([] as Cartera[])
+    const [cartera_ciudadesCopy, setcartera_ciudadesCopy] = useState<Cartera[]>([] as Cartera[])
+    const [texto_buscador_oportunidades, settexto_buscador_oportunidades] = useState('')
 
     useEffect(() => {
         moment.locale('es-mx')
@@ -57,6 +62,15 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
         }
     }, [cartera])
 
+    useEffect(() => {
+        Buscar()
+    }, [texto_buscador])
+
+    useEffect(() => {
+        Buscar_oportunidades()
+    }, [texto_buscador_oportunidades])
+
+
 
 
     const ConsultarCarteraVendedor = async () => {
@@ -64,11 +78,14 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
         try {
             const response = await axios.get(`/movimientos/cartera?strIdVendedor=${strIdVendedor}`)
             if (response.status == 200) {
-                const response_Ciudades = await axios.get(`movimientos/cartera_ciudades?strIdVendedor=${strIdVendedor}`)
-
                 setLoadingMovimiento(false)
                 setcartera(response.data.data)
+                setcarteraCopy(response.data.data)
+
+
+                const response_Ciudades = await axios.get(`movimientos/cartera_ciudades?strIdVendedor=${strIdVendedor}`)
                 setcartera_ciudades(response_Ciudades.data.data)
+                setcartera_ciudadesCopy(response_Ciudades.data.data)
 
             }
         } catch (error) {
@@ -91,8 +108,51 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
         }
     }
 
+    const handleChangeBuscador = (e: React.ChangeEvent<HTMLInputElement>) => {
+        settexto_buscador(e.target.value)
+    }
+
+    const handleChangeBuscadorOportunidades = (e: React.ChangeEvent<HTMLInputElement>) => {
+        settexto_buscador_oportunidades(e.target.value)
+    }
+
+    const Buscar = () => {
+        const data: Cartera[] = carteraCopy
+        const texto_buscadorSinAcentos = quitarAcentos(texto_buscador.toLowerCase());
+
+        const encontradas = data.filter((item) =>
+            quitarAcentos(item.StrDescripcion.toLowerCase()).includes(texto_buscadorSinAcentos) ||
+            item.StrNombre.toLowerCase().includes(texto_buscador.toLowerCase()) ||
+            item.StrIdTercero.includes(texto_buscador)
+        );
+
+        setcartera(encontradas)
+    }
+
+    const Buscar_oportunidades = () => {
+        const data: Cartera[] = cartera_ciudadesCopy
+        const texto_buscadorSinAcentos = quitarAcentos(texto_buscador_oportunidades.toLowerCase());
+
+        const encontradas = data.filter((item) =>
+            quitarAcentos(item.StrDescripcion.toLowerCase()).includes(texto_buscadorSinAcentos) ||
+            item.StrNombre.toLowerCase().includes(texto_buscador_oportunidades.toLowerCase()) ||
+            item.StrIdTercero.includes(texto_buscador_oportunidades)
+        )
+
+
+        setcartera_ciudades(encontradas)
+    }
+
     return (
         <div>
+            <input
+                type='text'
+                placeholder='Buscar por nombre, documento o ciudad'
+                aria-label='Buscar factura por nombre, documento o ciudad'
+                className='w-full border-2 border-slate-700 outline-none px-4 py-2 rounded my-2'
+                value={texto_buscador}
+                onChange={handleChangeBuscador}
+            />
             {
                 LoadingMovimiento ? (
                     <div className='flex items-center w-full mt-32 flex-col space-y-2'>
@@ -139,6 +199,15 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
                         </section>
 
                         <h3 className='text-2xl mt-12'>Oportunidad de recaudo</h3>
+
+                        <input
+                            type='text'
+                            placeholder='Buscar por nombre, documento o ciudad'
+                            aria-label='Buscar factura por nombre, documento o ciudad'
+                            className='w-full border-2 border-slate-700 outline-none px-4 py-2 rounded my-2'
+                            value={texto_buscador_oportunidades}
+                            onChange={handleChangeBuscadorOportunidades}
+                        />
                         <section className='h-[450px] overflow-y-scroll'>
 
                             <table className=' w-full border-b border-b-gray-800'>
