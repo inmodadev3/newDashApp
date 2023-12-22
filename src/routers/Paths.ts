@@ -15,6 +15,7 @@ const ROUTES_PATHS = {
     PROCESO_PEDIDOS:'/pedidos/proceso',
     CREAR_EMPLEADOS:'/administrador/crear_empleados',
     PERMISOS_EMPLEADOS:'/administrador/permisos',
+    CREAR_PERMISOS_EMPLEADOS:'/administrador/permisos/nuevo',
 }
 
 export default ROUTES_PATHS

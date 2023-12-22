@@ -14,7 +14,7 @@ import { MenuSections, SubMenuSections } from './MenuSections.ts';
 import './stylesMenu.css'
 
 interface IFilterPermisos {
-  idPermiso: number
+  id_permiso: number
 }
 
 interface MenuLateralProps {
@@ -69,16 +69,15 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
     }
   }, [])
 
+
   const ConsultarPermisos = () => {
-    axios.get(`/usuarios/permisos/${userInfo?.idLogin}`, {
+    axios.get(`/permisos/${userInfo?.idLogin}`, {
       headers: {
         Authorization: `Bearer ${userInfo?.token}`
       }
     }).then((response) => {
-      if (response.data.success) {
-        let dataPermisos = response.data.data
-        setpermisosArray(dataPermisos)
-      }
+      let dataPermisos = response.data.permisos
+      setpermisosArray(dataPermisos)
     }).catch((err) => {
       if (err.response.status === 403) {
         cerrarSesion()
@@ -121,7 +120,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
 
           {/*MENU ADMINISTRACION*/}
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 19) && (
+            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 1) && (
               <MenuItemRender
                 icon={<AiOutlineSetting size={22} />}
                 label="ADMINISTRADOR"
@@ -157,7 +156,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
 
           {/*MENU COMPRAS*/}
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 1) && (
+            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 2) && (
               <MenuItemRender
                 icon={<AiOutlineShop size={22} />}
                 label="COMPRAS"
@@ -193,7 +192,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
 
           {/*MENU PEDIDOS*/}
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 5) && (
+            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 3) && (
               <MenuItemRender
                 icon={<AiOutlineShopping size={22} />}
                 label="PEDIDOS"
@@ -207,7 +206,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
 
           {/*MENU CARTERA*/}
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 8) && (
+            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 4) && (
               <MenuItemRender
                 icon={<AiOutlineWallet size={22} />}
                 label="CARTERA"
@@ -220,7 +219,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
           }
 
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 8) && (
+            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 5) && (
               <MenuItemRender
                 icon={<AiOutlineUserAdd size={22} />}
                 label="REGISTRO USUARIOS WEB"
@@ -234,7 +233,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
 
           {/*MENU VENDEDORES*/}
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 11) && (
+            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 6) && (
               <MenuItemRender
                 icon={<AiOutlineUser size={22} />}
                 label="VENDEDORES"
@@ -248,7 +247,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
 
           {/*MENU INFORMES*/}
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 15) && (
+            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 7) && (
               <MenuItemRender
                 icon={<HiOutlineDocumentReport size={22} />}
                 label="INFORMES"
@@ -262,7 +261,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
 
           {/*MENU PORTAFOLIOS*/}
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
+            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 8) && (
               <MenuItemRender
                 icon={<HiOutlineBriefcase size={22} />}
                 label="PORTAFOLIOS"
@@ -276,7 +275,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
 
           {/* MENU DE PEDIDOS EN PROCESO TIENDA */}
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
+            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 9) && (
               <MenuItemRender
                 icon={<AiOutlineInfoCircle size={22} />}
                 label="PROCESO DE PEDIDOS"
@@ -289,7 +288,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
           }
           {/*MENU CATALOGOS*/}
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
+            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 10) && (
               <MenuItemRender
                 icon={<AiOutlineFilePdf size={22} />}
                 label="CATALOGOS"
@@ -306,7 +305,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
             showCatalogosMenu && (
               <>
                 {
-                  permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
+                  permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 10) && (
                     <SubMenuItemRender
                       icon={<AiOutlineFilePdf size={22} />}
                       label="Generar PDF'S"
@@ -318,7 +317,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
                   )
                 }
                 {
-                  permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
+                  permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 10) && (
                     <SubMenuItemRender
                       icon={<AiOutlineFilePdf size={22} />}
                       label="Ver PDFS"
@@ -335,7 +334,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
 
           {/*MENU MOVIMIENTOS*/}
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 27) && (
+            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 11) && (
               <MenuItemRender
                 icon={<AiOutlineFile size={22} color={'white'} />}
                 label="MOVIMIENTOS"
@@ -348,7 +347,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
           }
 
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.idPermiso === 43) && (
+            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 12) && (
               <MenuItemRender
                 icon={<AiOutlineSearch size={22} />}
                 label="PRODUCTOS"

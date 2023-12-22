@@ -26,6 +26,7 @@ export const Movimientos: React.FC = () => {
   const [año, setaño] = useState(0)
   const [tab_seleccionado, settab_seleccionado] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
+  const [totalSinIva, settotalSinIva] = useState<number>(0)
   const [total_Pagar, settotal_Pagar] = useState<number>(0)
 
   useEffect(() => {
@@ -136,6 +137,10 @@ export const Movimientos: React.FC = () => {
             <span>{tab_seleccionado !== 1 ? 'Total' : 'Total Propias'} : </span>
             <span>{FormateoNumberInt(total.toString())} $</span>
           </div>
+          <div className={`${tab_seleccionado !== 0 && 'hidden'} font-bold text-sm`}>
+            <span>Total sin iva: </span>
+            <span>{FormateoNumberInt(totalSinIva.toString())}  </span>
+          </div>
           {
             tab_seleccionado == 3 && (
               <div className='font-bold text-sm my-2'>
@@ -156,7 +161,7 @@ export const Movimientos: React.FC = () => {
 
             {/* FACTURAS */}
             <TabPanel>
-              <Facturas_Movimientos setLoadingMovimiento={setLoadingMovimiento} LoadingMovimiento={LoadingMovimiento} mes={mes} año={año} strIdVendedor={userInfo ? userInfo?.strIdVendedor : '1'} setTotal={setTotal} />
+              <Facturas_Movimientos setLoadingMovimiento={setLoadingMovimiento} LoadingMovimiento={LoadingMovimiento} mes={mes} año={año} strIdVendedor={userInfo ? userInfo?.strIdVendedor : '1'} setTotal={setTotal} setTotalNoIva={settotalSinIva}/>
             </TabPanel>
 
             {/* CARTERA */}

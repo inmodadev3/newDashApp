@@ -11,6 +11,7 @@ type PropsFacturas = {
     año: number
     strIdVendedor: string
     setTotal: React.Dispatch<React.SetStateAction<number>>
+    setTotalNoIva: React.Dispatch<React.SetStateAction<number>>
 }
 
 type Facturas = {
@@ -25,7 +26,7 @@ type Facturas = {
     Vendedor: string
 }
 
-export const Facturas_Movimientos: React.FC<PropsFacturas> = ({ setLoadingMovimiento, LoadingMovimiento, mes, año, strIdVendedor, setTotal }) => {
+export const Facturas_Movimientos: React.FC<PropsFacturas> = ({ setLoadingMovimiento, LoadingMovimiento, mes, año, strIdVendedor, setTotal,setTotalNoIva }) => {
 
     const { alerts, createToast } = useAlert()
     const [facturas, setfacturas] = useState<Facturas[]>([] as Facturas[])
@@ -72,10 +73,12 @@ export const Facturas_Movimientos: React.FC<PropsFacturas> = ({ setLoadingMovimi
     const Calcular_Total = () => {
         try {
             let total = 0;
+            let totalNoIva = 0
             facturas.forEach(element => {
+                totalNoIva += parseInt((element.IntValor).toFixed(0))
                 total += parseInt((element.IntTotal).toFixed(0))
             });
-
+            setTotalNoIva(totalNoIva)
             setTotal(total)
         } catch (error) {
             AgregarAlerta(createToast, `${error}`, 'danger')
