@@ -79,7 +79,7 @@ export const Modal_GenerarLinksTienda: React.FC<PropsModalGenerarLinks> = ({ Clo
 
     return (
         <ModalsLayout CloseEvent={CloseEvent}>
-            <section className='z-20 bg-white px-12 py-8 space-y-4 w-1/3'>
+            <section className='z-20 bg-white px-12 py-8 space-y-4 md:w-1/3 w-full'>
                 <label className='flex flex-col'>
                     <p className='text-sm text-slate-600'>Seleccione tipo de tienda</p>
                     <select

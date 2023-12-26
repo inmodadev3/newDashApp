@@ -16,6 +16,7 @@ const ROUTES_PATHS = {
     CREAR_EMPLEADOS:'/administrador/crear_empleados',
     PERMISOS_EMPLEADOS:'/administrador/permisos',
     CREAR_PERMISOS_EMPLEADOS:'/administrador/permisos/nuevo',
+    INFORMES:'/informes'
 }
 
 export default ROUTES_PATHS

@@ -92,7 +92,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
 
   return (
     <>
-      <div className={`MenuContainer ${menuView ? "ViewMenu" : "CloseMenu"}`}>
+      <div className={`MenuContainer ${menuView ? "ViewMenu" : "CloseMenu"} fixed`}>
 
         <div className='arrowCloseView' onClick={() => { setmenuView(false) }}>
           <AiOutlineArrowLeft size={24} />
@@ -253,7 +253,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
                 label="INFORMES"
                 selected={menuSelected === MenuSections.INFORMES}
                 onClick={() => {
-                  navigate(ROUTES_PATHS.HOME)
+                  navigate(ROUTES_PATHS.INFORMES)
                 }}
               />
             )
