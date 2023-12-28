@@ -170,7 +170,7 @@ export const Pedidos = () => {
         <AppLayout>
             {
                 <section className="w-full h-screen flex justify-center">
-                    <div className=" w-full h-6/6 my-5 rounded bg-gray-100 mt-10 overflow-scroll">
+                    <div className=" w-full h-6/6 my-5 rounded bg-gray-100 mt-10">
                         <div className="my-2">
                             <BuscadorPedidos ConsultarPedidosEnProceso={consultar_Pedidos} setdatos={setpedidos} setloadData={setisLoadingData} />
                         </div>

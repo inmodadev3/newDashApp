@@ -81,7 +81,7 @@ export const Movimientos: React.FC = () => {
 
   return (
     <AppLayout>
-      <div className='w-full h-screen overflow-y-scroll px-1'>
+      <div className='w-full h-screen px-1'>
         <article className='my-12'>
           <h1 className='text-2xl font-medium tracking-wide'>Movimientos</h1>
         </article>
