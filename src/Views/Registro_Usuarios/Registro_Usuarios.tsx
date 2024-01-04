@@ -49,11 +49,11 @@ const DataFormUsuario: React.FC<TPropsDataFormUsuario> = ({ text, value }) => {
     return (
         <article>
             <span className='font-medium text-gray-600'>{text}</span>
-            <label className='flex justify-between border-2 border-gray-400 px-4 py-2 rounded text-gray-800 font-thin'>
+            <label className='flex justify-between px-4 py-2 font-thin text-gray-800 border-2 border-gray-400 rounded'>
                 <input
                     type='text'
                     value={value}
-                    className='outline-none w-full'
+                    className='w-full outline-none'
                     disabled
                     id='name'
                 />
@@ -96,7 +96,7 @@ export const Registro_Usuarios: React.FC = () => {
             }
 
         } catch (error) {
-            console.log(error)
+            console.error(error)
             AgregarAlerta(createToast, "Ha ocurrido un error", 'danger')
 
         }
@@ -116,7 +116,7 @@ export const Registro_Usuarios: React.FC = () => {
                 })
                 setisVisibleModalUsuario(false)
             } else {
-                console.log(data)
+                console.warn(data)
                 AgregarAlerta(createToast, "Ha ocurrido un error", 'warning')
             }
 
@@ -154,12 +154,12 @@ export const Registro_Usuarios: React.FC = () => {
     return (
         <AppLayout>
             <br />
-            <h1 className='text-4xl py-2 text-center text-blue-900'>CLIENTES REGISTRADOS</h1>
+            <h1 className='py-2 text-4xl text-center text-blue-900'>CLIENTES REGISTRADOS</h1>
             <br />
-            <section className='TablePedidosContainer flex flex-col gap-y-6'>
+            <section className='flex flex-col TablePedidosContainer gap-y-6'>
                 {
                     usuarios_registrados.map((item, index) => (
-                        <div className='bg-gray-200 flex justify-between px-4 py-2 rounded' key={index}>
+                        <div className='flex justify-between px-4 py-2 bg-gray-200 rounded' key={index}>
                             <div className='flex flex-col justify-center '>
                                 <article>
                                     <p>Fecha: {moment(item.dtFechaRegistro).format('YY-MM-DD / hh:mm a')}</p>
@@ -167,8 +167,8 @@ export const Registro_Usuarios: React.FC = () => {
                                 </article>
                             </div>
                             <div className='flex flex-col py-4 gap-y-4'>
-                                <button onClick={() => { Descargar_Ruth(item.strRutaDocumento, `${item.strNombCliente}-RUT.pdf`) }} className='bg-blue-600 text-white w-52 py-2 rounded hover:bg-blue-800'>Descargar RUT</button>
-                                <button onClick={() => { informacion_usuario(item) }} className='bg-blue-600 text-white w-52 py-2 rounded hover:bg-blue-800'>Ver toda la informacion</button>
+                                <button onClick={() => { Descargar_Ruth(item.strRutaDocumento, `${item.strNombCliente}-RUT.pdf`) }} className='py-2 text-white bg-blue-600 rounded w-52 hover:bg-blue-800'>Descargar RUT</button>
+                                <button onClick={() => { informacion_usuario(item) }} className='py-2 text-white bg-blue-600 rounded w-52 hover:bg-blue-800'>Ver toda la informacion</button>
 
                             </div>
 
@@ -180,8 +180,8 @@ export const Registro_Usuarios: React.FC = () => {
             {
                 isVisibleModalUsuario && (
                     <ModalsLayout CloseEvent={setisVisibleModalUsuario}>
-                        <div className='w-1/2 h-5/6 bg-white z-10 grid grid-cols-1 px-12 py-8 gap-y-4 overflow-y-scroll rounded'>
-                            <h3 className='text-center text-4xl text-blue-500'>Datos usuario</h3>
+                        <div className='z-10 grid w-1/2 grid-cols-1 px-12 py-8 overflow-y-scroll bg-white rounded h-5/6 gap-y-4'>
+                            <h3 className='text-4xl text-center text-blue-500'>Datos usuario</h3>
                             <DataFormUsuario
                                 text='Identificacion'
                                 value={`${usuario_seleccionado.strTipoDocCliente} ${usuario_seleccionado.strIdCliente}`}
@@ -227,9 +227,9 @@ export const Registro_Usuarios: React.FC = () => {
                                 value={usuario_seleccionado.strRedes}
                             />
 
-                            <div className='flex w-full justify-around my-4'>
-                                <button onClick={() => { Finalizar_registro(usuario_seleccionado.intIdRegCliente) }} className='border-2 bg-blue-500 text-white px-6 py-2 rounded border-blue-500 hover:bg-white hover:text-blue-500 transition-all'>Finalizar registro en Hgi</button>
-                                <button onClick={() => { setisVisibleModalUsuario(false) }} className='border-2 bg-red-500 text-white px-6 py-2 rounded border-red-500 hover:bg-white hover:text-red-500 transition-all'>Cerrar</button>
+                            <div className='flex justify-around w-full my-4'>
+                                <button onClick={() => { Finalizar_registro(usuario_seleccionado.intIdRegCliente) }} className='px-6 py-2 text-white transition-all bg-blue-500 border-2 border-blue-500 rounded hover:bg-white hover:text-blue-500'>Finalizar registro en Hgi</button>
+                                <button onClick={() => { setisVisibleModalUsuario(false) }} className='px-6 py-2 text-white transition-all bg-red-500 border-2 border-red-500 rounded hover:bg-white hover:text-red-500'>Cerrar</button>
                             </div>
                         </div>
                     </ModalsLayout>

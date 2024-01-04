@@ -63,7 +63,7 @@ export const Liquidadas_Movimientos: React.FC<PropsLiquidadas> = ({ setLoadingMo
             if (response.data.data.length > 0) {
                 Filtrar_liquidacion_nombres(response.data.data)
             } else {
-                console.log('sin datos')
+                console.error('sin datos')
             }
         } catch (error) {
             AgregarAlerta(createToast, `${error}`, 'danger')
@@ -118,14 +118,14 @@ export const Liquidadas_Movimientos: React.FC<PropsLiquidadas> = ({ setLoadingMo
         <div>
             {
                 LoadingMovimiento ? (
-                    <div className='flex items-center w-full mt-32 flex-col space-y-2'>
+                    <div className='flex flex-col items-center w-full mt-32 space-y-2'>
                         <LoaderInfo />
-                        <span className='text-md font-medium text-gray-600'>Cargando Facturas liquidadas...</span>
+                        <span className='font-medium text-gray-600 text-md'>Cargando Facturas liquidadas...</span>
                     </div>
                 ) : (
                     ingresos.map((ingreso, index) => (
                         <div key={index} className='mt-12'>
-                            <div className='flex w-auto bg-gray-300 px-1 py-2 border-b border-b-black space-x-4'>
+                            <div className='flex w-auto px-1 py-2 space-x-4 bg-gray-300 border-b border-b-black'>
                                 <span>Documento: </span>
                                 <h2 className='flex font-bold'>{ingreso}</h2>
                             </div>
@@ -160,12 +160,12 @@ export const Liquidadas_Movimientos: React.FC<PropsLiquidadas> = ({ setLoadingMo
                                 </tbody>
                             </table>
                             <div className='flex space-x-4'>
-                                <div className='flex my-2 space-x-2 bg-gray-700 text-white w-max px-6 py-1 rounded-xl'>
-                                    <p className=' uppercase'>TOTAL Valor {ingreso} :</p>
+                                <div className='flex px-6 py-1 my-2 space-x-2 text-white bg-gray-700 w-max rounded-xl'>
+                                    <p className='uppercase '>TOTAL Valor {ingreso} :</p>
                                     <p>{FormateoNumberInt(calcular_valorXliquidacion(ingreso, 0).toFixed(0))}</p>
                                 </div>
-                                <div className='flex my-2 space-x-2 bg-gray-700 text-white w-max px-6 py-1 rounded-xl'>
-                                    <p className=' uppercase'>TOTAL valor a pagar {ingreso} :</p>
+                                <div className='flex px-6 py-1 my-2 space-x-2 text-white bg-gray-700 w-max rounded-xl'>
+                                    <p className='uppercase '>TOTAL valor a pagar {ingreso} :</p>
                                     <p>{FormateoNumberInt(calcular_valorXliquidacion(ingreso, 1).toFixed(0))}</p>
                                 </div>
                             </div>

@@ -19,6 +19,7 @@ import { Crear_empleados } from "../Views/Administrador/Crear_empleados/Crear_em
 import { Permisos_Empleados } from "../Views/Administrador/Permisos_Empleados/Permisos_Empleados"
 import { Crear_Permisos } from "../Views/Administrador/Permisos_Empleados/Crear_Permisos"
 import { Informes } from "../Views/Informes/Informes"
+import { Descargar_liquidadas } from "../Views/Compras/Descargar_liquidadas/Descargar_liquidadas"
 
 const MainRouters = () => {
     return(
@@ -42,6 +43,7 @@ const MainRouters = () => {
                 <Route path={ROUTES_PATHS.PERMISOS_EMPLEADOS} Component={Permisos_Empleados} />
                 <Route path={ROUTES_PATHS.CREAR_PERMISOS_EMPLEADOS}  Component={Crear_Permisos}/>
                 <Route path={ROUTES_PATHS.INFORMES} Component={Informes} />
+                <Route path={ROUTES_PATHS.DESCARGAR_LIQUIDADAS} Component={Descargar_liquidadas}/>
 
 
                 <Route path="/pedidos/pdf/:pedidoId" Component={PedidosPDF}/>

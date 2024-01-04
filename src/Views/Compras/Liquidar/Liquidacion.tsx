@@ -104,7 +104,7 @@ const FormLine: React.FC<PropsFormLine> = ({
     nameLabel1, nameLabel2, inputValue1, inputValue2, changeInputValue1, changeInputValue2, disabled1 = false, disabled2 = false
 }) => {
     return (
-        <div className='flex justify-center gap-x-12 my-2'>
+        <div className='flex justify-center my-2 gap-x-12'>
             <div className='w-full px-4 my-2'>
                 <p className='py-2 font-bold text-slate-200'>{nameLabel1}</p>
                 <input className={`rounded-xl w-full ${!disabled1 ? 'bg-white' : 'bg-gray-100/80'} outline-none border-2 border-gray-300 text-gray-800 p-2`} disabled={disabled1} type='text' value={typeof (inputValue1) == "number" ? FormateoNumberInt((inputValue1).toString()) : inputValue1} onChange={(e) => { changeInputValue1 && changeInputValue1(e.target.value) }} />
@@ -443,7 +443,6 @@ export const Liquidacion: React.FC = () => {
 
     }
 
-    console.log(listaProductosLiquidados)
     const Actualizar_Producto_Liquidado = (id: number) => {
         
         axios.post('/compras/liquidar', {
@@ -504,23 +503,23 @@ export const Liquidacion: React.FC = () => {
 
     return (
         <AppLayout>
-            <div className='relative max-h-screen overflow-y-scroll pb-5'>
+            <div className='relative max-h-screen pb-5'>
                 <section>
                     <div className='flex bg-[#2f3c87] text-white justify-center items-center py-2'>
-                        <h1 className='text-2xl mt-2 italic font-bold'>Liquidar Productos</h1>
+                        <h1 className='mt-2 text-2xl italic font-bold'>Liquidar Productos</h1>
                     </div>
-                    <div className='my-6'>
+                    <div className='px-1 my-6'>
                         <input
                             type='text'
                             placeholder='Buscar Referencia...'
-                            className='w-1/2 outline-none border-2 border-black rounded px-4 py-2'
+                            className='w-full px-4 py-2 border-2 border-black rounded outline-none'
                             onChange={(e) => { Buscar_Referencia(e.target.value) }}
                         />
                     </div>
                     <section>
                         <table className='w-full'>
                             <thead className='bg-[#75b628] text-white'>
-                                <tr className='h-12 [&>th]:border-2 [&>th]:border-gray-700'>
+                                <tr className='h-12 [&>th]:border [&>th]:border-gray-300'>
                                     <th>#</th>
                                     <th>Referencia</th>
                                     <th>Descripcion</th>
@@ -531,10 +530,10 @@ export const Liquidacion: React.FC = () => {
                                     <th>Accion</th>
                                 </tr>
                             </thead>
-                            <tbody className=' [&>tr]:border-b-2 [&>tr]:h-12 [&>tr>td]:border-x-2 [&>tr>td]:border-gray-300'>
+                            <tbody className='[&>tr]:border-b-2 [&>tr]:h-12 [&>tr>td]:border-x-2 [&>tr>td]:border-gray-300'>
                                 {
                                     datosLiquidar?.map((producto, index) => (
-                                        <tr className='[&>td]:text-center [&>td]:text-xl' key={index}>
+                                        <tr className='[&>td]:text-center [&>td]:text-md [&>td]:font-medium hover:bg-slate-300' key={index}>
                                             <td className='px-2'>{index + 1}</td>
                                             <td>{producto.strReferencia}</td>
                                             <td>{producto.strDescripcion}</td>
@@ -542,11 +541,11 @@ export const Liquidacion: React.FC = () => {
                                             <td>{producto.raggi}</td>
                                             <td>$ {FormateoNumberInt(producto.intValor)}</td>
                                             <td>$ {CalcularEstimadoDos(parseFloat(producto.intValor))}</td>
-                                            <td className='flex justify-center items-center h-12 w-full'>
+                                            <td className='flex items-center justify-center w-full h-12'>
                                                 <span onClick={() => {
                                                     setviewModalLiquidacion(true)
                                                     ConsultarInformacionProductoLiquidar(producto.id, producto.strReferencia)
-                                                }} className='bg-blue-500 px-2 py-1 rounded cursor-pointer hover:bg-blue-700 text-white'>Liquidar</span>
+                                                }} className='px-2 py-1 text-white bg-blue-600 rounded cursor-pointer hover:bg-blue-800'>Liquidar</span>
                                             </td>
                                         </tr>
                                     ))
@@ -560,20 +559,20 @@ export const Liquidacion: React.FC = () => {
 
                 <section>
                     <div className='flex bg-[#2f3c87] text-white justify-center items-center py-2'>
-                        <h1 className='text-2xl mt-2 italic font-bold'>Productos liquidados</h1>
+                        <h1 className='mt-2 text-2xl italic font-bold'>Productos liquidados</h1>
                     </div>
-                    <div className='my-6'>
+                    <div className='px-1 my-6'>
                         <input
                             type='text'
                             placeholder='Buscar Referencia...'
-                            className='w-1/2 outline-none border-2 border-black rounded px-4 py-2'
+                            className='w-full px-4 py-2 border-2 border-black rounded outline-none'
                             onChange={(e) => { Buscar_Referencia_Liquidada(e.target.value) }}
                         />
                     </div>
-                    <section>
+                    <section className='pb-12'>
                         <table className='w-full mt-6'>
                             <thead className='bg-[#75b628] text-white'>
-                                <tr className='h-12 [&>th]:border-2 [&>th]:border-gray-700'>
+                                <tr className='h-12 [&>th]:border-2 [&>th]:border-gray-300'>
                                     <th>#</th>
                                     <th>Referencia</th>
                                     <th>Descripcion</th>
@@ -589,7 +588,7 @@ export const Liquidacion: React.FC = () => {
                             <tbody className=' [&>tr]:border-b-2 [&>tr]:h-12 [&>tr>td]:border-x-2 [&>tr>td]:border-gray-300'>
                                 {
                                     listaProductosLiquidados?.map((producto, index) => (
-                                        <tr className='[&>td]:text-center [&>td]:text-xl' key={index}>
+                                        <tr className='[&>td]:text-center [&>td]:text-md [&>td]:font-medium hover:bg-slate-300' key={index}>
                                             <td className='px-2'>{index + 1}</td>
                                             <td>{producto.strReferencia}</td>
                                             <td>{producto.strDescripcion}</td>
@@ -599,12 +598,12 @@ export const Liquidacion: React.FC = () => {
                                             <td>$ {FormateoNumberInt((producto.intPrecio2).toString())}</td>
                                             <td>$ {FormateoNumberInt((producto.intPrecio3).toString())}</td>
                                             <td>$ {FormateoNumberInt((producto.intPrecio4).toString())}</td>
-                                            <td className='flex justify-center items-center h-12 w-full'>
+                                            <td className='flex items-center justify-center w-full h-12'>
                                                 <span onClick={() => {
                                                     /* Modificar_Producto_Liquidado(producto.id) */
                                                     Consultar_Informacion_Producto_Modificar(producto.id)
                                                     setviewModallModificar(true)
-                                                }} className='bg-lime-500 px-2 py-1 rounded cursor-pointer hover:bg-lime-700 text-white'>Modificar</span>
+                                                }} className='px-2 py-1 text-white bg-blue-600 rounded cursor-pointer hover:bg-blue-700'>Modificar</span>
                                             </td>
                                         </tr>
                                     ))
@@ -621,7 +620,7 @@ export const Liquidacion: React.FC = () => {
                         <section className={`text-xl flex h-full z-10 bg-gray-100 ${datosExistentesProducto == null ? "w-auto" : "w-full "}`}>
                             <div className={` overflow-y-scroll pb-2 bg-lime-800/80 text-white border-r-lime-400 border-r-2 flex-1`}>
                                 <div className='bg-blue-500'>
-                                    <h1 className='text-center text-2xl py-2 text-white italic font-bold'>DATOS PARA LIQUIDAR</h1>
+                                    <h1 className='py-2 text-2xl italic font-bold text-center text-white'>DATOS PARA LIQUIDAR</h1>
                                 </div>
 
                                 <hr className='border-white' />
@@ -665,8 +664,8 @@ export const Liquidacion: React.FC = () => {
                                                 <div>
                                                     <div className='w-full px-4 my-2'>
                                                         <p className='py-2 font-bold text-slate-200'>Unidad de medida</p>
-                                                        <select value={LUnidades} onChange={(e) => { setLUnidades(e.target.value) }} className='w-full px-2 py-2 rounded-lg outline-none border-gray-400 border-2 text-black'>
-                                                            <option value={0} disabled className='text-gray-400 text-sm'>Seleccione UDM</option>
+                                                        <select value={LUnidades} onChange={(e) => { setLUnidades(e.target.value) }} className='w-full px-2 py-2 text-black border-2 border-gray-400 rounded-lg outline-none'>
+                                                            <option value={0} disabled className='text-sm text-gray-400'>Seleccione UDM</option>
                                                             {
                                                                 listaUnidades.map((unidad, index) => (
                                                                     <option key={index} value={unidad.StrIdUnidad}>{unidad.StrIdUnidad}</option>
@@ -700,11 +699,11 @@ export const Liquidacion: React.FC = () => {
                                                     changeInputValue2={setLMaterial}
                                                 />
 
-                                                <div className='flex justify-center gap-x-12 my-2'>
+                                                <div className='flex justify-center my-2 gap-x-12'>
                                                     <div className='w-full px-4 my-2'>
                                                         <p className='py-2 font-bold text-slate-200'>Género</p>
-                                                        <select value={LGenero} onChange={(e) => { setLGenero(e.target.value) }} className='w-full px-2 py-2 rounded-lg outline-none border-gray-400 border-2 text-black'>
-                                                            <option value={0} disabled className='text-gray-400 text-sm'>Seleccione Genero</option>
+                                                        <select value={LGenero} onChange={(e) => { setLGenero(e.target.value) }} className='w-full px-2 py-2 text-black border-2 border-gray-400 rounded-lg outline-none'>
+                                                            <option value={0} disabled className='text-sm text-gray-400'>Seleccione Genero</option>
                                                             {
                                                                 listaGeneros.map((genero, index) => (
                                                                     <option key={index} value={genero.id} >{genero.descripcion}</option>
@@ -715,8 +714,8 @@ export const Liquidacion: React.FC = () => {
 
                                                     <div className='w-full px-4 my-2'>
                                                         <p className='py-2 font-bold text-slate-200'>Marca</p>
-                                                        <select value={LMarca} onChange={(e) => { setLMarca(e.target.value) }} className='w-full px-2 py-2 rounded-lg outline-none border-gray-400 border-2 text-black'>
-                                                            <option value={0} disabled className='text-gray-400 text-sm'>Seleccione Marca</option>
+                                                        <select value={LMarca} onChange={(e) => { setLMarca(e.target.value) }} className='w-full px-2 py-2 text-black border-2 border-gray-400 rounded-lg outline-none'>
+                                                            <option value={0} disabled className='text-sm text-gray-400'>Seleccione Marca</option>
                                                             {
                                                                 listaMarcas.map((marca, index) => (
                                                                     <option key={index} value={marca.id}>{marca.descripcion}</option>
@@ -727,18 +726,18 @@ export const Liquidacion: React.FC = () => {
                                                 </div>
 
                                                 <div className='w-full px-4 my-4'>
-                                                    <textarea value={Lobservacion} onChange={(e) => { setLobservacion(e.target.value) }} className='w-full h-20 outline-none resize-none text-black px-4 py-2 rounded' placeholder='Digite la observacion' />
+                                                    <textarea value={Lobservacion} onChange={(e) => { setLobservacion(e.target.value) }} className='w-full h-20 px-4 py-2 text-black rounded outline-none resize-none' placeholder='Digite la observacion' />
                                                 </div>
 
-                                                <div className='px-4 flex justify-evenly pb-4'>
-                                                    <button className='bg-lime-600 px-4 py-2 rounded hover:bg-lime-700' onClick={Liquidar}>Liquidar</button>
+                                                <div className='flex px-4 pb-4 justify-evenly'>
+                                                    <button className='px-4 py-2 rounded bg-lime-600 hover:bg-lime-700' onClick={Liquidar}>Liquidar</button>
                                                     <button
                                                         onClick={(e) => {
                                                             e.preventDefault()
                                                             setviewModalLiquidacion(false)
                                                             Limpiar_Datos()
                                                         }}
-                                                        className='bg-red-400/80 px-4 py-2 rounded hover:bg-red-500/80'>Cerrar
+                                                        className='px-4 py-2 rounded bg-red-400/80 hover:bg-red-500/80'>Cerrar
                                                     </button>
                                                 </div>
 
@@ -752,7 +751,7 @@ export const Liquidacion: React.FC = () => {
 
                             <div className={`${datosExistentesProducto == null && "hidden"} flex-1 overflow-y-scroll pb-2 bg-gray-600 text-white`}>
                                 <div className='bg-[#2f3c87]'>
-                                    <h1 className='text-center text-2xl py-2 text-white italic font-bold'>DATOS EXISTENTES</h1>
+                                    <h1 className='py-2 text-2xl italic font-bold text-center text-white'>DATOS EXISTENTES</h1>
                                 </div>
 
                                 <hr className='border-white' />
@@ -846,7 +845,7 @@ export const Liquidacion: React.FC = () => {
                         <section className={`text-xl flex h-full z-10 bg-gray-100 ${datosExistentesProducto == null ? "w-auto" : "w-full "}`}>
                             <div className={` overflow-y-scroll pb-2 bg-lime-800/80 text-white border-r-lime-400 border-r-2 flex-1`}>
                                 <div className='bg-blue-500'>
-                                    <h1 className='text-center text-2xl py-2 text-white italic font-bold'>DATOS PARA ACTUALIZAR</h1>
+                                    <h1 className='py-2 text-2xl italic font-bold text-center text-white'>DATOS PARA ACTUALIZAR</h1>
                                 </div>
 
                                 <hr className='border-white' />
@@ -890,8 +889,8 @@ export const Liquidacion: React.FC = () => {
                                                 <div>
                                                     <div className='w-full px-4 my-2'>
                                                         <p className='py-2 font-bold text-slate-200'>Unidad de medida</p>
-                                                        <select value={LUnidades} onChange={(e) => { setLUnidades(e.target.value) }} className='w-full px-2 py-2 rounded-lg outline-none border-gray-400 border-2 text-black'>
-                                                            <option value={0} disabled className='text-gray-400 text-sm'>Seleccione UDM</option>
+                                                        <select value={LUnidades} onChange={(e) => { setLUnidades(e.target.value) }} className='w-full px-2 py-2 text-black border-2 border-gray-400 rounded-lg outline-none'>
+                                                            <option value={0} disabled className='text-sm text-gray-400'>Seleccione UDM</option>
                                                             {
                                                                 listaUnidades.map((unidad, index) => (
                                                                     <option key={index} value={unidad.StrIdUnidad}>{unidad.StrIdUnidad}</option>
@@ -924,11 +923,11 @@ export const Liquidacion: React.FC = () => {
                                                     changeInputValue1={setLCantidadPaca}
                                                     changeInputValue2={setLMaterial}
                                                 />
-                                                <div className='flex justify-center gap-x-12 my-2'>
+                                                <div className='flex justify-center my-2 gap-x-12'>
                                                     <div className='w-full px-4 my-2'>
                                                         <p className='py-2 font-bold text-slate-200'>Género</p>
-                                                        <select value={LGenero} onChange={(e) => { setLGenero(e.target.value) }} className='w-full px-2 py-2 rounded-lg outline-none border-gray-400 border-2 text-black'>
-                                                            <option value={0} disabled className='text-gray-400 text-sm'>Seleccione Genero</option>
+                                                        <select value={LGenero} onChange={(e) => { setLGenero(e.target.value) }} className='w-full px-2 py-2 text-black border-2 border-gray-400 rounded-lg outline-none'>
+                                                            <option value={0} disabled className='text-sm text-gray-400'>Seleccione Genero</option>
                                                             {
                                                                 listaGeneros.map((genero, index) => (
                                                                     <option key={index} value={genero.id} >{genero.descripcion}</option>
@@ -939,8 +938,8 @@ export const Liquidacion: React.FC = () => {
 
                                                     <div className='w-full px-4 my-2'>
                                                         <p className='py-2 font-bold text-slate-200'>Marca</p>
-                                                        <select value={LMarca} onChange={(e) => { setLMarca(e.target.value) }} className='w-full px-2 py-2 rounded-lg outline-none border-gray-400 border-2 text-black'>
-                                                            <option value={0} disabled className='text-gray-400 text-sm'>Seleccione Marca</option>
+                                                        <select value={LMarca} onChange={(e) => { setLMarca(e.target.value) }} className='w-full px-2 py-2 text-black border-2 border-gray-400 rounded-lg outline-none'>
+                                                            <option value={0} disabled className='text-sm text-gray-400'>Seleccione Marca</option>
                                                             {
                                                                 listaMarcas.map((marca, index) => (
                                                                     <option key={index} value={marca.id}>{marca.descripcion}</option>
@@ -951,18 +950,18 @@ export const Liquidacion: React.FC = () => {
                                                 </div>
 
                                                 <div className='w-full px-4 my-4'>
-                                                    <textarea value={Lobservacion} onChange={(e) => { setLobservacion(e.target.value) }} className='w-full h-20 outline-none resize-none text-black px-4 py-2 rounded' placeholder='Digite la observacion' />
+                                                    <textarea value={Lobservacion} onChange={(e) => { setLobservacion(e.target.value) }} className='w-full h-20 px-4 py-2 text-black rounded outline-none resize-none' placeholder='Digite la observacion' />
                                                 </div>
 
-                                                <div className='px-4 flex justify-evenly pb-4'>
-                                                    <button className='bg-lime-600 px-4 py-2 rounded hover:bg-lime-700' onClick={()=>{Actualizar_Producto_Liquidado(Datos_Producto_Modificar.intIdDetalle)}}>Actualizar</button>
+                                                <div className='flex px-4 pb-4 justify-evenly'>
+                                                    <button className='px-4 py-2 rounded bg-lime-600 hover:bg-lime-700' onClick={()=>{Actualizar_Producto_Liquidado(Datos_Producto_Modificar.intIdDetalle)}}>Actualizar</button>
                                                     <button
                                                         onClick={(e) => {
                                                             e.preventDefault()
                                                             setviewModalLiquidacion(false)
                                                             Limpiar_Datos()
                                                         }}
-                                                        className='bg-red-400/80 px-4 py-2 rounded hover:bg-red-500/80'>Cerrar
+                                                        className='px-4 py-2 rounded bg-red-400/80 hover:bg-red-500/80'>Cerrar
                                                     </button>
                                                 </div>
 

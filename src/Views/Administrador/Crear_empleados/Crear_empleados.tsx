@@ -175,7 +175,6 @@ export const Crear_empleados: React.FC = () => {
 
     const eliminar_empleado = async (id: number) => {
         try {
-            console.log(id)
             axios.delete(`/empleados/eliminar/${id}`)
             AgregarAlerta(createToast, `El empleado con id ${id} se ha eliminado con exito`, "success")
             setempleados((prevData)=>{
@@ -193,15 +192,15 @@ export const Crear_empleados: React.FC = () => {
     return (
         <AppLayout>
             <div className='mt-4'>
-                <button className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700' onClick={handleChangeVisibleListaEmpleados}>Lista de empleados</button>
+                <button className='px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700' onClick={handleChangeVisibleListaEmpleados}>Lista de empleados</button>
             </div>
-            <section className='mt-4 px-12'>
+            <section className='px-12 mt-4'>
                 <label htmlFor='nombre_empleado'>
-                    <p className='py-2 px-1 font-medium'>Nombre Empleado</p>
+                    <p className='px-1 py-2 font-medium'>Nombre Empleado</p>
                     <input
                         type='text'
                         id='nombre_empleado'
-                        className='outline-none border-2 border-slate-300 w-full px-4 py-2 rounded-lg'
+                        className='w-full px-4 py-2 border-2 rounded-lg outline-none border-slate-300'
                         placeholder='Ejemplo: Sara Perez'
                         value={nombre}
                         onChange={handleChangeNombre}
@@ -210,11 +209,11 @@ export const Crear_empleados: React.FC = () => {
                 </label>
 
                 <label htmlFor='id_empleado'>
-                    <p className='py-2 px-1 font-medium'>Identificación</p>
+                    <p className='px-1 py-2 font-medium'>Identificación</p>
                     <input
                         type='text'
                         id='id_empleado'
-                        className='outline-none border-2 border-slate-300 w-full px-4 py-2 rounded-lg'
+                        className='w-full px-4 py-2 border-2 rounded-lg outline-none border-slate-300'
                         placeholder='Ejemplo: 1234567890'
                         value={id}
                         onChange={handleChangeId}
@@ -223,11 +222,11 @@ export const Crear_empleados: React.FC = () => {
                 </label>
 
                 <label htmlFor='usuario_empleado'>
-                    <p className='py-2 px-1'>Usuario</p>
+                    <p className='px-1 py-2'>Usuario</p>
                     <input
                         type='text'
                         id='usuario_empleado'
-                        className='outline-none border-2 border-slate-300 w-full px-4 py-2 rounded-lg'
+                        className='w-full px-4 py-2 border-2 rounded-lg outline-none border-slate-300'
                         placeholder='Ejemplo: Sara_Perez'
                         value={user}
                         onChange={handleChangeUser}
@@ -236,11 +235,11 @@ export const Crear_empleados: React.FC = () => {
                 </label>
 
                 <label htmlFor='password_empleado'>
-                    <p className='py-2 px-1'>Contraseña</p>
+                    <p className='px-1 py-2'>Contraseña</p>
                     <input
                         type='text'
                         id='password_empleado'
-                        className='outline-none border-2 border-slate-300 w-full px-4 py-2 rounded-lg'
+                        className='w-full px-4 py-2 border-2 rounded-lg outline-none border-slate-300'
                         placeholder='Ejemplo: SP7890*'
                         value={password}
                         onChange={handleChangePassword}
@@ -249,19 +248,19 @@ export const Crear_empleados: React.FC = () => {
                 </label>
 
                 <label htmlFor='celular_empleado'>
-                    <p className='py-2 px-1'>Celular </p>
+                    <p className='px-1 py-2'>Celular </p>
                     <input
                         type='text'
                         id='celular_empleado'
-                        className='outline-none border-2 border-slate-300 w-full px-4 py-2 rounded-lg'
+                        className='w-full px-4 py-2 border-2 rounded-lg outline-none border-slate-300'
                         placeholder='Ejemplo: 1234567 (Opcional)'
                         value={celular}
                         onChange={handleChangeCelular}
                     />
                 </label>
 
-                <div className='mt-8 relative'>
-                    <button onClick={crear_empleado} className='bg-green-500 text-white  px-4 py-2 rounded absolute right-0 hover:bg-green-700'>{actualizable ? "Actualizar Empleado" : "Crear Empleado"}</button>
+                <div className='relative mt-8'>
+                    <button onClick={crear_empleado} className='absolute right-0 px-4 py-2 text-white bg-green-500 rounded hover:bg-green-700'>{actualizable ? "Actualizar Empleado" : "Crear Empleado"}</button>
                 </div>
             </section>
 
@@ -273,7 +272,7 @@ export const Crear_empleados: React.FC = () => {
                             <label>
                                 <input
                                     type='text'
-                                    className='outline-none border-2 border-slate-300 w-full px-4 py-2 rounded-lg'
+                                    className='w-full px-4 py-2 border-2 rounded-lg outline-none border-slate-300'
                                     placeholder='Buscar empleado'
                                     value={empleado_buscar}
                                     onChange={handleChangeBuscar}

@@ -12,7 +12,7 @@ export const DescargarFormato: React.FC = () => {
 
     return (
         <div className='absolute w-auto lg:right-4 lg:top-3'>
-            <button className='bg-orange-500 px-6 py-3 text-white rounded hover:scale-110 transition-all duration-300' onClick={DescargarFormatoContenedor}>Descargar formato contenedor</button>
+            <button className='px-6 py-3 text-white transition-all duration-300 bg-blue-700 rounded hover:scale-110' onClick={DescargarFormatoContenedor}>Descargar formato contenedor</button>
         </div>
     )
 }

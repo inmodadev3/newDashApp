@@ -7,6 +7,7 @@ const ROUTES_PATHS = {
     PORTAFOLIOS:'/portafolios',
     CARGAR_COMPRAS:'/compras/cargar',
     LIQUIDACION:'/compras/liquidar',
+    DESCARGAR_LIQUIDADAS:'/compras/descargar',
     CATALOGOS:'/catalogos',
     VER_CATALOGOS:'/catalogos/view',
     REGISTRO_CLIENTES:'/clientes/registro',
@@ -16,7 +17,8 @@ const ROUTES_PATHS = {
     CREAR_EMPLEADOS:'/administrador/crear_empleados',
     PERMISOS_EMPLEADOS:'/administrador/permisos',
     CREAR_PERMISOS_EMPLEADOS:'/administrador/permisos/nuevo',
-    INFORMES:'/informes'
+    INFORMES:'/informes',
+
 }
 
 export default ROUTES_PATHS

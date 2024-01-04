@@ -89,7 +89,7 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
 
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
             AgregarAlerta(createToast, `${error}`, 'danger')
         }
     }
@@ -149,22 +149,22 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
                 type='text'
                 placeholder='Buscar por nombre, documento o ciudad'
                 aria-label='Buscar factura por nombre, documento o ciudad'
-                className='w-full border-2 border-slate-700 outline-none px-4 py-2 rounded my-2'
+                className='w-full px-4 py-2 my-2 border-2 rounded outline-none border-slate-700'
                 value={texto_buscador}
                 onChange={handleChangeBuscador}
             />
             {
                 LoadingMovimiento ? (
-                    <div className='flex items-center w-full mt-32 flex-col space-y-2'>
+                    <div className='flex flex-col items-center w-full mt-32 space-y-2'>
                         <LoaderInfo />
-                        <span className='text-md font-medium text-gray-600'>Cargando Cartera...</span>
+                        <span className='font-medium text-gray-600 text-md'>Cargando Cartera...</span>
                     </div>
                 ) : (
                     <>
                         <h3 className='text-2xl'>Propias</h3>
                         <section className='h-[450px] overflow-y-scroll'>
 
-                            <table className=' w-full border-b border-b-gray-800'>
+                            <table className='w-full border-b  border-b-gray-800'>
                                 <thead className='border-b border-gray-400'>
                                     <tr className='[&>th]:font-semibold [&>th]:text-start [&>th]:py-2'>
                                         <th className='w-20'>Doc</th>
@@ -198,19 +198,19 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
                             </table>
                         </section>
 
-                        <h3 className='text-2xl mt-12'>Oportunidad de recaudo</h3>
+                        <h3 className='mt-12 text-2xl'>Oportunidad de recaudo</h3>
 
                         <input
                             type='text'
                             placeholder='Buscar por nombre, documento o ciudad'
                             aria-label='Buscar factura por nombre, documento o ciudad'
-                            className='w-full border-2 border-slate-700 outline-none px-4 py-2 rounded my-2'
+                            className='w-full px-4 py-2 my-2 border-2 rounded outline-none border-slate-700'
                             value={texto_buscador_oportunidades}
                             onChange={handleChangeBuscadorOportunidades}
                         />
                         <section className='h-[450px] overflow-y-scroll'>
 
-                            <table className=' w-full border-b border-b-gray-800'>
+                            <table className='w-full border-b  border-b-gray-800'>
                                 <thead className='border-b border-gray-400'>
                                     <tr className='[&>th]:font-semibold [&>th]:text-start [&>th]:py-2'>
                                         <th className='w-20'>Doc</th>

@@ -137,7 +137,7 @@ export const Pedidos = () => {
                 }
                 Excel_Pedidos(data_Pedido, "TblDetalleDocumentos", `${data.data.header.intIdpedido}-${data.data.header.strNombCliente}`) 
             } else {
-                console.log(data)
+                console.error(data)
             }
         } catch (error) {
             console.error(error)
@@ -169,8 +169,8 @@ export const Pedidos = () => {
     return (
         <AppLayout>
             {
-                <section className="w-full h-screen flex justify-center">
-                    <div className=" w-full h-6/6 my-5 rounded bg-gray-100 mt-10">
+                <section className="flex justify-center w-full h-screen">
+                    <div className="w-full my-5 mt-10 bg-gray-100 rounded  h-6/6">
                         <div className="my-2">
                             <BuscadorPedidos ConsultarPedidosEnProceso={consultar_Pedidos} setdatos={setpedidos} setloadData={setisLoadingData} />
                         </div>
@@ -206,28 +206,28 @@ export const Pedidos = () => {
                                                         <td className="w-60">{pedido.strNombVendedor}</td>
                                                         <td>
                                                             {
-                                                                pedido.intEstado == 1 ? (<span className="bg-sky-300 p-2 rounded text-sky-950">Recibido</span>)
-                                                                    : pedido.intEstado == -1 ? (<span className="bg-red-600 p-1 rounded text-red-50">Anulado </span>)
-                                                                        : (<span className="bg-orange-300 p-1 rounded text-orange-800">Procesado </span>)
+                                                                pedido.intEstado == 1 ? (<span className="p-2 rounded bg-sky-300 text-sky-950">Recibido</span>)
+                                                                    : pedido.intEstado == -1 ? (<span className="p-1 bg-red-600 rounded text-red-50">Anulado </span>)
+                                                                        : (<span className="p-1 text-orange-800 bg-orange-300 rounded">Procesado </span>)
                                                             }
                                                         </td>
                                                         <td>
-                                                            <div className="flex w-full h-full justify-center items-center relative group">
-                                                                <span className="cursor-pointer w-10 h-10 bg-gray-400/30 rounded-full flex justify-center items-center z-10">
+                                                            <div className="relative flex items-center justify-center w-full h-full group">
+                                                                <span className="z-10 flex items-center justify-center w-10 h-10 rounded-full cursor-pointer bg-gray-400/30">
                                                                     <AiOutlineMore size={26} />
                                                                 </span>
-                                                                <div className="hidden absolute top-full transform -translate-x-1/2 bg-white border border-gray-300 p-2 rounded shadow-md group-hover:flex flex-col z-20 w-60">
+                                                                <div className="absolute z-20 flex-col hidden p-2 transform -translate-x-1/2 bg-white border border-gray-300 rounded shadow-md top-full group-hover:flex w-60">
                                                                     {/* Contenido del cuadro de opciones */}
-                                                                    <button onClick={() => { Descargar_excel_pedido(pedido.intIdPedido) }} className="hover:bg-gray-200 py-3 px-4 flex items-center gap-x-10">
+                                                                    <button onClick={() => { Descargar_excel_pedido(pedido.intIdPedido) }} className="flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10">
                                                                         <span><AiOutlineFileExcel size={20} /></span>
                                                                         <span>Descargar Excel</span>
                                                                     </button>
-                                                                    <button className="hover:bg-gray-200 py-3 px-4 flex items-center gap-x-10" onClick={() => { anular_Pedido(pedido.intIdPedido) }}>
+                                                                    <button className="flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10" onClick={() => { anular_Pedido(pedido.intIdPedido) }}>
                                                                         <span><AiOutlineDelete size={20} /></span>
                                                                         <span>Anular pedido</span>
                                                                     </button>
                                                                     <a
-                                                                        className="hover:bg-gray-200 py-3 px-4 flex items-center gap-x-10 cursor-pointer"
+                                                                        className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200 gap-x-10"
                                                                         target="_blank"
                                                                         href={`/#/pedidos/pdf/${pedido.intIdPedido}`}
                                                                         onClick={() => {
@@ -237,7 +237,7 @@ export const Pedidos = () => {
                                                                         <span><AiOutlinePrinter size={20} /></span>
                                                                         <span>Imprimir pedido</span>
                                                                     </a>
-                                                                    {/* <button className="hover:bg-gray-200 py-3 px-4 flex items-center gap-x-10">
+                                                                    {/* <button className="flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10">
                                                                         <span><AiOutlineSend size={20} /></span>
                                                                         <span>Enviar a HGI</span>
                                                                     </button> */}

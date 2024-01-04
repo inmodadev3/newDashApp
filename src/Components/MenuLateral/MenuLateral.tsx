@@ -12,6 +12,7 @@ import { useEffect, useState, useContext } from 'react'
 import logo from '../../../assets/img/INMODA.png'
 import { MenuSections, SubMenuSections } from './MenuSections.ts';
 import './stylesMenu.css'
+import { FaFileDownload } from 'react-icons/fa';
 
 interface IFilterPermisos {
   id_permiso: number
@@ -99,7 +100,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
         </div>
 
         <div className='MenuHeader'>
-          <div className='w-36 h-36 bg-white rounded-full mb-6 flex items-center justify-center'>
+          <div className='flex items-center justify-center mb-6 bg-white rounded-full w-36 h-36'>
             <img src={logo} alt='logoInmoda' className="w-28" />
           </div>
           <span>DASH</span>
@@ -184,6 +185,15 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
                 submenuSelected={submenuSelected === SubMenuSections.LIQUIDAR}
                 onClick={() => {
                   navigate(ROUTES_PATHS.LIQUIDACION)
+                }}
+              />
+
+              <SubMenuItemRender
+                icon={<FaFileDownload  size={22} />}
+                label={"liquidadas"}
+                submenuSelected={submenuSelected === SubMenuSections.DESCARGAR_COMPRAS}
+                onClick={() => {
+                  navigate(ROUTES_PATHS.DESCARGAR_LIQUIDADAS)
                 }}
               />
 
