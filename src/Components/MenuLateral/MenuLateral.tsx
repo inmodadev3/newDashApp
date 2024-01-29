@@ -6,13 +6,12 @@ import { GoContainer } from "react-icons/go";
 import { HiOutlineDocumentReport, HiOutlineBriefcase } from "react-icons/hi";
 import { IDataUser } from '../../Utils/GlobalInterfaces.ts';
 import { MenuSelectedContext } from '../../Utils/UseContextProviders.tsx';
-import { MdAttachMoney } from "react-icons/md";
+import { MdAttachMoney, MdOutlineDownloading } from "react-icons/md";
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState, useContext } from 'react'
 import logo from '../../../assets/img/INMODA.png'
 import { MenuSections, SubMenuSections } from './MenuSections.ts';
 import './stylesMenu.css'
-import { FaFileDownload } from 'react-icons/fa';
 
 interface IFilterPermisos {
   id_permiso: number
@@ -189,7 +188,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
               />
 
               <SubMenuItemRender
-                icon={<FaFileDownload  size={22} />}
+                icon={<MdOutlineDownloading  size={22} />}
                 label={"liquidadas"}
                 submenuSelected={submenuSelected === SubMenuSections.DESCARGAR_COMPRAS}
                 onClick={() => {
