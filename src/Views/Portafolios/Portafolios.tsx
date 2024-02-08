@@ -7,7 +7,7 @@ import { GestionesClientes } from '../../Components/Portafolios/GestionesCliente
 import { IDataUser } from '../../Utils/GlobalInterfaces';
 import { InfoClientesPortafolio } from '../../Components/Portafolios/InfoClientes/InfoClientesPortafolio';
 import { Loader } from '../../Components/LoadingPage/Loader';
-import { MenuSelectedContext } from '../../Utils/UseContextProviders'
+import { MenuSelectedContext } from '../../context/UseContextProviders'
 import { TablePortafolios } from '../../Components/Portafolios/TablePortafolios/TablePortafolios';
 import { useNavigate } from 'react-router-dom';
 import '../../Components/TablePedidos/stylesTablePedidos.css'

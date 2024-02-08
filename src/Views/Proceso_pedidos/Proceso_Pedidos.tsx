@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { MenuSelectedContext } from '../../Utils/UseContextProviders'
+import { MenuSelectedContext } from '../../context/UseContextProviders'
 import { MenuSections } from '../../Components/MenuLateral/MenuSections'
 import { AppLayout } from '../../Components/AppLayout/AppLayout'
 import { IPropsVendedor, Modal_GenerarLinksTienda } from '../../Components/Modals/Modal_GenerarLinksTienda'

@@ -5,7 +5,7 @@ import './stylesPDF.css'
 import { useParams } from 'react-router-dom'
 import axios from '../../../Utils/BaseUrlAxio'
 import { AppLayout } from '../../../Components/AppLayout/AppLayout'
-import { MenuSelectedContext } from '../../../Utils/UseContextProviders'
+import { MenuSelectedContext } from '../../../context/UseContextProviders'
 
 interface IHeaderPdf {
     dtFechaEnvio: string

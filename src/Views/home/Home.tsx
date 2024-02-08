@@ -3,7 +3,7 @@ import { AppLayout } from "../../Components/AppLayout/AppLayout"
 import { IDataUser } from "../../Utils/GlobalInterfaces";
 import { useContext, useEffect } from 'react'
 import './stylesHome.css'
-import { MenuSelectedContext } from "../../Utils/UseContextProviders";
+import { MenuSelectedContext } from "../../context/UseContextProviders";
 
 
 const Home = () => {

@@ -5,13 +5,14 @@ import { GiHamburgerMenu, GiNotebook } from "react-icons/gi";
 import { GoContainer } from "react-icons/go";
 import { HiOutlineDocumentReport, HiOutlineBriefcase } from "react-icons/hi";
 import { IDataUser } from '../../Utils/GlobalInterfaces.ts';
-import { MenuSelectedContext } from '../../Utils/UseContextProviders.tsx';
-import { MdAttachMoney, MdOutlineDownloading } from "react-icons/md";
+import { MenuSelectedContext } from '../../context/UseContextProviders.tsx';
+import { MdAttachMoney, MdOutlineDownloading} from "react-icons/md";
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState, useContext } from 'react'
 import logo from '../../../assets/img/INMODA.png'
 import { MenuSections, SubMenuSections } from './MenuSections.ts';
 import './stylesMenu.css'
+import { PermisosContext } from '../../context/permisosContext.tsx';
 
 interface IFilterPermisos {
   id_permiso: number
@@ -50,6 +51,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
   let userInfo: IDataUser | null = null!;
   const [permisosArray, setpermisosArray] = useState([])
   const { menuSelected, submenuSelected } = useContext(MenuSelectedContext);
+  const {setPermisos,permisos } = useContext(PermisosContext)
   const navigate = useNavigate();
 
   //VISUALIZACION DE SUBMENUS
@@ -69,6 +71,12 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
     }
   }, [])
 
+  useEffect(()=>{
+    if(permisosArray.length > 0){
+      setPermisos(permisosArray)
+    }
+  },[permisosArray])
+
 
   const ConsultarPermisos = () => {
     axios.get(`/permisos/${userInfo?.idLogin}`, {
@@ -84,6 +92,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
       }
     })
   }
+
 
   const cerrarSesion = () => {
     localStorage.removeItem("dataUser")
@@ -188,7 +197,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
               />
 
               <SubMenuItemRender
-                icon={<MdOutlineDownloading  size={22} />}
+                icon={<MdOutlineDownloading size={22} />}
                 label={"liquidadas"}
                 submenuSelected={submenuSelected === SubMenuSections.DESCARGAR_COMPRAS}
                 onClick={() => {
@@ -367,6 +376,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
               />
             )
           }
+
         </nav>
 
         <div className='CerrarSesion'>

@@ -1,6 +1,6 @@
 import { IArrayProductos } from "../../Utils/GlobalInterfaces"
 import { FormateoNumberInt, ImagenNotFound, URLIMAGENESPRODUCTOS } from "../../Utils/Helpers"
-import { useState } from "react"
+import React, { useState } from "react"
 import './Styles/stylesProductoCard.css'
 import axios from "../../Utils/BaseUrlAxio"
 
@@ -8,7 +8,14 @@ interface IArrayImagenes {
     StrArchivo: string
 }
 
-export const ProductoCard: React.FC<{ producto: IArrayProductos }> = ({ producto }) => {
+interface CardProps {
+    producto:IArrayProductos,
+    editar_ubicacion:boolean,
+    setviewModalEditarUbicacion: React.Dispatch<React.SetStateAction<boolean>>
+    setproducto_editar: React.Dispatch<React.SetStateAction<IArrayProductos>>
+}
+
+export const ProductoCard: React.FC<CardProps> = ({ producto, editar_ubicacion,setviewModalEditarUbicacion,setproducto_editar }) => {
 
     const [ViewImage, setViewImage] = useState(false)
     const [arrayImagenes, setarrayImagenes] = useState<IArrayImagenes[]>([])
@@ -23,20 +30,25 @@ export const ProductoCard: React.FC<{ producto: IArrayProductos }> = ({ producto
             })
     }
 
+    const Activar_Modal_EditarUbicaciones = () =>{
+        setviewModalEditarUbicacion(true)
+        setproducto_editar(producto)
+    }
+
     return (
         <>
-            <div className="flex flex-col lg:flex-row w-full max-w-2xl h-full justify-between border-2 border-gray-300 rounded">
+            <div className="flex flex-col justify-between w-full h-full max-w-2xl border-2 border-gray-300 rounded lg:flex-row">
                 <figure
-                    className="bg-white w-full lg:w-1/2 cursor-pointer flex border-gray-400 border-b-2 lg:border-r-2 lg:border-b-0 h-full"
+                    className="flex w-full h-full bg-white border-b-2 border-gray-400 cursor-pointer lg:w-1/2 lg:border-b-0"
                     onClick={() => {
                         setViewImage(true)
                         setimagenCount(producto.productoImg !== null ? URLIMAGENESPRODUCTOS + producto.productoImg : ImagenNotFound)
                         ConsultarImagenesProducto()
                     }}>
-                    <img src={URLIMAGENESPRODUCTOS + producto.productoImg ? producto.productoImg !== null ? URLIMAGENESPRODUCTOS + producto.productoImg : ImagenNotFound : ImagenNotFound} alt="Imagen Producto" className="w-full h-full object-contain" />
+                    <img src={URLIMAGENESPRODUCTOS + producto.productoImg ? producto.productoImg !== null ? URLIMAGENESPRODUCTOS + producto.productoImg : ImagenNotFound : ImagenNotFound} alt="Imagen Producto" className="object-contain w-full h-full" />
                 </figure>
-                <div className="px-5 bg-gray-300/10 w-full lg:w-1/2 flex flex-col gap-y-2">
-                    <span className=" text-lg underline text-sky-950 font-bold">{producto.descripcion}</span>
+                <div className="flex flex-col w-full px-5 bg-gray-300/10 lg:w-1/2 gap-y-2 lg:border-l-2">
+                    <span className="text-lg font-bold underline text-sky-950">{producto.descripcion}</span>
                     <div>
                         <span className={"font-bold text-sky-950 text-lg"}>Referencia : </span>
                         <span>{producto.referencia}</span>
@@ -62,9 +74,20 @@ export const ProductoCard: React.FC<{ producto: IArrayProductos }> = ({ producto
                         <span>{producto.Ubicacion}</span>
                     </div>
                     <div>
-                        <span className={"font-bold text-sky-950 text-lg"}>{producto.saldoInv !== null ? "Inventario : ": "Sin inventario"} </span>
+                        <span className={"font-bold text-sky-950 text-lg"}>{(producto.saldoInv !== null && parseInt(parseInt(producto.saldoInv).toFixed(0)) > 0) ? "Inventario : ": "Sin inventario"} </span>
                         <span>{producto.saldoInv !== null ? parseInt(producto.saldoInv).toFixed(0) : ""}</span>
                     </div>
+                    {
+                        editar_ubicacion && (
+                            <div className="py-2">
+                                <button 
+                                    onClick={Activar_Modal_EditarUbicaciones}
+                                    className="px-3 py-1 text-white bg-blue-600 rounded"
+                                 >Editar ubicación</button>
+                            </div>
+                        )
+                    }
+                    
                 </div>
             </div>
 
