@@ -51,7 +51,7 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
   let userInfo: IDataUser | null = null!;
   const [permisosArray, setpermisosArray] = useState([])
   const { menuSelected, submenuSelected } = useContext(MenuSelectedContext);
-  const {setPermisos,permisos } = useContext(PermisosContext)
+  const {setPermisos} = useContext(PermisosContext)
   const navigate = useNavigate();
 
   //VISUALIZACION DE SUBMENUS
