@@ -6,7 +6,7 @@ import { IPropsVendedor, Modal_GenerarLinksTienda } from '../../Components/Modal
 import axios from '../../Utils/BaseUrlAxio'
 import moment from 'moment'
 import { FormateoNumberInt } from '../../Utils/Helpers'
-import { AiOutlineEye } from 'react-icons/ai'
+import { AiOutlineEye, AiTwotoneDelete } from 'react-icons/ai'
 import { Modal_Productos_Pedidos_Proceso } from '../../Components/Modals/Modal_Productos_Pedidos_Proceso'
 
 
@@ -40,6 +40,8 @@ export const Proceso_Pedidos: React.FC = () => {
     const vendedor = localStorage.getItem('dataUser')
     const [pedidos, setpedidos] = useState<IPropsPedidos[]>([])
     const [idPedidoDetalle, setidPedidoDetalle] = useState(0)
+    const estado_pedido = ['En proceso', 'Finalizado', 'Eliminado']
+    const colores_estado = ['bg-green-500', 'bg-blue-500', 'bg-red-500']
 
     useEffect(() => {
         setMenuSelected(MenuSections.PROCESO_PEDIDOS)
@@ -69,12 +71,25 @@ export const Proceso_Pedidos: React.FC = () => {
         setisViewDetallesPedido(true)
     }
 
+    const EliminarPedidoActivo = async (idPedido: number) => {
+        await axios.put(`/proceso_pedidos/estado`, {
+            estado: 3,
+            idPedido: idPedido
+        })
+
+        setpedidos((prevData) =>
+            prevData.map((pedido) =>
+                pedido.intIdPedido === idPedido ? { ...pedido, intEstado: 3 } : pedido
+            )
+        );
+    }
+
     return (
         <AppLayout>
             <section className='w-full my-4 '>
-                <button onClick={handleChangeVisibleModalLinks} className='bg-blue-600 px-6 py-1 rounded text-slate-100'>Generar link</button>
+                <button onClick={handleChangeVisibleModalLinks} className='px-6 py-1 bg-blue-600 rounded text-slate-100'>Generar link</button>
             </section>
-            <h1 className='text-center text-2xl text-slate-600 font-medium'>Proceso de pedidos</h1>
+            <h1 className='text-2xl font-medium text-center text-slate-600'>Proceso de pedidos</h1>
             <div className='px-8 py-2 h-full max-h-[600px] bg-gray-100 overflow-y-scroll'>
                 {
                     pedidos.length > 0 ? (
@@ -99,9 +114,15 @@ export const Proceso_Pedidos: React.FC = () => {
                                             <td>{pedido.strIdCliente}</td>
                                             <td>{moment(pedido.dtFechaInicio).format('DD-MM-YYYY / hh-mm')}</td>
                                             <td>${FormateoNumberInt((pedido.intValorTotal).toString())}</td>
-                                            <td className={` text-white ${pedido.intEstado == 1 ? "bg-green-500" : "bg-blue-600"}`}>{pedido.intEstado == 1 ? "En proceso" : "Finalizado"}</td>
-                                            <td className='flex justify-center items-center'>
+                                            <td className={` text-white ${colores_estado[pedido.intEstado - 1]}`}>{estado_pedido[pedido.intEstado - 1]}</td>
+                                            <td className='flex items-center justify-center gap-4'>
                                                 <span onClick={() => { handleChangePedidoId(pedido.intIdPedido) }} className='cursor-pointer'><AiOutlineEye size={20} /></span>
+                                                {
+                                                    pedido.intEstado == 1 && (
+                                                        <span onClick={() => { EliminarPedidoActivo(pedido.intIdPedido) }} className='cursor-pointer'><AiTwotoneDelete size={20} color={"#E76B82"} /></span>
+                                                    )
+                                                }
+
                                             </td>
                                         </tr>
                                     ))
@@ -118,7 +139,7 @@ export const Proceso_Pedidos: React.FC = () => {
             </div>
 
             {
-                isViewDetallesPedido && (<Modal_Productos_Pedidos_Proceso CloseEvent={setisViewDetallesPedido} id={idPedidoDetalle}/>)
+                isViewDetallesPedido && (<Modal_Productos_Pedidos_Proceso CloseEvent={setisViewDetallesPedido} id={idPedidoDetalle} />)
             }
 
             {
