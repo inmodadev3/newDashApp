@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { MenuSelectedContext } from "../../context/UseContextProviders"
 import { AppLayout } from "../../Components/AppLayout/AppLayout"
 import { ProductosBuscador } from "./ProductosBuscador"
-import { IArrayProductos, IDataUser } from "../../Utils/GlobalInterfaces"
-import { useNavigate } from "react-router-dom"
+import { IArrayProductos } from "../../Utils/GlobalInterfaces"
 import { ProductoCard } from "./ProductoCard"
 import './Styles/stylesProductos.css'
 import { Loader } from "../../Components/LoadingPage/Loader"
@@ -27,16 +26,6 @@ export const Productos = () => {
     const [producto_editar, setproducto_editar] = useState<IArrayProductos>({} as IArrayProductos)
     const [nueva_ubicacion, setnueva_ubicacion] = useState('')
 
-    const navigate = useNavigate()
-
-    const userData: string | null = localStorage.getItem('dataUser');
-    let userInfo: IDataUser | null = null!;
-
-    if (userData) {
-        userInfo = JSON.parse(userData);
-    } else {
-        navigate('/login');
-    }
 
     useEffect(() => {
         setMenuSelected(9)
@@ -89,7 +78,7 @@ export const Productos = () => {
     return (
         <AppLayout >
             <div className="px-4 arrayCardsBody">
-                <ProductosBuscador setarrayProductos={setarrayProductos} userInfo={userInfo} setloadProductos={setloadProductos} />
+                <ProductosBuscador setarrayProductos={setarrayProductos} setloadProductos={setloadProductos} />
                 {
                     !loadProductos ? (
                         <div className={`${arrayProductos.length !== 1

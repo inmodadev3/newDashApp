@@ -7,7 +7,7 @@ import axios from '../../../Utils/BaseUrlAxio'
 import { AppLayout } from '../../../Components/AppLayout/AppLayout'
 import { MenuSelectedContext } from '../../../context/UseContextProviders'
 
-interface IHeaderPdf {
+export interface IHeaderPdf {
     dtFechaEnvio: string
     intIdpedido: number
     strCiudadCliente: string
@@ -35,6 +35,7 @@ export interface IDataProductosPdf {
     strUnidadMedida: string
     ubicaciones: string
     precio_cambio:boolean
+    valor_original?:number
 }
 
 export interface IDataPDF {

@@ -10,10 +10,8 @@ import { AiOutlineMore, AiOutlineFileExcel, AiOutlinePrinter, AiOutlineDelete } 
 import { BuscadorPedidos } from "./BuscadorPedidos";
 import { Excel_Pedidos } from '../../Utils/excelTemplates/ExcelFormats';
 import { IDataProductosPdf } from '../pdfs/pedidos/PedidosPDF';
-/* import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'; */
-/* import { PedidosNuevos } from "./PedidosNuevos";
-import { PedidosProceso } from "./PedidosProceso";
-import { PedidosTerminal } from "./PedidosTerminal"; */
+import { PermisosContext } from '../../context/permisosContext';
+import { FaEdit } from 'react-icons/fa';
 
 type TPedidosProps = {
     intIdPedido: number,
@@ -51,11 +49,41 @@ interface IpropsArrayExcel {
     intValorTotal: number,
 }
 
+type TEstadosPedidos = {
+    nombre: string,
+    estilo: string
+}
+
 export const Pedidos = () => {
     const [pedidos, setpedidos] = useState<TPedidosProps[]>([] as TPedidosProps[])
     const [isLoadingData, setisLoadingData] = useState(false)
     const { setMenuSelected, setSubmenuSelected } = useContext(MenuSelectedContext)
+    const { permisos } = useContext(PermisosContext)
+    const [revisionTrue, setrevisionTrue] = useState(false)
     const { createToast, alerts } = useAlert()
+
+    const estados_pedidos: TEstadosPedidos[] = [
+        {
+            nombre: "Anulado",
+            estilo: "p-1 bg-red-600  text-red-50"
+        },
+        {
+            nombre: "Recibido",
+            estilo: "p-2  bg-sky-300 text-sky-950"
+        },
+        {
+            nombre: "Impreso 📰",
+            estilo: "p-1 text-orange-800 bg-orange-300 "
+        },
+        {
+            nombre: "En revision",
+            estilo: "p-1 text-green-800 bg-green-300 "
+        },
+        {
+            nombre: "Revisado  🌟",
+            estilo: "p-1 text-green-800 bg-green-300 "
+        }
+    ]
 
     useEffect(() => {
         setMenuSelected(4)
@@ -63,6 +91,16 @@ export const Pedidos = () => {
         consultar_Pedidos()
         window.document.title = "Panel - Pedidos"
     }, [])
+
+    useEffect(() => {
+        if (permisos.length > 1) {
+            let revision = permisos.find(permiso => permiso.id_permiso == 14)
+
+            if (revision !== null && revision !== undefined) {
+                setrevisionTrue(true)
+            }
+        }
+    }, [permisos])
 
     const consultar_Pedidos = async () => {
         try {
@@ -91,27 +129,26 @@ export const Pedidos = () => {
         }
     }
 
-    const procesar_pedido = async (id: number, estado_actual: number) => {
-        if (estado_actual !== 1) {
+    const procesar_pedido = async (id: number, estado_actual: number, estado_nuevo: number) => {
+        if (estado_nuevo == 2 && estado_actual !== 1) {
             return;
         }
 
         let data = await axios.put('/pedidos/actualizar_estado', {
             id: id,
-            estado: 2
+            estado: estado_nuevo
         })
 
         if (data.data.success) {
             setpedidos((prevData) =>
                 prevData.map((pedido) =>
-                    pedido.intIdPedido === id ? { ...pedido, intEstado: 2 } : pedido
+                    pedido.intIdPedido === id ? { ...pedido, intEstado: estado_nuevo } : pedido
                 )
             );
         }
 
     }
-
-    const compararNombresAZ = (a:IDataProductosPdf,b:IDataProductosPdf) =>{
+    const compararNombresAZ = (a: IDataProductosPdf, b: IDataProductosPdf) => {
         return a.strIdProducto.localeCompare(b.strIdProducto)
     }
 
@@ -124,9 +161,9 @@ export const Pedidos = () => {
                 let response = data.data.data
                 response.sort(compararNombresAZ)
                 if (response) {
-                    response.forEach(( item:IProps, index:number ) => {
+                    response.forEach((item: IProps, index: number) => {
                         data_Pedido.push({
-                            'StrSerie': index+1,
+                            'StrSerie': index + 1,
                             'StrProducto': item.strIdProducto,
                             'StrColor': '0',
                             'intCantidadDoc': item.intCantidad,
@@ -135,7 +172,7 @@ export const Pedidos = () => {
                         },)
                     });
                 }
-                Excel_Pedidos(data_Pedido, "TblDetalleDocumentos", `${data.data.header.intIdpedido}-${data.data.header.strNombCliente}`) 
+                Excel_Pedidos(data_Pedido, "TblDetalleDocumentos", `${data.data.header.intIdpedido}-${data.data.header.strNombCliente}`)
             } else {
                 console.error(data)
             }
@@ -143,26 +180,6 @@ export const Pedidos = () => {
             console.error(error)
             AgregarAlerta(createToast, "Ha ocurrido un error al descargar el pedido", "danger")
         }
-        /* const data1 = [
-            {
-                'StrSerie': '1',
-                'StrProducto': 'AA0313',
-                'StrColor': '0',
-                'intCantidadDoc': '1',
-                'intValorUnitario': '8300',
-                'intValorTotal': '8300',
-            },
-            {
-                'StrSerie': '2',
-                'StrProducto': 'AA0329',
-                'StrColor': '0',
-                'intCantidadDoc': '1',
-                'intValorUnitario': '3300',
-                'intValorTotal': '3300',
-            }
-        ];
-        
-        Excel_Pedidos(data1, "prueba 2", "prueba_2") */
     }
 
 
@@ -170,7 +187,7 @@ export const Pedidos = () => {
         <AppLayout>
             {
                 <section className="flex justify-center w-full h-screen">
-                    <div className="w-full my-5 mt-10 bg-gray-100 rounded  h-6/6">
+                    <div className="w-full my-5 mt-10 bg-gray-100 rounded h-6/6">
                         <div className="my-2">
                             <BuscadorPedidos ConsultarPedidosEnProceso={consultar_Pedidos} setdatos={setpedidos} setloadData={setisLoadingData} />
                         </div>
@@ -206,9 +223,10 @@ export const Pedidos = () => {
                                                         <td className="w-60">{pedido.strNombVendedor}</td>
                                                         <td>
                                                             {
-                                                                pedido.intEstado == 1 ? (<span className="p-2 rounded bg-sky-300 text-sky-950">Recibido</span>)
-                                                                    : pedido.intEstado == -1 ? (<span className="p-1 bg-red-600 rounded text-red-50">Anulado </span>)
-                                                                        : (<span className="p-1 text-orange-800 bg-orange-300 rounded">Procesado </span>)
+                                                                pedido.intEstado == -1 ? (<span className="p-1 bg-red-600 rounded text-red-50">Anulado </span>)
+                                                                    : (
+                                                                        <span className={`${estados_pedidos[pedido.intEstado] ? estados_pedidos[pedido.intEstado].estilo : estados_pedidos[2].estilo} rounded`}>{estados_pedidos[pedido.intEstado] ? estados_pedidos[pedido.intEstado].nombre : estados_pedidos[2].nombre}</span>
+                                                                    )
                                                             }
                                                         </td>
                                                         <td>
@@ -218,31 +236,46 @@ export const Pedidos = () => {
                                                                 </span>
                                                                 <div className="absolute z-20 flex-col hidden p-2 transform -translate-x-1/2 bg-white border border-gray-300 rounded shadow-md top-full group-hover:flex w-60">
                                                                     {/* Contenido del cuadro de opciones */}
-                                                                    <button onClick={() => { Descargar_excel_pedido(pedido.intIdPedido) }} className="flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10">
-                                                                        <span><AiOutlineFileExcel size={20} /></span>
-                                                                        <span>Descargar Excel</span>
-                                                                    </button>
-                                                                    <button className="flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10" onClick={() => { anular_Pedido(pedido.intIdPedido) }}>
-                                                                        <span><AiOutlineDelete size={20} /></span>
-                                                                        <span>Anular pedido</span>
-                                                                    </button>
+                                                                    {
+                                                                        (!revisionTrue) && (
+                                                                            <>
+                                                                                <button onClick={() => { Descargar_excel_pedido(pedido.intIdPedido) }} className="flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10">
+                                                                                    <span><AiOutlineFileExcel size={20} /></span>
+                                                                                    <span>Descargar Excel</span>
+                                                                                </button>
+                                                                                <button className="flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10" onClick={() => { anular_Pedido(pedido.intIdPedido) }}>
+                                                                                    <span><AiOutlineDelete size={20} /></span>
+                                                                                    <span>Anular pedido</span>
+                                                                                </button>
+
+                                                                            </>
+                                                                        )
+                                                                    }
                                                                     <a
                                                                         className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200 gap-x-10"
                                                                         target="_blank"
                                                                         href={`/#/pedidos/pdf/${pedido.intIdPedido}`}
                                                                         onClick={() => {
-                                                                            procesar_pedido(pedido.intIdPedido, pedido.intEstado)
+                                                                            procesar_pedido(pedido.intIdPedido, pedido.intEstado, 2)
                                                                         }}
                                                                     >
                                                                         <span><AiOutlinePrinter size={20} /></span>
                                                                         <span>Imprimir pedido</span>
                                                                     </a>
-                                                                    {/* <button className="flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10">
-                                                                        <span><AiOutlineSend size={20} /></span>
-                                                                        <span>Enviar a HGI</span>
-                                                                    </button> */}
 
-                                                                    {/* ... Más opciones ... */}
+                                                                    <a
+                                                                        className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200 gap-x-10"
+                                                                        target="_blank"
+                                                                        href={`/#/pedidos/revisar/${pedido.intIdPedido}`}
+                                                                        onClick={() => {
+                                                                            procesar_pedido(pedido.intIdPedido, pedido.intEstado, 3)
+                                                                        }}
+                                                                    >
+
+                                                                        <span><FaEdit /></span>
+                                                                        <span>Revisar Pedido</span>
+
+                                                                    </a>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -259,24 +292,6 @@ export const Pedidos = () => {
                 </section>
 
             }
-
-            {/* <Tabs>
-                <TabList>
-                    <Tab>Nuevos Pedidos</Tab>
-                    <Tab>Pedidos En proceso</Tab>
-                    <Tab>Pedidos En Terminal</Tab>
-                </TabList>
-
-                <TabPanel>
-                    <PedidosNuevos/>
-                </TabPanel>
-                <TabPanel>
-                    <PedidosProceso/>
-                </TabPanel>
-                <TabPanel>
-                    <PedidosTerminal/>
-                </TabPanel>
-            </Tabs> */}
             {alerts}
         </AppLayout>
     )

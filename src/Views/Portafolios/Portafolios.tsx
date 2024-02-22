@@ -32,7 +32,10 @@ export const Portafolios: React.FC = () => {
     const [datosClientes, setdatosClientes] = useState<IDataPropsPortafolio[] | null>(null)
     const [viewGestionesCliente, setviewGestionesCliente] = useState(false)
     const [viewInfoCliente, setviewInfoCliente] = useState(false)
-    const [idClienteGestiones, setidClienteGestiones] = useState('')
+    const [idClienteGestiones, setidClienteGestiones] = useState({
+        stridCedula:'',
+        strNombre: ''
+    })
     const { setMenuSelected, setSubmenuSelected } = useContext(MenuSelectedContext)
     const { alerts, createToast } = useAlert()
 
@@ -95,7 +98,7 @@ export const Portafolios: React.FC = () => {
             }
             {
                 viewInfoCliente && (
-                    <InfoClientesPortafolio setviewInfoCliente={setviewInfoCliente} cedula={idClienteGestiones} />
+                    <InfoClientesPortafolio setviewInfoCliente={setviewInfoCliente} cedula={idClienteGestiones.stridCedula} />
                 )
             }
             {alerts}

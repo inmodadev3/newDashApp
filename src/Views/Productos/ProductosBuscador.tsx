@@ -1,5 +1,5 @@
 import { SetStateAction, useState } from 'react'
-import { IArrayProductos, IDataUser } from '../../Utils/GlobalInterfaces';
+import { IArrayProductos} from '../../Utils/GlobalInterfaces';
 import axios from '../../Utils/BaseUrlAxio';
 import './Styles/stylesProductosBuscador.css'
 import { AiOutlineSearch } from "react-icons/ai";
@@ -9,13 +9,12 @@ import { AgregarAlerta } from '../../Utils/Helpers';
 
 interface ISetProductos {
     setarrayProductos: React.Dispatch<React.SetStateAction<IArrayProductos[]>>;
-    userInfo: IDataUser | null
     setloadProductos: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 type TProductos = string
 
-export const ProductosBuscador: React.FC<ISetProductos> = ({ setarrayProductos, userInfo, setloadProductos }) => {
+export const ProductosBuscador: React.FC<ISetProductos> = ({ setarrayProductos, setloadProductos }) => {
     const [productos, setproductos] = useState<TProductos>('')
     const [opcion, setopcion] = useState<SetStateAction<number | string>>(0)
     const { alerts, createToast } = useAlert()
@@ -25,11 +24,11 @@ export const ProductosBuscador: React.FC<ISetProductos> = ({ setarrayProductos, 
         if (productos.toString().trim() !== '') {
             setloadProductos(true)
             setarrayProductos([])
-            axios.get(`/productos/${productos}`, {
+            axios.get(`/productos/${productos}`/* , {
                 headers: {
                     Authorization: `Bearer ${userInfo?.token}`
                 }
-            }).then((response) => {
+            } */).then((response) => {
                 if (response.data.success) {
                     setarrayProductos(response.data.data)
                     setloadProductos(false)
@@ -50,11 +49,11 @@ export const ProductosBuscador: React.FC<ISetProductos> = ({ setarrayProductos, 
             if (productos.toString().trim() !== '') {
                 setloadProductos(true)
                 setarrayProductos([])
-                axios.get(`/productos/nombre/${productos}`, {
+                axios.get(`/productos/nombre/${productos}`/* , {
                     headers: {
                         Authorization: `Bearer ${userInfo?.token}`
                     }
-                }).then((response) => {
+                } */).then((response) => {
                     if (response.data.success) {
                         setarrayProductos(response.data.data)
                         setloadProductos(false)
@@ -95,11 +94,11 @@ export const ProductosBuscador: React.FC<ISetProductos> = ({ setarrayProductos, 
 
     return (
         <section className='flex flex-col items-center'>
-            <h1 className='text-4xl py-4'>Buscador de productos</h1>
-            <section className='flex flex-col md:flex-row w-full gap-x-12'>
-                <div className='flex py-1 rounded-xl w-full md:w-1/2 border-2 border-sky-900 relative h-12 bg-white px-4'>
+            <h1 className='py-4 text-4xl'>Buscador de productos</h1>
+            <section className='flex flex-col w-full md:flex-row gap-x-12'>
+                <div className='relative flex w-full h-12 px-4 py-1 bg-white border-2 rounded-xl md:w-1/2 border-sky-900'>
                     <input
-                        className=' border-none outline-none bg-transparent px-4 w-full'
+                        className='w-full px-4 bg-transparent border-none outline-none '
                         placeholder='Digite una referencia'
                         type='text'
                         value={productos}
@@ -111,9 +110,9 @@ export const ProductosBuscador: React.FC<ISetProductos> = ({ setarrayProductos, 
                             }
                         }}
                     />
-                    <span className='absolute w-10 h-10 right-2 flex justify-center items-center rounded-full cursor-pointer' onClick={consultarProductos}><AiOutlineSearch size={24} color={'black'} /> </span>
+                    <span className='absolute flex items-center justify-center w-10 h-10 rounded-full cursor-pointer right-2' onClick={consultarProductos}><AiOutlineSearch size={24} color={'black'} /> </span>
                 </div>
-                <div className='my-1 rounded-xl w-full md:w-1/2 border-2 border-sky-900 relative h-12 bg-white px-4'>
+                <div className='relative w-full h-12 px-4 my-1 bg-white border-2 rounded-xl md:w-1/2 border-sky-900'>
                     <select
                         value={opcion.toString()}
                         onChange={(e) => { setopcion(e.target.value) }}

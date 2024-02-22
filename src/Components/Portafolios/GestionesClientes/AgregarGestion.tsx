@@ -12,6 +12,8 @@ type PropsAddGestion = {
 
 export const AgregarGestion: React.FC<PropsAddGestion> = ({ cedula, idLogin, ConsultarGestionesClientes }) => {
 
+    console.log(cedula)
+
     const [gestionValue, setgestionValue] = useState('')
     const [tipoGestion, settipoGestion] = useState("0")
     const {alerts,createToast} = useAlert()

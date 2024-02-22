@@ -5,8 +5,14 @@ import moment from 'moment'
 import { AgregarGestion } from './AgregarGestion'
 import { ModalsLayout } from '../../Modals/ModalsLayout'
 
+
+type PropsTercero = {
+    stridCedula: string,
+    strNombre: string
+}
+
 type PropsGestiones = {
-    cedula: string
+    cedula: PropsTercero
     setviewGestionesCliente: React.Dispatch<React.SetStateAction<boolean>>
     idLogin: number
 }
@@ -28,7 +34,7 @@ export const GestionesClientes: React.FC<PropsGestiones> = ({ cedula, setviewGes
 
 
     const ConsultarGestionesClientes = () => {
-        axios.get(`/portafolios/gestiones/${cedula}`)
+        axios.get(`/portafolios/gestiones/${cedula.stridCedula}`)
             .then((response) => {
                 setgestionesCliente(response.data.data)
             }).catch((err) => {
@@ -38,11 +44,15 @@ export const GestionesClientes: React.FC<PropsGestiones> = ({ cedula, setviewGes
 
     const Gestiones = ["Llamada", "Envio de Fotos", "Envio de Portafolio", "Venta en sala", "Venta en Dash", "Visita a cliente", "Pos venta", "Deshabilitar", "Varios","Mensajes"]
 
-
     return (
         <ModalsLayout CloseEvent={setviewGestionesCliente}>
             <div className='Gestiones_info_Container'>
-                <AgregarGestion cedula={cedula} idLogin={idLogin} ConsultarGestionesClientes={ConsultarGestionesClientes} />
+                <div className='flex gap-x-11'>
+                    <p className='font-semibold'>{cedula.strNombre}</p>
+                    <p>{cedula.stridCedula}</p>
+                </div>
+                <hr/>
+                <AgregarGestion cedula={cedula.stridCedula} idLogin={idLogin} ConsultarGestionesClientes={ConsultarGestionesClientes} />
                 <div className='containerTableGestiones'>
                     <table className='table tableGestiones'>
                         <thead>

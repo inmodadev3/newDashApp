@@ -5,6 +5,10 @@
     max-height: calc(100vh - 150px);
 }
 
+.table_checked{
+    background-color: rgb(255, 248, 208) !important;
+}
+
 .TablePedidosContainer::-webkit-scrollbar{
     width: 8px;
 }

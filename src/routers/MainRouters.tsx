@@ -20,6 +20,7 @@ import { Permisos_Empleados } from "../Views/Administrador/Permisos_Empleados/Pe
 import { Crear_Permisos } from "../Views/Administrador/Permisos_Empleados/Crear_Permisos"
 import { Informes } from "../Views/Informes/Informes"
 import { Descargar_liquidadas } from "../Views/Compras/Descargar_liquidadas/Descargar_liquidadas"
+import { Revision } from "../Views/Pedidos/Revision"
 
 const MainRouters = () => {
     return(
@@ -47,6 +48,7 @@ const MainRouters = () => {
 
 
                 <Route path="/pedidos/pdf/:pedidoId" Component={PedidosPDF}/>
+                <Route path="/pedidos/revisar/:pedidoId" Component={Revision}/>
             </Routes>
         </HashRouter>
     )

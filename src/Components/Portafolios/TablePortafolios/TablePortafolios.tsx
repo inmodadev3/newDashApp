@@ -4,6 +4,11 @@ import { MdOutlineManageAccounts } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
 import moment from 'moment';
 
+type PropsTercero = {
+    stridCedula: string,
+    strNombre: string
+}
+
 interface IDataPropsPortafolio {
     Estado: string
     Nombre_tercero: string,
@@ -15,12 +20,12 @@ interface IDataPropsPortafolio {
 
 type Props = {
     data: IDataPropsPortafolio[]
-    setviewGestionesCliente:React.Dispatch<React.SetStateAction<boolean>>
-    setidClienteGestiones:React.Dispatch<React.SetStateAction<string>>
-    setviewInfoCliente:React.Dispatch<React.SetStateAction<boolean>>
+    setviewGestionesCliente: React.Dispatch<React.SetStateAction<boolean>>
+    setidClienteGestiones: React.Dispatch<React.SetStateAction<PropsTercero>>
+    setviewInfoCliente: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const TablePortafolios: React.FC<Props> = ({ data,setviewGestionesCliente,setidClienteGestiones,setviewInfoCliente }) => {
+export const TablePortafolios: React.FC<Props> = ({ data, setviewGestionesCliente, setidClienteGestiones, setviewInfoCliente }) => {
     return (
         <table className='table table_portafolio'>
             <thead>
@@ -42,17 +47,23 @@ export const TablePortafolios: React.FC<Props> = ({ data,setviewGestionesCliente
                             <td className={`estado`}>{tercero.Estado}</td>
                             <td>{tercero.StrIdTercero}</td>
                             <td>{tercero.Nombre_tercero}</td>
-                            <td style={{textAlign:'center'}}>{tercero.Viaja}</td>
-                            <td>{tercero.ultima_Compra !== null? moment(tercero.ultima_Compra).format('DD-MM-yy'):""}</td>
+                            <td style={{ textAlign: 'center' }}>{tercero.Viaja}</td>
+                            <td>{tercero.ultima_Compra !== null ? moment(tercero.ultima_Compra).format('DD-MM-yy') : ""}</td>
                             <td>{tercero.ciudad}</td>
-                            <td style={{textAlign:'center'}}><span className='portafolio_options' onClick={()=>{
+                            <td style={{ textAlign: 'center' }}><span className='portafolio_options' onClick={() => {
                                 setviewGestionesCliente(true)
-                                setidClienteGestiones(tercero.StrIdTercero)
-                                }}><MdOutlineManageAccounts size={28} className="optionP" /></span></td>
-                            <td style={{textAlign:'center'}}><span className='portafolio_options' onClick={()=>{
+                                setidClienteGestiones({
+                                    strNombre:tercero.Nombre_tercero,
+                                    stridCedula: tercero.StrIdTercero
+                                });
+                            }}><MdOutlineManageAccounts size={28} className="optionP" /></span></td>
+                            <td style={{ textAlign: 'center' }}><span className='portafolio_options' onClick={() => {
                                 setviewInfoCliente(true)
-                                setidClienteGestiones(tercero.StrIdTercero)
-                            }}><AiOutlineUser size={28} className="optionP"/></span></td>
+                                setidClienteGestiones({
+                                    strNombre:tercero.Nombre_tercero,
+                                    stridCedula: tercero.StrIdTercero
+                                });
+                            }}><AiOutlineUser size={28} className="optionP" /></span></td>
                         </tr>
                     ))
                 }
