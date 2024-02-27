@@ -45,6 +45,7 @@ export const Revision: React.FC = () => {
             .then((response) => {
                 if (response.data.success) {
                     response.data.data.sort(compararNombresAZ)
+                    console.log(response.data.data)
                     setheaderPedido(response.data.header)
                     setdataPedido(response.data.data)
                     setdataPedidoCopy(response.data.data)
@@ -281,7 +282,8 @@ export const Revision: React.FC = () => {
                                                     <th>Ver</th>
                                                     <th>Referecia</th>
                                                     <th>Descripcion</th>
-                                                    <th>Canitdad</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Precio</th>
                                                     <th>Unidad de medida</th>
                                                     <th>Color</th>
                                                     <th>Observacion</th>
@@ -328,6 +330,7 @@ export const Revision: React.FC = () => {
                                                                     }}
                                                                 />
                                                             </td>
+                                                            <td>${FormateoNumberInt(producto.intPrecio.toString())}</td>
                                                             <td>{producto.strUnidadMedida}</td>
                                                             <td>{producto.strColor}</td>
                                                             <td>{producto.strObservacion}</td>
