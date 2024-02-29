@@ -14,11 +14,13 @@ import './styles/styles.css'
 import { AiFillEye } from 'react-icons/ai'
 import { ModalRevisionAgregarProducto } from './Modales/ModalRevisionAgregarProducto'
 import { ModalRevisionVerProducto } from './Modales/ModalRevisionVerProducto'
+import { PermisosContext } from '../../context/permisosContext'
 
 export const Revision: React.FC = () => {
 
     const { pedidoId } = useParams()
     const { setMenuSelected } = useContext(MenuSelectedContext)
+    const { permisos } = useContext(PermisosContext)
     const [headerPedido, setheaderPedido] = useState<IHeaderPdf>({} as IHeaderPdf)
     const [dataPedido, setdataPedido] = useState<IDataProductosPdf[]>([] as IDataProductosPdf[])
     const [loadingData, setloadingData] = useState<boolean>(true)
@@ -45,7 +47,6 @@ export const Revision: React.FC = () => {
             .then((response) => {
                 if (response.data.success) {
                     response.data.data.sort(compararNombresAZ)
-                    console.log(response.data.data)
                     setheaderPedido(response.data.header)
                     setdataPedido(response.data.data)
                     setdataPedidoCopy(response.data.data)
@@ -308,8 +309,8 @@ export const Revision: React.FC = () => {
                                                                 />
                                                             </td>
                                                             <td className='flex items-center justify-center'>
-                                                                <span 
-                                                                    onClick={()=>{
+                                                                <span
+                                                                    onClick={() => {
                                                                         setisViewModalInfoProducto(!isViewModalInfoProducto)
                                                                         setreferenciaInfoProducto(producto.strIdProducto)
                                                                     }}
@@ -344,9 +345,13 @@ export const Revision: React.FC = () => {
                                         </table>
                                     </div>
                                     <br />
-                                    <div className='flex justify-end py-4'>
-                                        <button onClick={finalizar_revision} className='px-4 py-2 text-white duration-300 bg-green-500 rounded hover:bg-green-700'>Finalizar revision</button>
-                                    </div>
+                                    {
+                                        (permisos.find((item) => item.id_permiso == 3) || permisos.find((item) => item.id_permiso == 14)) && (
+                                            <div className='flex justify-end py-4'>
+                                                <button onClick={finalizar_revision} className='px-4 py-2 text-white duration-300 bg-green-500 rounded hover:bg-green-700'>Finalizar revision</button>
+                                            </div>
+                                        )
+                                    }
                                 </>
                             ) : (
                                 <div className='flex flex-col items-center w-full mt-32 space-y-2'>

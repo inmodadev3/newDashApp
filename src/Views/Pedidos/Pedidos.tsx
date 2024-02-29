@@ -12,6 +12,7 @@ import { Excel_Pedidos } from '../../Utils/excelTemplates/ExcelFormats';
 import { IDataProductosPdf } from '../pdfs/pedidos/PedidosPDF';
 import { PermisosContext } from '../../context/permisosContext';
 import { FaEdit } from 'react-icons/fa';
+import { IoPricetag } from 'react-icons/io5';
 
 type TPedidosProps = {
     intIdPedido: number,
@@ -182,6 +183,31 @@ export const Pedidos = () => {
         }
     }
 
+    const CambiarPrecioPedido = (IdPedido: number) => async () => {
+
+        try {
+            const response = await axios.put('/pedidos/precios_productos', {
+                "idPedido": IdPedido,
+                "intPrecio": 1
+            })
+            setpedidos((prevValue) =>
+                prevValue.map((pedido) =>
+                    pedido.intIdPedido == IdPedido ? { ...pedido, intValorTotal: response.data.total } : pedido
+                )
+            )
+            const UrlPedido = `https://panel.inmodafantasy.com.co/#/pedidos/revisar/${IdPedido}`
+
+            AgregarAlerta(createToast, "Pedido actualizado con exito", 'success')
+
+            setTimeout(() => {
+                window.open(`https://web.whatsapp.com/send?phone=573009933162&text=${encodeURIComponent(`Se acaba de registrar un nuevo pedido de edixon guerra \n ${UrlPedido}`)}`)
+            }, 1000);
+
+        } catch (error) {
+            AgregarAlerta(createToast, "Error al actualizar el pedido", "danger")
+            console.error(error)
+        }
+    }
 
     return (
         <AppLayout>
@@ -274,8 +300,16 @@ export const Pedidos = () => {
 
                                                                         <span><FaEdit /></span>
                                                                         <span>Revisar Pedido</span>
-
                                                                     </a>
+
+                                                                    {
+                                                                        pedido.strNombCliente.toLowerCase().includes("edixon") && (
+                                                                            <button onClick={CambiarPrecioPedido(pedido.intIdPedido)} className='flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10'>
+                                                                                <span><IoPricetag /></span>
+                                                                                <span>Pasar a precio 1</span>
+                                                                            </button>
+                                                                        )
+                                                                    }
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -292,6 +326,7 @@ export const Pedidos = () => {
                 </section>
 
             }
+
             {alerts}
         </AppLayout>
     )
