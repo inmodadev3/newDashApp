@@ -112,7 +112,7 @@ export const Proceso_Pedidos: React.FC = () => {
                                             <td>{pedido.intIdPedido}</td>
                                             <td>{pedido.strNombCliente}</td>
                                             <td>{pedido.strIdCliente}</td>
-                                            <td>{moment(pedido.dtFechaInicio).format('DD-MM-YYYY / hh-mm')}</td>
+                                            <td>{moment.utc(pedido.dtFechaInicio).format('DD-MM-YYYY / HH-mm A')}</td>
                                             <td>${FormateoNumberInt((pedido.intValorTotal).toString())}</td>
                                             <td className={` text-white ${colores_estado[pedido.intEstado - 1]}`}>{estado_pedido[pedido.intEstado - 1]}</td>
                                             <td className='flex items-center justify-center gap-4'>

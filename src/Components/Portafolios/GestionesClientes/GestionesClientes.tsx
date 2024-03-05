@@ -71,7 +71,7 @@ export const GestionesClientes: React.FC<PropsGestiones> = ({ cedula, setviewGes
                                         <td>{gestion.strNombreEmpleado}</td>
                                         <td>{gestion.strObservacion}</td>
                                         <td>{Gestiones[gestion.intTipoGestion]}</td>
-                                        <td>{moment(gestion.dtFechaGestion).format('DD-MM-yy hh:mm:ss')}</td>
+                                        <td>{moment.utc(gestion.dtFechaGestion).format('DD-MM-yy hh:mm:ss')}</td>
                                         {/* <td ><span><CiEdit size={30} cursor={"pointer"} onClick={() => { console.log(fechaFormated) }} /></span></td> */}
                                     </tr>
                                 ))
