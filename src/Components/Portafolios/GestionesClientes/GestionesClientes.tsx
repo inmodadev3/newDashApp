@@ -4,6 +4,7 @@ import axios from '../../../Utils/BaseUrlAxio'
 import moment from 'moment'
 import { AgregarGestion } from './AgregarGestion'
 import { ModalsLayout } from '../../Modals/ModalsLayout'
+import { IDataPropsPortafolio } from '../../../Views/Portafolios/Portafolios'
 
 
 type PropsTercero = {
@@ -15,6 +16,8 @@ type PropsGestiones = {
     cedula: PropsTercero
     setviewGestionesCliente: React.Dispatch<React.SetStateAction<boolean>>
     idLogin: number
+    setdatosClientes: React.Dispatch<React.SetStateAction<IDataPropsPortafolio[] | null>> 
+    datosClientes : IDataPropsPortafolio[] | null
 }
 
 interface IDataGestionesClientes {
@@ -25,8 +28,9 @@ interface IDataGestionesClientes {
     strObservacion: string
 }
 
-export const GestionesClientes: React.FC<PropsGestiones> = ({ cedula, setviewGestionesCliente, idLogin }) => {
+export const GestionesClientes: React.FC<PropsGestiones> = ({ cedula, setviewGestionesCliente, idLogin,setdatosClientes,datosClientes }) => {
     const [gestionesCliente, setgestionesCliente] = useState<IDataGestionesClientes[]>([])
+    
 
     useEffect(() => {
         ConsultarGestionesClientes()
@@ -52,7 +56,7 @@ export const GestionesClientes: React.FC<PropsGestiones> = ({ cedula, setviewGes
                     <p>{cedula.stridCedula}</p>
                 </div>
                 <hr/>
-                <AgregarGestion cedula={cedula.stridCedula} idLogin={idLogin} ConsultarGestionesClientes={ConsultarGestionesClientes} />
+                <AgregarGestion datosClientes={datosClientes} setdatosClientes={setdatosClientes} cedula={cedula.stridCedula} idLogin={idLogin} ConsultarGestionesClientes={ConsultarGestionesClientes} />
                 <div className='containerTableGestiones'>
                     <table className='table tableGestiones'>
                         <thead>
@@ -71,7 +75,7 @@ export const GestionesClientes: React.FC<PropsGestiones> = ({ cedula, setviewGes
                                         <td>{gestion.strNombreEmpleado}</td>
                                         <td>{gestion.strObservacion}</td>
                                         <td>{Gestiones[gestion.intTipoGestion]}</td>
-                                        <td>{moment.utc(gestion.dtFechaGestion).format('DD-MM-yy hh:mm:ss')}</td>
+                                        <td>{moment.utc(gestion.dtFechaGestion).local().format('DD-MM-yy hh:mm:ss')}</td>
                                         {/* <td ><span><CiEdit size={30} cursor={"pointer"} onClick={() => { console.log(fechaFormated) }} /></span></td> */}
                                     </tr>
                                 ))

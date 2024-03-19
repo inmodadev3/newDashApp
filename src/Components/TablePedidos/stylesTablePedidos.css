@@ -33,13 +33,13 @@ a:active {
   top: 0
 }
 
-.table tr:nth-child(even) {
+/* .table tr:nth-child(even) {
   background-color: #e4e4e4;
   color: black;
-}
+} */
 
 .table tr:hover {
-  background-color: #cacaca;
+  background-color: #CACACA;
 }
 
 .table thead > tr:hover {

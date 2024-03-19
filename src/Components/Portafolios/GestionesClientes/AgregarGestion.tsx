@@ -2,24 +2,27 @@ import axios from '../../../Utils/BaseUrlAxio'
 import React, { useState } from 'react'
 import { useAlert } from '../../../hooks/useAlert'
 import { AgregarAlerta } from '../../../Utils/Helpers'
+import { IDataPropsPortafolio } from '../../../Views/Portafolios/Portafolios'
 
 
 type PropsAddGestion = {
     cedula: string
     idLogin: number
     ConsultarGestionesClientes: () => void
+    setdatosClientes: React.Dispatch<React.SetStateAction<IDataPropsPortafolio[] | null>>
+    datosClientes: IDataPropsPortafolio[] | null
 }
 
-export const AgregarGestion: React.FC<PropsAddGestion> = ({ cedula, idLogin, ConsultarGestionesClientes }) => {
-
-    console.log(cedula)
+export const AgregarGestion: React.FC<PropsAddGestion> = ({ cedula, idLogin, ConsultarGestionesClientes, setdatosClientes, datosClientes }) => {
 
     const [gestionValue, setgestionValue] = useState('')
     const [tipoGestion, settipoGestion] = useState("0")
-    const {alerts,createToast} = useAlert()
+    const { alerts, createToast } = useAlert()
 
     const crearNuevaGestion = () => {
         if (gestionValue.toString().trim() !== "") {
+            const nuevaFecha = new Date();
+
             axios.post(`/portafolios/gestiones/agregar`, {
                 "clienteId": cedula,
                 "intTipoGestion": parseInt(tipoGestion),
@@ -27,16 +30,37 @@ export const AgregarGestion: React.FC<PropsAddGestion> = ({ cedula, idLogin, Con
                 "strObservacion": gestionValue
             }).then((response) => {
                 //response.data.message
-                AgregarAlerta(createToast,response.data.message,'success')
+                let nuevosDatosClientes: IDataPropsPortafolio[] = [];
+                if (datosClientes !== null) {
+                    nuevosDatosClientes = [...datosClientes]
+                }
+
+                if (nuevosDatosClientes !== null) {
+                    nuevosDatosClientes = nuevosDatosClientes.map((data) => {
+                        if (data.StrIdTercero == cedula) {
+                            return {
+                                ...data,
+                                ultima_gestion: new Date(nuevaFecha.toISOString())
+                            }
+                        } else {
+                            return data
+                        }
+                    })
+                }
+
+                if (datosClientes !== null) {
+                    setdatosClientes(nuevosDatosClientes)
+                }
+
+                AgregarAlerta(createToast, response.data.message, 'success')
                 ConsultarGestionesClientes()
                 setgestionValue("")
             }).catch((err) => {
                 console.error(err)
             })
         } else {
-            AgregarAlerta(createToast,"Se necesita una gestion para agregar",'warning')
+            AgregarAlerta(createToast, "Se necesita una gestion para agregar", 'warning')
         }
-
     }
 
     return (
@@ -45,7 +69,7 @@ export const AgregarGestion: React.FC<PropsAddGestion> = ({ cedula, idLogin, Con
                 <div className='inputGestion'>
                     <input
                         type='text'
-                        placeholder='Agregar Gestion'
+                        placeholder='Agregar Gestión'
                         value={gestionValue}
                         onChange={(e) => { setgestionValue(e.target.value) }}
                     />

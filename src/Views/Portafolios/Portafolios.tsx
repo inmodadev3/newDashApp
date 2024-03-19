@@ -1,7 +1,5 @@
-import axios from '../../Utils/BaseUrlAxio';
 import React, { useContext, useEffect, useState } from 'react'
 import { AppLayout } from '../../Components/AppLayout/AppLayout'
-import { AgregarAlerta } from '../../Utils/Helpers';
 import { BuscadorPortafolios } from '../../Components/Portafolios/BuscadorPortafolios/BuscadorPortafolios';
 import { GestionesClientes } from '../../Components/Portafolios/GestionesClientes/GestionesClientes';
 import { IDataUser } from '../../Utils/GlobalInterfaces';
@@ -14,13 +12,14 @@ import '../../Components/TablePedidos/stylesTablePedidos.css'
 import '../Pedidos/styles/styles.css'
 import { useAlert } from '../../hooks/useAlert';
 
-interface IDataPropsPortafolio {
+export interface IDataPropsPortafolio {
     Estado: string
     Nombre_tercero: string,
     StrIdTercero: string
     Viaja: string
     ciudad: string
     ultima_Compra: number
+    ultima_gestion: Date
 }
 
 export const Portafolios: React.FC = () => {
@@ -33,11 +32,14 @@ export const Portafolios: React.FC = () => {
     const [viewGestionesCliente, setviewGestionesCliente] = useState(false)
     const [viewInfoCliente, setviewInfoCliente] = useState(false)
     const [idClienteGestiones, setidClienteGestiones] = useState({
-        stridCedula:'',
+        stridCedula: '',
         strNombre: ''
     })
     const { setMenuSelected, setSubmenuSelected } = useContext(MenuSelectedContext)
-    const { alerts, createToast } = useAlert()
+    const { alerts } = useAlert()
+    const [paginas, setpaginas] = useState(0)
+    const [pagina, setpagina] = useState(0)
+
 
     if (userData) {
         userInfo = JSON.parse(userData);
@@ -51,54 +53,47 @@ export const Portafolios: React.FC = () => {
         window.document.title = "Panel - Portafolio"
     }, [])
 
-    useEffect(() => {
-        if (userInfo && loadingData) {
-            ConsultarPrimeraListaClientesXVendedor()
-        }
-    }, [userInfo])
-
-
-    const ConsultarPrimeraListaClientesXVendedor = async () => {
-        try {
-            if (userInfo !== null) {
-                const response = await axios.get(`/portafolios/${userInfo.strIdVendedor}`)
-                setdatosClientes(response.data.data)
-            }
-        } catch (error) {
-            AgregarAlerta(createToast, `${error}`, 'danger')
-        } finally {
-            setloadingData(false)
-        }
-    }
-
     return (
         <AppLayout>
             {
-                !loadingData ? (
-                    datosClientes !== null && userInfo !== null ? (
-                        <>
-                            <BuscadorPortafolios
-                                setdatosClientes={setdatosClientes}
-                                cedulaVendedor={userInfo.strIdVendedor}
-                            />
-                            <div className='TablePedidosContainer'>
-                                <TablePortafolios data={datosClientes} setviewGestionesCliente={setviewGestionesCliente} setidClienteGestiones={setidClienteGestiones} setviewInfoCliente={setviewInfoCliente} />
-                            </div>
-                        </>
-                    ) :
+                (userInfo !== null) ? (
+                    <BuscadorPortafolios
+                        setdatosClientes={setdatosClientes}
+                        setPaginas={setpaginas}
+                        paginas={paginas}
+                        setPagina={setpagina}
+                        pagina={pagina}
+                        cedulaVendedor={userInfo.strIdVendedor}
+                        setloadingData={setloadingData}
+                    />
+                ) :
+                    (
                         <h1>Sin datos</h1>
+                    )
+            }
+            {
+                !loadingData && datosClientes !== null ? (
+
+                    <>
+
+                        <div className='TablePedidosContainer'>
+                            <TablePortafolios data={datosClientes} setviewGestionesCliente={setviewGestionesCliente} setidClienteGestiones={setidClienteGestiones} setviewInfoCliente={setviewInfoCliente} />
+                        </div>
+                    </>
+
+
                 ) : (
                     <Loader />
                 )
             }
             {
                 viewGestionesCliente && (
-                    <GestionesClientes cedula={idClienteGestiones} setviewGestionesCliente={setviewGestionesCliente} idLogin={userInfo !== null ? userInfo.idLogin : 75} />
+                    <GestionesClientes setdatosClientes={setdatosClientes} datosClientes={datosClientes} cedula={idClienteGestiones} setviewGestionesCliente={setviewGestionesCliente} idLogin={userInfo !== null ? userInfo.idLogin : 75} />
                 )
             }
             {
                 viewInfoCliente && (
-                    <InfoClientesPortafolio setviewInfoCliente={setviewInfoCliente} cedula={idClienteGestiones.stridCedula} />
+                    <InfoClientesPortafolio setviewInfoCliente={setviewInfoCliente} cedula={idClienteGestiones.stridCedula} setviewGestionesCliente={setviewGestionesCliente} setidClienteGestiones={setidClienteGestiones} />
                 )
             }
             {alerts}

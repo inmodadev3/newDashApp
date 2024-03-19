@@ -81,6 +81,12 @@ export const Revision: React.FC = () => {
             )
         )
 
+        setdataPedidoCopy((prevData) =>
+            prevData.map((pedido) =>
+                pedido.intIdPedDetalle === intIdPedDetalle ? { ...pedido, valor_original: pedido.intCantidad, intCantidad: parseInt(value) } : pedido
+            )
+        )
+
     }
 
     const blurCantidad = async (e: React.ChangeEvent<HTMLInputElement>, intIdPedDetalle: number) => {
@@ -92,6 +98,8 @@ export const Revision: React.FC = () => {
                     pedido.intIdPedDetalle === intIdPedDetalle ? { ...pedido, valor_original: pedido.intCantidad, intCantidad: pedido.valor_original ? pedido.valor_original : 1 } : pedido
                 )
             )
+        } else {
+
         }
 
         const precio = calcular_total()
@@ -138,7 +146,7 @@ export const Revision: React.FC = () => {
     const calcular_total = () => {
         let total = 0;
 
-        dataPedido.map((producto) => {
+        dataPedidoCopy.map((producto) => {
             let cantidad = (!Number.isNaN(producto.intCantidad)) ? producto.intCantidad : 1
             total += (cantidad) * (producto.intPrecio)
         })
@@ -185,18 +193,11 @@ export const Revision: React.FC = () => {
             }]
 
             setdataPedido(newData)
+            setdataPedidoCopy(newData)
             setisViewModalProductos(false)
             setarrayProductos([])
 
             await calcular_total()
-
-
-
-            /* console.log({
-                idCliente, 
-                "idProducto":strIdProducto,
-                "idPedido":idPedido
-            }) */
 
         } catch (error) {
             console.error(error)
@@ -325,6 +326,7 @@ export const Revision: React.FC = () => {
                                                                     type='number'
                                                                     className='w-20 px-4 py-2 text-center border-2 border-gray-500 rounded outline-none'
                                                                     value={producto.intCantidad}
+                                                                    min={1}
                                                                     onChange={(e) => { handleChangeCantidad(e, producto.intIdPedDetalle) }}
                                                                     onBlur={(e) => {
                                                                         blurCantidad(e, producto.intIdPedDetalle)
