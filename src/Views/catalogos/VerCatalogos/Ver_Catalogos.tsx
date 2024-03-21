@@ -4,10 +4,10 @@ import { AppLayout } from '../../../Components/AppLayout/AppLayout'
 import { MenuSelectedContext } from '../../../context/UseContextProviders'
 import { IDataUser } from '../../../Utils/GlobalInterfaces'
 import { useNavigate } from 'react-router-dom'
-import { PiFilePdfFill } from 'react-icons/pi'
+/* import { PiFilePdfFill } from 'react-icons/pi'
 import { AiOutlineDownload } from 'react-icons/ai'
 import { URLAPI } from '../../../Utils/Helpers'
-import moment from 'moment'
+import moment from 'moment' */
 import { MenuSections, SubMenuSections } from '../../../Components/MenuLateral/MenuSections'
 
 
@@ -128,7 +128,7 @@ export const Ver_Catalogos: React.FC = () => {
             })
     }
 
-    const downloadPDF = (url: string, filename: string) => {
+    /* const downloadPDF = (url: string, filename: string) => {
         axios.get(url, { responseType: 'blob' })
             .then(response => {
                 const blob = new Blob([response.data], { type: 'application/pdf' });
@@ -144,7 +144,7 @@ export const Ver_Catalogos: React.FC = () => {
             .catch(err => {
                 console.error(err);
             });
-    };
+    }; */
 
     fileList?.sort((a, b) => b.dateModified.localeCompare(a.dateModified));
 
