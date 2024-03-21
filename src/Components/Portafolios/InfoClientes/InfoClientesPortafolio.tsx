@@ -1,7 +1,7 @@
 import axios from '../../../Utils/BaseUrlAxio'
 import React, { useContext, useEffect, useState } from 'react'
 import { AiFillHome, AiFillPhone, AiOutlineUser, AiTwotoneMail } from 'react-icons/ai'
-import { BiSolidCity } from 'react-icons/bi'
+import { BiHomeAlt, BiSolidCity } from 'react-icons/bi'
 import { FaMoneyBillWave } from "react-icons/fa";
 import { HiIdentification } from 'react-icons/hi'
 import { ModalsLayout } from '../../Modals/ModalsLayout'
@@ -94,8 +94,8 @@ export const InfoClientesPortafolio: React.FC<InfoProps> = ({ setviewInfoCliente
     return (
         <ModalsLayout CloseEvent={setviewInfoCliente}>
             <div className='overflow-y-scroll infoCliente_Container '>
-                <div className='flex flex-col items-center px-6 border-r-2 justify-evenly '>
-                    <div className='flex items-center justify-center my-6 rounded-full w-28 h-28 bg-sky-800'>
+                <div className='flex flex-col items-center px-6 border-r-2 justify-evenly'>
+                    <div className='flex items-center justify-center p-4 m-6 rounded-full bg-sky-800'>
                         <AiOutlineUser size={60} color={"white"} />
                     </div>
                     <div>
@@ -130,6 +130,15 @@ export const InfoClientesPortafolio: React.FC<InfoProps> = ({ setviewInfoCliente
                                 <div className='flex items-center mt-5'>
                                     <span style={{ marginRight: '20px' }}><AiFillHome size={20} /></span>
                                     <span>{dataCliente.direcc1}</span>
+                                </div>
+                            )
+                        }
+
+{
+                            (dataCliente.direcc2 !== "" && dataCliente.direcc2 !== null) && (
+                                <div className='flex items-center w-64 mt-4 overflow-hidden'>
+                                    <span style={{ marginRight: '20px' }}><BiHomeAlt size={20} /></span>
+                                    <span className='break-all'>{dataCliente.direcc2}</span>
                                 </div>
                             )
                         }
