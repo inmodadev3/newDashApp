@@ -10,9 +10,9 @@ import { AgregarAlerta } from '../../../Utils/Helpers'
 
 type PropsFormLine = {
     nameLabel1: string,
-    nameLabel2: string,
+    nameLabel2?: string,
     inputValue1: string | number | undefined,
-    inputValue2: string | number | undefined,
+    inputValue2?: string | number | undefined,
     changeInputValue1?: React.Dispatch<React.SetStateAction<string | number>>,
     changeInputValue2?: React.Dispatch<React.SetStateAction<string | number>>,
     disabled1?: boolean
@@ -110,10 +110,15 @@ const FormLine: React.FC<PropsFormLine> = ({
                 <input className={`rounded-xl w-full ${!disabled1 ? 'bg-white' : 'bg-gray-100/80'} outline-none border-2 border-gray-300 text-gray-800 p-2`} disabled={disabled1} type='text' value={typeof (inputValue1) == "number" ? FormateoNumberInt((inputValue1).toString()) : inputValue1} onChange={(e) => { changeInputValue1 && changeInputValue1(e.target.value) }} />
             </div>
 
-            <div className='w-full px-4 my-2'>
-                <p className='py-2 font-bold text-slate-200'>{nameLabel2}</p>
-                <input className={`rounded-xl w-full ${!disabled2 ? 'bg-white' : 'bg-gray-100/80'} outline-none border-2 border-gray-300 text-gray-800 p-2`} disabled={disabled2} type='text' value={typeof (inputValue2) == "number" ? FormateoNumberInt((inputValue2).toString()) : inputValue2} onChange={(e) => { changeInputValue2 && changeInputValue2(e.target.value) }} />
-            </div>
+            {
+                nameLabel2 && (
+                    <div className='w-full px-4 my-2'>
+                        <p className='py-2 font-bold text-slate-200'>{nameLabel2}</p>
+                        <input className={`rounded-xl w-full ${!disabled2 ? 'bg-white' : 'bg-gray-100/80'} outline-none border-2 border-gray-300 text-gray-800 p-2`} disabled={disabled2} type='text' value={typeof (inputValue2) == "number" ? FormateoNumberInt((inputValue2).toString()) : inputValue2} onChange={(e) => { changeInputValue2 && changeInputValue2(e.target.value) }} />
+                    </div>
+                )
+            }
+
         </div>
     )
 }
@@ -252,6 +257,19 @@ export const Liquidacion: React.FC = () => {
             setLDimension(data.data.dash.strDimesion)
             setLCantidadPaca(data.data.dash.intCantidadPaca)
             setLobservacion(data.data.hgi ? data.data.hgi.descripcion_corta : "")
+            setLMaterial(data.data.dash.strMaterial)
+            const unidad = await listaUnidades.find((unidad) => unidad.StrIdUnidad == data.data.hgi.unidad_medida)
+            const genero = await listaGeneros.find((genero) => genero.descripcion == data.data.hgi.genero)
+            const marca = await listaMarcas.find((marca) => marca.descripcion == data.data.hgi.marca)
+            if (marca) {
+                setLMarca(marca.id)
+            }
+            if (genero) {
+                setLGenero(genero.id)
+            }
+            if (unidad) {
+                setLUnidades(unidad.StrIdUnidad)
+            }
             //setLColor(data.data.dash.strColor)
         } catch (error) {
             console.error(error)
@@ -444,7 +462,7 @@ export const Liquidacion: React.FC = () => {
     }
 
     const Actualizar_Producto_Liquidado = (id: number) => {
-        
+
         axios.post('/compras/liquidar', {
             intIdDetalle: Datos_Producto_Modificar.intIdDetalle,
             strDescripcion: LDescripcion,
@@ -471,21 +489,21 @@ export const Liquidacion: React.FC = () => {
                 setviewModallModificar(false)
                 setlistaProductosLiquidados((prevData) => {
                     return prevData.map((Producto) => (
-                      Producto.id === id
-                        ? {
-                            id: Producto.id,
-                            strReferencia: LReferencia,
-                            strDescripcion: LDescripcion,
-                            intPrecio1: LPrecio1,
-                            intPrecio2: LPrecio2,
-                            intPrecio3: LPrecio3,
-                            intPrecio4: LPrecio4,
-                            raggi: listaProductosLiquidados[0].raggi,
-                            strUnidadMedida: LUnidades
-                          }
-                        : Producto
+                        Producto.id === id
+                            ? {
+                                id: Producto.id,
+                                strReferencia: LReferencia,
+                                strDescripcion: LDescripcion,
+                                intPrecio1: LPrecio1,
+                                intPrecio2: LPrecio2,
+                                intPrecio3: LPrecio3,
+                                intPrecio4: LPrecio4,
+                                raggi: listaProductosLiquidados[0].raggi,
+                                strUnidadMedida: LUnidades
+                            }
+                            : Producto
                     ));
-                  });
+                });
                 AgregarAlerta(createToast, "Actualizado correctamente", "success")
                 Limpiar_Datos()
 
@@ -618,6 +636,66 @@ export const Liquidacion: React.FC = () => {
                 viewModalLiquidacion && (
                     <ModalsLayout CloseEvent={setviewModalLiquidacion}>
                         <section className={`text-xl flex h-full z-10 bg-gray-100 ${datosExistentesProducto == null ? "w-auto" : "w-full "}`}>
+                            {/* DATOS EXISTENTES */}
+                            <div className={`${datosExistentesProducto == null && "hidden"}flex flex-col overflow-y-scroll pb-2 bg-gray-600 text-white`}>
+                                <div className='bg-[#2f3c87]'>
+                                    <h1 className='py-2 text-2xl italic font-bold text-center text-white'>DATOS EXISTENTES</h1>
+                                </div>
+
+                                <hr className='border-white' />
+                                {
+                                    datosExistentesProducto !== null ? (
+                                        <form>
+                                            <div className='[&>div>div>input]:bg-white/80'>
+                                                <FormLine
+                                                    nameLabel1={"Referencia"}
+                                                    nameLabel2={"precio 1"}
+                                                    inputValue1={datosExistentesProducto.referencia}
+                                                    inputValue2={FormateoNumberInt(`${datosExistentesProducto.precio1}`)}
+                                                    disabled1={true}
+                                                    disabled2={true}
+
+                                                />
+                                                <FormLine
+                                                    nameLabel1={"Descripcion"}
+                                                    inputValue1={datosExistentesProducto.Descripcion}
+                                                    disabled1={true}
+                                                />
+                                                <FormLine
+                                                    nameLabel1={"Unidad de Medida"}
+                                                    inputValue1={datosExistentesProducto.unidad_medida}
+                                                    disabled1={true}
+                                                />
+                                                <FormLine
+                                                    nameLabel1={"Dimension"}
+                                                    inputValue1={datosExistentesProducto.dimension}
+                                                    disabled1={true}
+                                                />
+
+                                                <FormLine
+                                                    nameLabel1={"Genero"}
+                                                    nameLabel2={"Marca"}
+                                                    inputValue1={datosExistentesProducto.genero}
+                                                    inputValue2={datosExistentesProducto.marca}
+                                                    disabled1={true}
+                                                    disabled2={true}
+                                                />
+
+                                                <FormLine
+                                                    nameLabel1={"Observacion"}
+                                                    inputValue1={datosExistentesProducto.descripcion_corta}
+                                                    disabled1={true}
+                                                />
+                                            </div>
+                                        </form>
+                                    ) : (
+                                        <h1></h1>
+                                    )
+                                }
+
+                            </div>
+
+                            {/* DATOS QUE VAN A LIQUIDAR */}
                             <div className={` overflow-y-scroll pb-2 bg-lime-800/80 text-white border-r-lime-400 border-r-2 flex-1`}>
                                 <div className='bg-blue-500'>
                                     <h1 className='py-2 text-2xl italic font-bold text-center text-white'>DATOS PARA LIQUIDAR</h1>
@@ -748,90 +826,6 @@ export const Liquidacion: React.FC = () => {
                                     )
                                 }
                             </div>
-
-                            <div className={`${datosExistentesProducto == null && "hidden"} flex-1 overflow-y-scroll pb-2 bg-gray-600 text-white`}>
-                                <div className='bg-[#2f3c87]'>
-                                    <h1 className='py-2 text-2xl italic font-bold text-center text-white'>DATOS EXISTENTES</h1>
-                                </div>
-
-                                <hr className='border-white' />
-                                {
-                                    datosExistentesProducto !== null ? (
-                                        <form>
-                                            <div className='[&>div>div>input]:bg-white/80'>
-                                                <FormLine
-                                                    nameLabel1={"Referencia"}
-                                                    nameLabel2={"precio 1"}
-                                                    inputValue1={datosExistentesProducto.referencia}
-                                                    inputValue2={FormateoNumberInt(`${datosExistentesProducto.precio1}`)}
-                                                    disabled1={true}
-                                                    disabled2={true}
-
-                                                />
-                                                <FormLine
-                                                    nameLabel1={"Descripcion"}
-                                                    nameLabel2={"precio 2"}
-                                                    inputValue1={datosExistentesProducto.Descripcion}
-                                                    inputValue2={FormateoNumberInt(`${datosExistentesProducto.precio2}`)}
-                                                    disabled1={true}
-                                                    disabled2={true}
-                                                />
-                                                <FormLine
-                                                    nameLabel1={"precio 3"}
-                                                    nameLabel2={"precio 4"}
-                                                    inputValue1={FormateoNumberInt(`${datosExistentesProducto.precio3}`)}
-                                                    inputValue2={FormateoNumberInt(`${datosExistentesProducto.precio4}`)}
-                                                    disabled1={true}
-                                                    disabled2={true}
-                                                />
-                                                <FormLine
-                                                    nameLabel1={"Dimension"}
-                                                    nameLabel2={"Unidad de Medida"}
-                                                    inputValue1={datosExistentesProducto.dimension}
-                                                    inputValue2={datosExistentesProducto.unidad_medida}
-                                                    disabled1={true}
-                                                    disabled2={true}
-                                                />
-                                                <FormLine
-                                                    nameLabel1={"Material"}
-                                                    nameLabel2={"Marca"}
-                                                    inputValue1={datosExistentesProducto.material}
-                                                    inputValue2={datosExistentesProducto.marca}
-                                                    disabled1={true}
-                                                    disabled2={true}
-                                                />
-                                                <FormLine
-                                                    nameLabel1={"Género"}
-                                                    nameLabel2={"linea"}
-                                                    inputValue1={datosExistentesProducto.genero}
-                                                    inputValue2={datosExistentesProducto.linea}
-                                                    disabled1={true}
-                                                    disabled2={true}
-                                                />
-                                                <FormLine
-                                                    nameLabel1={"clase"}
-                                                    nameLabel2={"Grupo"}
-                                                    inputValue1={datosExistentesProducto.clase}
-                                                    inputValue2={datosExistentesProducto.grupo}
-                                                    disabled1={true}
-                                                    disabled2={true}
-                                                />
-                                                <FormLine
-                                                    nameLabel1={"Tipo"}
-                                                    nameLabel2={"Observacion"}
-                                                    inputValue1={datosExistentesProducto.tipo}
-                                                    inputValue2={datosExistentesProducto.descripcion_corta}
-                                                    disabled1={true}
-                                                    disabled2={true}
-                                                />
-                                            </div>
-                                        </form>
-                                    ) : (
-                                        <h1></h1>
-                                    )
-                                }
-
-                            </div>
                         </section>
                     </ModalsLayout>
                 )
@@ -954,7 +948,7 @@ export const Liquidacion: React.FC = () => {
                                                 </div>
 
                                                 <div className='flex px-4 pb-4 justify-evenly'>
-                                                    <button className='px-4 py-2 rounded bg-lime-600 hover:bg-lime-700' onClick={()=>{Actualizar_Producto_Liquidado(Datos_Producto_Modificar.intIdDetalle)}}>Actualizar</button>
+                                                    <button className='px-4 py-2 rounded bg-lime-600 hover:bg-lime-700' onClick={() => { Actualizar_Producto_Liquidado(Datos_Producto_Modificar.intIdDetalle) }}>Actualizar</button>
                                                     <button
                                                         onClick={(e) => {
                                                             e.preventDefault()
