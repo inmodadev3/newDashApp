@@ -241,8 +241,8 @@ export const Pedidos = () => {
                                                     >
                                                         <td>{pedido.intIdPedido}</td>
                                                         <td className="flex flex-col">
-                                                            <span>{moment.utc(pedido.dtFechaEnvio).format("MMM. DD, YYYY")}</span>
-                                                            <span>{moment.utc(pedido.dtFechaEnvio).format("HH:mm A")}</span>
+                                                            <span>{moment.utc(pedido.dtFechaEnvio).local().format("MMM. DD, YYYY")}</span>
+                                                            <span>{moment.utc(pedido.dtFechaEnvio).local().format("hh:mm A")}</span>
                                                         </td>
                                                         <td className="w-60">{pedido.strNombCliente}</td>
                                                         <td>{FormateoNumberInt((pedido.intValorTotal).toString())}</td>

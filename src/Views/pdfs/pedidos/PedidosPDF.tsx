@@ -72,7 +72,9 @@ export const PedidosPDF: React.FC = () => {
     }
 
     const compararNombresAZ = (a:IDataProductosPdf,b:IDataProductosPdf) =>{
-        return a.ubicaciones.localeCompare(b.ubicaciones)
+        if(b.ubicaciones !== null){
+            return a.ubicaciones.localeCompare(b.ubicaciones)
+        }
     }
 
 
