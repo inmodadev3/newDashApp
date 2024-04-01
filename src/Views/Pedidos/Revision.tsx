@@ -225,11 +225,24 @@ export const Revision: React.FC = () => {
                     producto.strIdProducto == strIdProducto ? { ...producto, intEstado: 2 } : producto
                 ))
             )
+
+            setdataPedidoCopy((PrevValue) =>
+                PrevValue.map((producto) => (
+                    producto.strIdProducto == strIdProducto ? { ...producto, intEstado: 2 } : producto
+                ))
+            )
+
         } else {
 
             await actualizar_estado_producto(intIdPedDetalle, 1, 1)
 
             setdataPedido((PrevValue) =>
+                PrevValue.map((producto) => (
+                    producto.strIdProducto == strIdProducto ? { ...producto, intEstado: 1 } : producto
+                ))
+            )
+
+            setdataPedidoCopy((PrevValue) =>
                 PrevValue.map((producto) => (
                     producto.strIdProducto == strIdProducto ? { ...producto, intEstado: 1 } : producto
                 ))
@@ -280,13 +293,14 @@ export const Revision: React.FC = () => {
                                         <table className='w-full border-2 bg-gray-50 border-black/30'>
                                             <thead className="border-b-2 border-b-black/30 text-center [&>th]:py-4">
                                                 <tr>
+                                                    <th>#</th>
                                                     <th>Revisado</th>
                                                     <th>Ver</th>
                                                     <th>Referecia</th>
                                                     <th>Descripcion</th>
                                                     <th>Cantidad</th>
                                                     <th>Precio</th>
-                                                    <th>Unidad de medida</th>
+                                                    <th className='pr-4'>Unidad de medida</th>
                                                     <th>Color</th>
                                                     <th>Observacion</th>
                                                     <th>Eliminar</th>
@@ -294,11 +308,12 @@ export const Revision: React.FC = () => {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    dataPedido.map((producto) => (
+                                                    dataPedido.map((producto, key:number) => (
                                                         <tr
                                                             key={producto.strIdProducto}
                                                             className={`border-b-2 border-b-black/20 text-center [&>td]:py-4 [&>td]:text-sm group relative ${producto.intEstado == 2 && "table_checked"}`}
                                                         >
+                                                            <td className='px-2'>{key + 1}</td>
                                                             <td className=''>
                                                                 <input
                                                                     type="checkbox"
@@ -309,7 +324,7 @@ export const Revision: React.FC = () => {
                                                                     }}
                                                                 />
                                                             </td>
-                                                            <td className='flex items-center justify-center'>
+                                                            <td className='flex items-center justify-center mx-2'>
                                                                 <span
                                                                     onClick={() => {
                                                                         setisViewModalInfoProducto(!isViewModalInfoProducto)
@@ -333,7 +348,7 @@ export const Revision: React.FC = () => {
                                                                     }}
                                                                 />
                                                             </td>
-                                                            <td>${FormateoNumberInt(producto.intPrecio.toString())}</td>
+                                                            <td className='px-12'>${FormateoNumberInt(producto.intPrecio.toString())}</td>
                                                             <td>{producto.strUnidadMedida}</td>
                                                             <td>{producto.strColor}</td>
                                                             <td>{producto.strObservacion}</td>
