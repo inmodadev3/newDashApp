@@ -18,6 +18,7 @@ export interface IHeaderPdf {
     strCorreoClienteAct: string
     strObservacion: string
     intValorTotal: number
+    observacionTercero:string
 }
 
 export interface IDataProductosPdf {

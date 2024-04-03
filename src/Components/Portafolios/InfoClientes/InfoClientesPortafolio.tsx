@@ -200,7 +200,7 @@ export const InfoClientesPortafolio: React.FC<InfoProps> = ({ setviewInfoCliente
                     <section className='flex flex-col my-6'>
                         {/*  <h3 className='text-xl font-bold text-sky-800'>Top productos mas comprados</h3> */}
                         {
-                            dataCliente.observacion && (<p className='text-lg font-bold text-sky-800'>Observación: <span className='text-sm text-center text-black truncate'>{dataCliente.observacion}</span></p>)
+                            dataCliente.observacion && (<p className='text-lg font-bold  text-sky-800'>Observación: <span className='text-sm text-center text-black'>{dataCliente.observacion}</span></p>)
                         }
 
                         {

@@ -110,8 +110,8 @@ export const TemplatePedidos: React.FC<IDatosPropsTemplatePedidos> = ({ datos })
                                     <Text style={[styles.tableBody, styles.lblUnidadMed]}>{item.strUnidadMedida}</Text>
                                     <Text style={[styles.tableBody, styles.lblCantidad]}>{item.intCantidad}</Text>
                                     <Text style={[styles.tableBody, styles.lblPrecio]}>{FormateoNumberInt((item.intPrecio).toString())}</Text>
-                                    <Text style={[styles.tableBody, styles.lblValorTotal]}>{FormateoNumberInt((item.intCantidad * item.intPrecio).toString())} 
-                                    <Text style={styles.lblCambioPrecio}>{item.precio_cambio && " * "}</Text></Text>
+                                    <Text style={[styles.tableBody, styles.lblValorTotal]}>{FormateoNumberInt((item.intCantidad * item.intPrecio).toString())}
+                                        <Text style={styles.lblCambioPrecio}>{item.precio_cambio && " * "}</Text></Text>
                                 </View>
                             )
                         })
@@ -137,9 +137,19 @@ export const TemplatePedidos: React.FC<IDatosPropsTemplatePedidos> = ({ datos })
                             </Text>
                         </View>
                     </View>
+                    <View style={{ justifyContent: 'center', alignItems: 'center', marginTop:10 }}>
+
+                        <Text style={{ fontSize: 10, color: '#000' }}>
+                            Observaciones generales: 
+                            <Text style={styles.lblObservacion}>
+                                {datos.header.observacionTercero ? datos.header.observacionTercero : ""}
+                            </Text>
+                            
+                        </Text>
+                    </View>
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
 
-                        <Text style={{ fontSize: 8, color: '#ccc' }}>
+                        <Text style={{ fontSize: 8, color: '#ccc', marginTop: 12 }}>
                             Factura In Moda Fantasy S.A.S
                         </Text>
                     </View>
@@ -239,7 +249,7 @@ const styles = StyleSheet.create({
         width: '9%'
     },
     lblCambioPrecio: {
-        color:'red',
+        color: 'red',
         fontSize: 12
     },
     footerContainer: {
