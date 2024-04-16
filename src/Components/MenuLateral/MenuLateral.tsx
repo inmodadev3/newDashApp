@@ -1,18 +1,21 @@
 import axios from '../../Utils/BaseUrlAxio.ts'
 import ROUTES_PATHS from '../../routers/Paths.ts';
+import logo from '../../../assets/img/INMODA.png'
 import { AiOutlineHome, AiOutlineFilePdf, AiOutlineSetting, AiOutlineShopping, AiOutlineShop, AiOutlineWallet, AiOutlineUser, AiOutlineSearch, AiOutlineArrowLeft, AiFillCaretDown, AiFillCaretUp, AiOutlineUserAdd, AiOutlineFile, AiOutlineInfoCircle } from "react-icons/ai";
 import { GiHamburgerMenu, GiNotebook } from "react-icons/gi";
 import { GoContainer } from "react-icons/go";
 import { HiOutlineDocumentReport, HiOutlineBriefcase } from "react-icons/hi";
 import { IDataUser } from '../../Utils/GlobalInterfaces.ts';
 import { MenuSelectedContext } from '../../context/UseContextProviders.tsx';
-import { MdAttachMoney, MdOutlineDownloading} from "react-icons/md";
+import { MdAttachMoney, MdOutlineDownloading } from "react-icons/md";
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState, useContext } from 'react'
-import logo from '../../../assets/img/INMODA.png'
 import { MenuSections, SubMenuSections } from './MenuSections.ts';
-import './stylesMenu.css'
 import { PermisosContext } from '../../context/permisosContext.tsx';
+import { FaFileContract } from 'react-icons/fa';
+import { FaUsersBetweenLines } from "react-icons/fa6";
+import './stylesMenu.css'
+
 
 interface IFilterPermisos {
   id_permiso: number
@@ -51,13 +54,14 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
   let userInfo: IDataUser | null = null!;
   const [permisosArray, setpermisosArray] = useState([])
   const { menuSelected, submenuSelected } = useContext(MenuSelectedContext);
-  const {setPermisos} = useContext(PermisosContext)
+  const { setPermisos } = useContext(PermisosContext)
   const navigate = useNavigate();
 
   //VISUALIZACION DE SUBMENUS
   const [showAdminMenu, setShowAdminMenu] = useState(false);
   const [showComprasMenu, setShowComprasMenu] = useState(false);
   const [showCatalogosMenu, setshowCatalogosMenu] = useState(false)
+  const [showPedidosMenu, setshowPedidosMenu] = useState(false)
 
   if (userData) {
     userInfo = JSON.parse(userData);
@@ -71,11 +75,11 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
     }
   }, [])
 
-  useEffect(()=>{
-    if(permisosArray.length > 0){
+  useEffect(() => {
+    if (permisosArray.length > 0) {
       setPermisos(permisosArray)
     }
-  },[permisosArray])
+  }, [permisosArray])
 
 
   const ConsultarPermisos = () => {
@@ -209,16 +213,61 @@ export const MenuLateral: React.FC<MenuLateralProps> = ({ menuView, setmenuView 
           )}
 
           {/*MENU PEDIDOS*/}
+
           {
-            permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 3) && (
+            (permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 3) || permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 14)) && (
               <MenuItemRender
                 icon={<AiOutlineShopping size={22} />}
                 label="PEDIDOS"
                 selected={menuSelected === MenuSections.PEDIDOS}
                 onClick={() => {
-                  navigate(ROUTES_PATHS.PEDIDOS)
+                  setshowPedidosMenu(!showPedidosMenu)
+                  //navigate(ROUTES_PATHS.PEDIDOS)
                 }}
+                iconOptional={showPedidosMenu ? <AiFillCaretUp size={22} /> : <AiFillCaretDown size={22} />}
               />
+            )
+          }
+          {
+            showPedidosMenu && (
+              <>
+                {
+                  (permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 3) || permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 14)) && (
+                    <SubMenuItemRender
+                      icon={<AiOutlineShopping size={22} />}
+                      label="Ver Pedidos"
+                      submenuSelected={submenuSelected === SubMenuSections.VER_PEDIDOS}
+                      onClick={() => {
+                        navigate(ROUTES_PATHS.PEDIDOS)
+                      }}
+                    />
+                  )
+                }
+                {
+                  permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 3) && (
+                    <SubMenuItemRender
+                      icon={<FaFileContract size={22} />}
+                      label="Seguimiento de pedidos"
+                      submenuSelected={submenuSelected === SubMenuSections.VER_SEGUIMIENTOS}
+                      onClick={() => {
+                        navigate(ROUTES_PATHS.SEGUIMIENTOS)
+                      }}
+                    />
+                  )
+                }
+                {
+                  permisosArray.find((permiso: IFilterPermisos) => permiso.id_permiso === 3) && (
+                    <SubMenuItemRender
+                      icon={<FaUsersBetweenLines size={22} color={'#FFF'} />}
+                      label="Encargados"
+                      submenuSelected={submenuSelected === SubMenuSections.ENCARGADOS}
+                      onClick={() => {
+                        navigate(ROUTES_PATHS.ENCARGADOS)
+                      }}
+                    />
+                  )
+                }
+              </>
             )
           }
 

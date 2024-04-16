@@ -18,6 +18,9 @@ const ROUTES_PATHS = {
     PERMISOS_EMPLEADOS:'/administrador/permisos',
     CREAR_PERMISOS_EMPLEADOS:'/administrador/permisos/nuevo',
     INFORMES:'/informes',
+    SEGUIMIENTOS:'/pedidos/seguimientos',
+    ENCARGADOS: '/pedidos/encargados',
+    CREAR_ENCARGADOS:'/pedidos/encargados/nuevo'
 
 }
 

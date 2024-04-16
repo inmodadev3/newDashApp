@@ -1,7 +1,7 @@
 import 'react-tabs/style/react-tabs.css';
 import axios from "../../Utils/BaseUrlAxio";
 import moment from "moment";
-import { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { MenuSelectedContext } from "../../context/UseContextProviders"
 import { AppLayout } from "../../Components/AppLayout/AppLayout"
 import { useAlert } from "../../hooks/useAlert";
@@ -11,10 +11,12 @@ import { BuscadorPedidos } from "./BuscadorPedidos";
 import { Excel_Pedidos } from '../../Utils/excelTemplates/ExcelFormats';
 import { IDataProductosPdf } from '../pdfs/pedidos/PedidosPDF';
 import { PermisosContext } from '../../context/permisosContext';
-import { FaEdit } from 'react-icons/fa';
+import { FaEdit, FaFileContract } from 'react-icons/fa';
 import { IoPricetag } from 'react-icons/io5';
+import { Seguimientos } from './Seguimientos/Seguimientos';
+import { SubMenuSections } from '../../Components/MenuLateral/MenuSections';
 
-type TPedidosProps = {
+export type TPedidosProps = {
     intIdPedido: number,
     strIdPedidoVendedor: number,
     strNombVendedor: string,
@@ -23,6 +25,8 @@ type TPedidosProps = {
     dtFechaEnvio: string,
     intValorTotal: number,
     intEstado: number
+    pago: number,
+    isDropi: number
 }
 
 interface IProps {
@@ -55,13 +59,59 @@ type TEstadosPedidos = {
     estilo: string
 }
 
-export const Pedidos = () => {
+export type TSeguimiento = {
+    NroPedido: string,
+    Cliente: string,
+    Pago: string | null,
+    Ciudad: string | null,
+    Vendedor: string | null,
+    TipoVenta: string | null,
+    Encargado_Alistamiento1: string | null,
+    Encargado_Alistamiento2: string | null,
+    Encargado_Alistamiento3: string | null,
+    Encargado_Revision: string | null,
+    Encargado_Facturacion: string | null,
+    NroFactura: string | null,
+    TipoEnvio: string | null,
+    NroGuia: string | null,
+    Despacho: string | null,
+    ValorEnvio: number | null,
+    NroCajas: string | null,
+    Comentarios: string | null,
+    Fecha_Facura: Date | null,
+    Fecha_Pedido: Date | null,
+    Fecha_Envio: Date | null,
+    isDropi: boolean,
+    Devolucion: boolean,
+    Recaudo: string
+    Estado: boolean
+    Cartera: boolean
+}
+
+export interface IEncargados {
+    alistamiento: TEncargados[]
+    facturacion: TEncargados[]
+    revision: TEncargados[]
+}
+
+export type TEncargados = {
+    id: number,
+    nombre: string,
+    tipo_encargado_id: number,
+    intEstado: number
+}
+
+
+export const Pedidos:React.FC = () => {
     const [pedidos, setpedidos] = useState<TPedidosProps[]>([] as TPedidosProps[])
     const [isLoadingData, setisLoadingData] = useState(false)
     const { setMenuSelected, setSubmenuSelected } = useContext(MenuSelectedContext)
     const { permisos } = useContext(PermisosContext)
     const [revisionTrue, setrevisionTrue] = useState(false)
     const { createToast, alerts } = useAlert()
+    const [isViewModalSeguimiento, setIsViewModalSeguimiento] = useState<boolean>(false)
+    const [idPedidoSeguimiento, setidPedidoSeguimiento] = useState(0)
+
 
     const estados_pedidos: TEstadosPedidos[] = [
         {
@@ -88,7 +138,7 @@ export const Pedidos = () => {
 
     useEffect(() => {
         setMenuSelected(4)
-        setSubmenuSelected(0)
+        setSubmenuSelected(SubMenuSections.VER_PEDIDOS)
         consultar_Pedidos()
         window.document.title = "Panel - Pedidos"
     }, [])
@@ -209,6 +259,26 @@ export const Pedidos = () => {
         }
     }
 
+    const openModalSeguimiento = (idPedido: TPedidosProps) => async () => {
+        setIsViewModalSeguimiento(true)
+        setidPedidoSeguimiento(idPedido.intIdPedido)
+    }
+
+    const seguimientoPedido = (pedido: TPedidosProps) => {
+        let estado;
+        if (pedido.pago == 0 || pedido.pago == null) {
+            return;
+        }
+
+        if (pedido.isDropi) {
+            estado = "Pagado 💲"
+        } else {
+            estado = "Despachado 🚚"
+        }
+
+        return estado
+
+    }
     return (
         <AppLayout>
             {
@@ -251,7 +321,12 @@ export const Pedidos = () => {
                                                             {
                                                                 pedido.intEstado == -1 ? (<span className="p-1 bg-red-600 rounded text-red-50">Anulado </span>)
                                                                     : (
-                                                                        <span className={`${estados_pedidos[pedido.intEstado] ? estados_pedidos[pedido.intEstado].estilo : estados_pedidos[2].estilo} rounded`}>{estados_pedidos[pedido.intEstado] ? estados_pedidos[pedido.intEstado].nombre : estados_pedidos[2].nombre}</span>
+                                                                        <article className='flex flex-col gap-y-2'>
+                                                                            <span className={`${estados_pedidos[pedido.intEstado] ? estados_pedidos[pedido.intEstado].estilo : estados_pedidos[2].estilo} rounded`}>{estados_pedidos[pedido.intEstado] ? estados_pedidos[pedido.intEstado].nombre : estados_pedidos[2].nombre}</span>
+                                                                            {(pedido.pago !== null && pedido.pago !== 0) && (
+                                                                                <span className='p-1 bg-green-600  text-red-50'>{seguimientoPedido(pedido)}</span>
+                                                                            )}
+                                                                        </article>
                                                                     )
                                                             }
                                                         </td>
@@ -298,9 +373,17 @@ export const Pedidos = () => {
                                                                         }}
                                                                     >
 
-                                                                        <span><FaEdit /></span>
+                                                                        <span><FaEdit size={20} /></span>
                                                                         <span>Revisar Pedido</span>
                                                                     </a>
+
+                                                                    <button
+                                                                        className='flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10'
+                                                                        onClick={openModalSeguimiento(pedido)}
+                                                                    >
+                                                                        <span><FaFileContract size={20} /></span>
+                                                                        <span>Seguimiento de pedido</span>
+                                                                    </button>
 
                                                                     {
                                                                         pedido.strNombCliente.toLowerCase().includes("edixon") && (
@@ -327,6 +410,15 @@ export const Pedidos = () => {
 
             }
 
+            {
+                isViewModalSeguimiento && (
+                    <Seguimientos
+                        setIsViewModalSeguimiento={setIsViewModalSeguimiento}
+                        intIdPedido={idPedidoSeguimiento}
+                        setpedidos={setpedidos}
+                    />
+                )
+            }
             {alerts}
         </AppLayout>
     )

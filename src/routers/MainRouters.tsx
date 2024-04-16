@@ -21,6 +21,9 @@ import { Crear_Permisos } from "../Views/Administrador/Permisos_Empleados/Crear_
 import { Informes } from "../Views/Informes/Informes"
 import { Descargar_liquidadas } from "../Views/Compras/Descargar_liquidadas/Descargar_liquidadas"
 import { Revision } from "../Views/Pedidos/Revision"
+import { SeguimientosPanel } from "../Views/Pedidos/Seguimientos/SeguimientosPanel"
+import { Encargados } from "../Views/Pedidos/Encargados/Encargados"
+import { AgregarEncargado } from "../Views/Pedidos/Encargados/AgregarEncargado"
 
 const MainRouters = () => {
     return(
@@ -45,6 +48,9 @@ const MainRouters = () => {
                 <Route path={ROUTES_PATHS.CREAR_PERMISOS_EMPLEADOS}  Component={Crear_Permisos}/>
                 <Route path={ROUTES_PATHS.INFORMES} Component={Informes} />
                 <Route path={ROUTES_PATHS.DESCARGAR_LIQUIDADAS} Component={Descargar_liquidadas}/>
+                <Route path={ROUTES_PATHS.SEGUIMIENTOS} Component={SeguimientosPanel}/>
+                <Route path={ROUTES_PATHS.ENCARGADOS} Component={Encargados} />
+                <Route path={ROUTES_PATHS.CREAR_ENCARGADOS} Component={AgregarEncargado}/>
 
 
                 <Route path="/pedidos/pdf/:pedidoId" Component={PedidosPDF}/>
