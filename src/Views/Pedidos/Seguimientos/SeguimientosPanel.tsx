@@ -16,7 +16,7 @@ export type PropsSeguimientos = {
     "Vendedor": string | null,
     "TipoVenta": string | null,
     "NroFactura": number | null,
-    "TipoEnvio": string | null,
+    "TipoEnvio": string | null | number,
     "NroGuia": string | null,
     "Despacho": string | null,
     "ValorEnvio": string | null,
@@ -102,7 +102,12 @@ export const SeguimientosPanel: React.FC = () => {
 
     const BuscarPorId = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
-        const data = seguimientosCopy.filter((seguimieto) => (seguimieto.intIdPedido.toString()).includes(value))
+        const data = seguimientosCopy.filter((seguimiento) =>
+            (seguimiento.intIdPedido.toString()).includes(value) ||
+            (seguimiento.NroFactura !== null && seguimiento.NroFactura.toString().includes(value)) || 
+            (seguimiento.cliente?.toLocaleLowerCase().includes(value.toLowerCase())) || 
+            (seguimiento.NroGuia !== null && seguimiento.NroGuia.toLowerCase().includes(value.toLowerCase()))
+        )
         setseguimientos(data)
     }
 
@@ -110,10 +115,10 @@ export const SeguimientosPanel: React.FC = () => {
     return (
         <AppLayout>
             <div>
-                <section className='flex my-2 justify-between'>
+                <section className='flex justify-between my-2'>
                     <input
-                        type='tex'
-                        className='w-1/2 outline-none rounded border-2 border-slate-300 p-2'
+                        type='text'
+                        className='w-1/2 p-2 border-2 rounded outline-none border-slate-300'
                         placeholder='Buscar por id'
                         onChange={BuscarPorId}
                     />
@@ -129,8 +134,8 @@ export const SeguimientosPanel: React.FC = () => {
 
                 </section>
                 {
-                    seguimientos.length > 0 && (
-                        <table className="w-full bg-gray-100 border-2 border-black/30 my-2">
+                    seguimientos.length > 0 ? (
+                        <table className="w-full my-2 bg-gray-100 border-2 border-black/30">
                             <thead >
                                 <tr className="border-b-2 border-b-black/30 text-center [&>th]:py-4">
                                     <th>Pedido</th>
@@ -168,13 +173,17 @@ export const SeguimientosPanel: React.FC = () => {
                                                 </article>
                                             </td>
                                             <td>
-                                                <span className='flex justify-center items-center'><span className=' cursor-pointer' onClick={openModalSeguimiento(seguimiento.intIdPedido)}><CgArrowsExchangeAlt size={32} /></span></span>
+                                                <span className='flex items-center justify-center'><span className='cursor-pointer ' onClick={openModalSeguimiento(seguimiento.intIdPedido)}><CgArrowsExchangeAlt size={32} /></span></span>
                                             </td>
                                         </tr>
                                     ))
                                 }
                             </tbody>
                         </table>
+                    ):(
+                        <div>
+                            <h3 className='text-xl font-bold'>No se han encontrado seguimientos</h3>
+                        </div>
                     )
                 }
 

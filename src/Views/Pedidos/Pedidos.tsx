@@ -72,7 +72,7 @@ export type TSeguimiento = {
     Encargado_Revision: string | null,
     Encargado_Facturacion: string | null,
     NroFactura: string | null,
-    TipoEnvio: string | null,
+    TipoEnvio: string | null | number,
     NroGuia: string | null,
     Despacho: string | null,
     ValorEnvio: number | null,
@@ -324,7 +324,7 @@ export const Pedidos:React.FC = () => {
                                                                         <article className='flex flex-col gap-y-2'>
                                                                             <span className={`${estados_pedidos[pedido.intEstado] ? estados_pedidos[pedido.intEstado].estilo : estados_pedidos[2].estilo} rounded`}>{estados_pedidos[pedido.intEstado] ? estados_pedidos[pedido.intEstado].nombre : estados_pedidos[2].nombre}</span>
                                                                             {(pedido.pago !== null && pedido.pago !== 0) && (
-                                                                                <span className='p-1 bg-green-600  text-red-50'>{seguimientoPedido(pedido)}</span>
+                                                                                <span className='p-1 bg-green-600 text-red-50'>{seguimientoPedido(pedido)}</span>
                                                                             )}
                                                                         </article>
                                                                     )

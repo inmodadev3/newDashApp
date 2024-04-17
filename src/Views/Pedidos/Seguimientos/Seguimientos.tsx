@@ -10,7 +10,7 @@ import { PropsSeguimientos } from './SeguimientosPanel'
 interface ISeguimientosProps {
     setIsViewModalSeguimiento: React.Dispatch<React.SetStateAction<boolean>>
     intIdPedido: number
-    setpedidos: React.Dispatch<React.SetStateAction<TPedidosProps[]>> | React.Dispatch<React.SetStateAction<PropsSeguimientos[] >>
+    setpedidos: React.Dispatch<React.SetStateAction<TPedidosProps[]>> | React.Dispatch<React.SetStateAction<PropsSeguimientos[]>>
 }
 
 
@@ -91,12 +91,12 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
 
             const newIsDropi = seguimientoData.isDropi ? 1 : 0
             const newPago = seguimientoData.Estado ? 1 : 0
-            const newDevolucion = seguimientoData.Devolucion ? 1:0
+            const newDevolucion = seguimientoData.Devolucion ? 1 : 0
+            const estado = seguimientoData.Estado ? 1 : 0
 
-
-            setpedidos((prevData:TPedidosProps[] | PropsSeguimientos[]) =>
-                prevData.map((pedido:any) =>
-                    pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta:seguimientoData.TipoVenta, Devolucion:newDevolucion } : pedido
+            setpedidos((prevData: TPedidosProps[] | PropsSeguimientos[]) =>
+                prevData.map((pedido: any) =>
+                    pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta: seguimientoData.TipoVenta, Devolucion: newDevolucion, estado:estado } : pedido
                 )
             );
 
@@ -213,7 +213,7 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                 text={"Fecha Pedido"}
                                 valueChange={'Fecha_Pedido'}
                                 inputType={"text"}
-                                valueInput={(seguimientoData.Fecha_Pedido !== null && seguimientoData.Fecha_Pedido !== undefined) ? (String(moment.utc(seguimientoData.Fecha_Pedido).local().format("MMM. DD, YYYY")).toString()) : ""}
+                                valueInput={(seguimientoData.Fecha_Pedido !== null && seguimientoData.Fecha_Pedido !== undefined) ? (String(moment.utc(seguimientoData.Fecha_Pedido).format("MMM. DD, YYYY")).toString()) : ""}
                                 handleChangeValueSeguimiento={handleChangeValueSeguimiento}
                                 disabled={true}
                             />
@@ -222,7 +222,7 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                 text={"Fecha Factura"}
                                 valueChange={'Fecha_Facura'}
                                 inputType={"text"}
-                                valueInput={(seguimientoData.Fecha_Facura !== null && seguimientoData.Fecha_Facura !== undefined) ? String(moment.utc(seguimientoData.Fecha_Facura).local().format("MMM. DD, YYYY")).toString() : ""}
+                                valueInput={(seguimientoData.Fecha_Facura !== null && seguimientoData.Fecha_Facura !== undefined) ? String(moment.utc(seguimientoData.Fecha_Facura).format("MMM. DD, YYYY")).toString() : ""}
                                 handleChangeValueSeguimiento={handleChangeValueSeguimiento}
                                 disabled={true}
                             />
@@ -230,21 +230,40 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                             <LabelSeguimiento
                                 text={"N° Guia"}
                                 valueChange={'NroGuia'}
-                                inputType={"number"}
+                                inputType={"text"}
                                 valueInput={seguimientoData.NroGuia}
                                 handleChangeValueSeguimiento={handleChangeValueSeguimiento}
                             />
 
 
+                            <label>
+                                <p>Tipo de venta</p>
+                                <select
+                                    onChange={(e) => {
+                                        handleChangeValueSeguimiento(e.target.value, 'TipoVenta')
+                                    }}
+                                    value={seguimientoData.TipoVenta ? seguimientoData.isDropi ? seguimientoData.TipoVenta = "Dropi" : seguimientoData.TipoVenta : ""}
+                                    disabled={seguimientoData.isDropi ? true : false}
+                                    className='min-w-[250px] px-2 py-1 rounded outline-gray-400 border gray-300'
+                                >
+                                    <option value={"Catalogo"}>Catalogo</option>
+                                    <option value={"Sala"}>Sala</option>
+                                    <option value={"Externo"}>Externo</option>
+                                    <option value={"Redes"}>Redes</option>
+                                    <option value={"Dropi"}>Dropi</option>
+                                </select>
+                            </label>
 
-                            <LabelSeguimiento
+
+
+                            {/*  <LabelSeguimiento
                                 text={"Tipo de venta"}
                                 valueChange={'TipoVenta'}
                                 inputType={"text"}
                                 valueInput={seguimientoData.isDropi ? seguimientoData.TipoVenta = "Dropi" : seguimientoData.TipoVenta}
                                 handleChangeValueSeguimiento={handleChangeValueSeguimiento}
                                 disabled={seguimientoData.isDropi ? true : false}
-                            />
+                            /> */}
 
 
 
@@ -256,21 +275,74 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                 handleChangeValueSeguimiento={handleChangeValueSeguimiento}
                             />
 
-                            <LabelSeguimiento
+                            <label>
+                                <p>Tipo de envio</p>
+                                <select
+                                    onChange={(e) => {
+                                        handleChangeValueSeguimiento(e.target.value, 'TipoEnvio')
+                                    }}
+                                    value={seguimientoData.TipoEnvio ? seguimientoData.TipoEnvio : ""}
+                                    className='min-w-[250px] px-2 py-1 rounded outline-gray-400 border gray-300'
+                                >
+                                    <option value={"Coordinadora"}>Coordinadora</option>
+                                    <option value={"Transprensa"}>Transprensa</option>
+                                    <option value={"Jhon"}>Jhon</option>
+                                    <option value={"Sergio"}>Sergio</option>
+                                    <option value={"Jesus"}>Jesus</option>
+                                    <option value={"Recogió"}>Recogió</option>
+                                    <option value={"Servientrega"}>Servientrega</option>
+                                    <option value={"Veloenvios"}>Veloenvios</option>
+                                    <option value={"Rapido Ochoa"}>Rapido Ochoa</option>
+                                    <option value={"Estelar"}>Estelar</option>
+                                    <option value={"Eduard"}>Eduard</option>
+                                    <option value={"interrapidisimo"}>interrapidisimo</option>
+                                    <option value={"Humberto"}>Humberto</option>
+                                    <option value={"Orlando"}>Orlando</option>
+                                    <option value={"Envientrega"}>Envientrega</option>
+                                    <option value={"transegovia"}>transegovia</option>
+                                    <option value={"Unicarga"}>Unicarga</option>
+                                    <option value={"Oriente"}>Oriente</option>
+                                    <option value={"Envia"}>Envia</option>
+                                    <option value={"Transregional"}>Transregional</option>
+                                    <option value={"Dropi"}>Dropi</option>
+                                    <option value={"Jorge Guevara"}>Jorge Guevara</option>
+                                    <option value={"Redetrans"}>Redetrans</option>
+                                    <option value={"Coonorte"}>Coonorte</option>
+                                    <option value={"Libertadores"}>Libertadores</option>
+                                    <option value={"Brasilia"}>Brasilia</option>
+                                </select>
+                            </label>
+
+
+                            {/*   <LabelSeguimiento
                                 text={"Tipo de envio"}
                                 valueChange={'TipoEnvio'}
                                 inputType={"text"}
                                 valueInput={seguimientoData.TipoEnvio}
                                 handleChangeValueSeguimiento={handleChangeValueSeguimiento}
-                            />
+                            /> */}
 
-                            <LabelSeguimiento
+                            <label>
+                                <p>Contraentrega/Asumido</p>
+                                <select
+                                    onChange={(e) => {
+                                        handleChangeValueSeguimiento(e.target.value, 'Despacho')
+                                    }}
+                                    value={seguimientoData.Despacho ? seguimientoData.Despacho : ""}
+                                    className='min-w-[250px] px-2 py-1 rounded outline-gray-400 border gray-300'
+                                >
+                                    <option value={"Contraentrega"}>Contraentrega</option>
+                                    <option value={"Asumido"}>Asumido</option>
+                                </select>
+                            </label>
+
+                            {/*  <LabelSeguimiento
                                 text={"Contraentrega/Asumido"}
                                 valueChange={'Despacho'}
                                 inputType={"text"}
                                 valueInput={seguimientoData.Despacho}
                                 handleChangeValueSeguimiento={handleChangeValueSeguimiento}
-                            />
+                            /> */}
 
                             <LabelSeguimiento
                                 text={"Valor envio"}
@@ -292,7 +364,7 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                 text={"Fecha Envio"}
                                 valueChange={'Fecha_Envio'}
                                 inputType={(seguimientoData.Fecha_Envio !== null && seguimientoData.Fecha_Envio !== undefined) ? "text" : "date"}
-                                valueInput={(seguimientoData.Fecha_Envio !== null && seguimientoData.Fecha_Envio !== undefined) ? String(moment.utc(seguimientoData.Fecha_Envio).local().format("MMM. DD, YYYY")).toString() : ""}
+                                valueInput={(seguimientoData.Fecha_Envio !== null && seguimientoData.Fecha_Envio !== undefined) ? String(moment.utc(seguimientoData.Fecha_Envio).format("MMM. DD, YYYY")).toString() : ""}
                                 handleChangeValueSeguimiento={handleChangeValueSeguimiento}
                                 disabled={false}
                             />
