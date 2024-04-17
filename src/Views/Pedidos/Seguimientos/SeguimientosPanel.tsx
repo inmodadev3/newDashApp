@@ -104,9 +104,10 @@ export const SeguimientosPanel: React.FC = () => {
         const value = e.target.value
         const data = seguimientosCopy.filter((seguimiento) =>
             (seguimiento.intIdPedido.toString()).includes(value) ||
-            (seguimiento.NroFactura !== null && seguimiento.NroFactura.toString().includes(value)) || 
-            (seguimiento.cliente?.toLocaleLowerCase().includes(value.toLowerCase())) || 
-            (seguimiento.NroGuia !== null && seguimiento.NroGuia.toLowerCase().includes(value.toLowerCase()))
+            (seguimiento.NroFactura !== null && seguimiento.NroFactura.toString().includes(value)) ||
+            (seguimiento.cliente?.toLocaleLowerCase().includes(value.toLowerCase())) ||
+            (seguimiento.NroGuia !== null && seguimiento.NroGuia.toLowerCase().includes(value.toLowerCase())) || 
+            (seguimiento.Vendedor?.toLocaleLowerCase().includes(value.toLowerCase()))
         )
         setseguimientos(data)
     }
@@ -180,7 +181,7 @@ export const SeguimientosPanel: React.FC = () => {
                                 }
                             </tbody>
                         </table>
-                    ):(
+                    ) : (
                         <div>
                             <h3 className='text-xl font-bold'>No se han encontrado seguimientos</h3>
                         </div>
@@ -193,6 +194,7 @@ export const SeguimientosPanel: React.FC = () => {
                             setIsViewModalSeguimiento={setIsViewModalSeguimiento}
                             intIdPedido={idEditar}
                             setpedidos={setseguimientos}
+                            setpedidosCopy={setseguimientosCopy}
                         />
                     )
                 }

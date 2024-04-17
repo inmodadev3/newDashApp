@@ -11,10 +11,11 @@ interface ISeguimientosProps {
     setIsViewModalSeguimiento: React.Dispatch<React.SetStateAction<boolean>>
     intIdPedido: number
     setpedidos: React.Dispatch<React.SetStateAction<TPedidosProps[]>> | React.Dispatch<React.SetStateAction<PropsSeguimientos[]>>
+    setpedidosCopy?: React.Dispatch<React.SetStateAction<TPedidosProps[]>> | React.Dispatch<React.SetStateAction<PropsSeguimientos[]>>
 }
 
 
-export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSeguimiento, intIdPedido, setpedidos }) => {
+export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSeguimiento, intIdPedido, setpedidos, setpedidosCopy }) => {
 
     const [encargados, setencargados] = useState<IEncargados>({} as IEncargados)
     const [seguimientoData, setSeguimientoData] = useState<TSeguimiento>({} as TSeguimiento)
@@ -94,9 +95,17 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
             const newDevolucion = seguimientoData.Devolucion ? 1 : 0
             const estado = seguimientoData.Estado ? 1 : 0
 
+            if (setpedidosCopy) {
+                setpedidosCopy((prevData: TPedidosProps[] | PropsSeguimientos[]) =>
+                    prevData.map((pedido: any) =>
+                        pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta: seguimientoData.TipoVenta, Devolucion: newDevolucion, estado: estado } : pedido
+                    )
+                );
+            }
+
             setpedidos((prevData: TPedidosProps[] | PropsSeguimientos[]) =>
                 prevData.map((pedido: any) =>
-                    pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta: seguimientoData.TipoVenta, Devolucion: newDevolucion, estado:estado } : pedido
+                    pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta: seguimientoData.TipoVenta, Devolucion: newDevolucion, estado: estado } : pedido
                 )
             );
 
@@ -123,6 +132,9 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                 className={`px-2 py-1 rounded outline-gray-400 border gray-300 min-w-min`}
                                 onChange={(e) => {
                                     handleChangeValueSeguimiento(e.target.checked, 'isDropi')
+                                    if(e.target.checked){
+                                        handleChangeValueSeguimiento("Dropi", 'TipoVenta')
+                                    }
                                 }}
                             />
                         </label>
@@ -242,8 +254,8 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                     onChange={(e) => {
                                         handleChangeValueSeguimiento(e.target.value, 'TipoVenta')
                                     }}
-                                    value={seguimientoData.TipoVenta ? seguimientoData.isDropi ? seguimientoData.TipoVenta = "Dropi" : seguimientoData.TipoVenta : ""}
-                                    disabled={seguimientoData.isDropi ? true : false}
+                                    value={seguimientoData.TipoVenta ? seguimientoData.TipoVenta : ""}
+                                    //disabled={seguimientoData.isDropi ? true : false}
                                     className='min-w-[250px] px-2 py-1 rounded outline-gray-400 border gray-300'
                                 >
                                     <option value={"Catalogo"}>Catalogo</option>
