@@ -15,6 +15,7 @@ import { FaEdit, FaFileContract } from 'react-icons/fa';
 import { IoPricetag } from 'react-icons/io5';
 import { Seguimientos } from './Seguimientos/Seguimientos';
 import { SubMenuSections } from '../../Components/MenuLateral/MenuSections';
+import { Loader } from '../../Components/LoadingPage/Loader';
 
 export type TPedidosProps = {
     intIdPedido: number,
@@ -102,7 +103,7 @@ export type TEncargados = {
 }
 
 
-export const Pedidos:React.FC = () => {
+export const Pedidos: React.FC = () => {
     const [pedidos, setpedidos] = useState<TPedidosProps[]>([] as TPedidosProps[])
     const [isLoadingData, setisLoadingData] = useState(false)
     const { setMenuSelected, setSubmenuSelected } = useContext(MenuSelectedContext)
@@ -111,6 +112,7 @@ export const Pedidos:React.FC = () => {
     const { createToast, alerts } = useAlert()
     const [isViewModalSeguimiento, setIsViewModalSeguimiento] = useState<boolean>(false)
     const [idPedidoSeguimiento, setidPedidoSeguimiento] = useState(0)
+    const [Loadingpedidos, setLoadingpedidos] = useState(false)
 
 
     const estados_pedidos: TEstadosPedidos[] = [
@@ -154,6 +156,7 @@ export const Pedidos:React.FC = () => {
     }, [permisos])
 
     const consultar_Pedidos = async () => {
+        setLoadingpedidos(true)
         try {
             let { data } = await axios.get(`/pedidos`)
             if (data.success) {
@@ -162,6 +165,8 @@ export const Pedidos:React.FC = () => {
         } catch (error) {
             console.error(error)
             AgregarAlerta(createToast, "Ha ocurrido un error", "danger")
+        } finally {
+            setLoadingpedidos(false)
         }
     }
 
@@ -282,131 +287,139 @@ export const Pedidos:React.FC = () => {
     return (
         <AppLayout>
             {
-                <section className="flex justify-center w-full h-screen">
-                    <div className="w-full my-5 mt-10 bg-gray-100 rounded h-6/6">
-                        <div className="my-2">
-                            <BuscadorPedidos ConsultarPedidosEnProceso={consultar_Pedidos} setdatos={setpedidos} setloadData={setisLoadingData} />
-                        </div>
-                        {!isLoadingData ?
-                            (
-                                <div className="w-full px-4">
-                                    <table className="w-full bg-gray-100 border-2 border-black/30">
-                                        <thead>
-                                            <tr className="border-b-2 border-b-black/30 text-center [&>th]:py-4">
-                                                <th>Documento</th>
-                                                <th>Fecha</th>
-                                                <th>Cliente</th>
-                                                <th>Valor</th>
-                                                <th>Vendedor</th>
-                                                <th>Estado</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                pedidos?.map((pedido) => (
-                                                    <tr
-                                                        key={pedido.intIdPedido}
-                                                        className="border-b-2 border-b-black/20 text-center py-12 [&>td]:py-8 [&>td]:text-sm"
-                                                    >
-                                                        <td>{pedido.intIdPedido}</td>
-                                                        <td className="flex flex-col">
-                                                            <span>{moment.utc(pedido.dtFechaEnvio).local().format("MMM. DD, YYYY")}</span>
-                                                            <span>{moment.utc(pedido.dtFechaEnvio).local().format("hh:mm A")}</span>
-                                                        </td>
-                                                        <td className="w-60">{pedido.strNombCliente}</td>
-                                                        <td>{FormateoNumberInt((pedido.intValorTotal).toString())}</td>
-                                                        <td className="w-60">{pedido.strNombVendedor}</td>
-                                                        <td>
-                                                            {
-                                                                pedido.intEstado == -1 ? (<span className="p-1 bg-red-600 rounded text-red-50">Anulado </span>)
-                                                                    : (
-                                                                        <article className='flex flex-col gap-y-2'>
-                                                                            <span className={`${estados_pedidos[pedido.intEstado] ? estados_pedidos[pedido.intEstado].estilo : estados_pedidos[2].estilo} rounded`}>{estados_pedidos[pedido.intEstado] ? estados_pedidos[pedido.intEstado].nombre : estados_pedidos[2].nombre}</span>
-                                                                            {(pedido.pago !== null && pedido.pago !== 0) && (
-                                                                                <span className='p-1 bg-green-600 text-red-50'>{seguimientoPedido(pedido)}</span>
-                                                                            )}
-                                                                        </article>
-                                                                    )
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            <div className="relative flex items-center justify-center w-full h-full group">
-                                                                <span className="z-10 flex items-center justify-center w-10 h-10 rounded-full cursor-pointer bg-gray-400/30">
-                                                                    <AiOutlineMore size={26} />
-                                                                </span>
-                                                                <div className="absolute z-20 flex-col hidden p-2 transform -translate-x-1/2 bg-white border border-gray-300 rounded shadow-md top-full group-hover:flex w-60">
-                                                                    {/* Contenido del cuadro de opciones */}
-                                                                    {
-                                                                        (!revisionTrue) && (
-                                                                            <>
-                                                                                <button onClick={() => { Descargar_excel_pedido(pedido.intIdPedido) }} className="flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10">
-                                                                                    <span><AiOutlineFileExcel size={20} /></span>
-                                                                                    <span>Descargar Excel</span>
-                                                                                </button>
-                                                                                <button className="flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10" onClick={() => { anular_Pedido(pedido.intIdPedido) }}>
-                                                                                    <span><AiOutlineDelete size={20} /></span>
-                                                                                    <span>Anular pedido</span>
-                                                                                </button>
-
-                                                                            </>
-                                                                        )
-                                                                    }
-                                                                    <a
-                                                                        className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200 gap-x-10"
-                                                                        target="_blank"
-                                                                        href={`/#/pedidos/pdf/${pedido.intIdPedido}`}
-                                                                        onClick={() => {
-                                                                            procesar_pedido(pedido.intIdPedido, pedido.intEstado, 2)
-                                                                        }}
-                                                                    >
-                                                                        <span><AiOutlinePrinter size={20} /></span>
-                                                                        <span>Imprimir pedido</span>
-                                                                    </a>
-
-                                                                    <a
-                                                                        className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200 gap-x-10"
-                                                                        target="_blank"
-                                                                        href={`/#/pedidos/revisar/${pedido.intIdPedido}`}
-                                                                        onClick={() => {
-                                                                            procesar_pedido(pedido.intIdPedido, pedido.intEstado, 3)
-                                                                        }}
-                                                                    >
-
-                                                                        <span><FaEdit size={20} /></span>
-                                                                        <span>Revisar Pedido</span>
-                                                                    </a>
-
-                                                                    <button
-                                                                        className='flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10'
-                                                                        onClick={openModalSeguimiento(pedido)}
-                                                                    >
-                                                                        <span><FaFileContract size={20} /></span>
-                                                                        <span>Seguimiento de pedido</span>
-                                                                    </button>
-
-                                                                    {
-                                                                        pedido.strNombCliente.toLowerCase().includes("edixon") && (
-                                                                            <button onClick={CambiarPrecioPedido(pedido.intIdPedido)} className='flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10'>
-                                                                                <span><IoPricetag /></span>
-                                                                                <span>Pasar a precio 1</span>
-                                                                            </button>
-                                                                        )
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        </td>
+                !Loadingpedidos ?
+                    (
+                        <section className="flex justify-center w-full h-screen">
+                            <div className="w-full my-5 mt-10 bg-gray-100 rounded h-6/6">
+                                <div className="my-2">
+                                    <BuscadorPedidos ConsultarPedidosEnProceso={consultar_Pedidos} setdatos={setpedidos} setloadData={setisLoadingData} />
+                                </div>
+                                {!isLoadingData ?
+                                    (
+                                        <div className="w-full px-4">
+                                            <table className="w-full bg-gray-100 border-2 border-black/30">
+                                                <thead>
+                                                    <tr className="border-b-2 border-b-black/30 text-center [&>th]:py-4">
+                                                        <th>Documento</th>
+                                                        <th>Fecha</th>
+                                                        <th>Cliente</th>
+                                                        <th>Valor</th>
+                                                        <th>Vendedor</th>
+                                                        <th>Estado</th>
+                                                        <th>Acciones</th>
                                                     </tr>
-                                                ))
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>) :
-                            (
-                                <h1>Cargando datos...</h1>
-                            )}
-                    </div>
-                </section>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        pedidos?.map((pedido) => (
+                                                            <tr
+                                                                key={pedido.intIdPedido}
+                                                                className="border-b-2 border-b-black/20 text-center py-12 [&>td]:py-8 [&>td]:text-sm"
+                                                            >
+                                                                <td>{pedido.intIdPedido}</td>
+                                                                <td className="flex flex-col">
+                                                                    <span>{moment.utc(pedido.dtFechaEnvio).local().format("MMM. DD, YYYY")}</span>
+                                                                    <span>{moment.utc(pedido.dtFechaEnvio).local().format("hh:mm A")}</span>
+                                                                </td>
+                                                                <td className="w-60">{pedido.strNombCliente}</td>
+                                                                <td>{FormateoNumberInt((pedido.intValorTotal).toString())}</td>
+                                                                <td className="w-60">{pedido.strNombVendedor}</td>
+                                                                <td>
+                                                                    {
+                                                                        pedido.intEstado == -1 ? (<span className="p-1 bg-red-600 rounded text-red-50">Anulado </span>)
+                                                                            : (
+                                                                                <article className='flex flex-col gap-y-2'>
+                                                                                    <span className={`${estados_pedidos[pedido.intEstado] ? estados_pedidos[pedido.intEstado].estilo : estados_pedidos[2].estilo} rounded`}>{estados_pedidos[pedido.intEstado] ? estados_pedidos[pedido.intEstado].nombre : estados_pedidos[2].nombre}</span>
+                                                                                    {(pedido.pago !== null && pedido.pago !== 0) && (
+                                                                                        <span className='p-1 bg-green-600 text-red-50'>{seguimientoPedido(pedido)}</span>
+                                                                                    )}
+                                                                                </article>
+                                                                            )
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    <div className="relative flex items-center justify-center w-full h-full group">
+                                                                        <span className="z-10 flex items-center justify-center w-10 h-10 rounded-full cursor-pointer bg-gray-400/30">
+                                                                            <AiOutlineMore size={26} />
+                                                                        </span>
+                                                                        <div className="absolute z-20 flex-col hidden p-2 transform -translate-x-1/2 bg-white border border-gray-300 rounded shadow-md top-full group-hover:flex w-60">
+                                                                            {/* Contenido del cuadro de opciones */}
+                                                                            {
+                                                                                (!revisionTrue) && (
+                                                                                    <>
+                                                                                        <button onClick={() => { Descargar_excel_pedido(pedido.intIdPedido) }} className="flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10">
+                                                                                            <span><AiOutlineFileExcel size={20} /></span>
+                                                                                            <span>Descargar Excel</span>
+                                                                                        </button>
+                                                                                        <button className="flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10" onClick={() => { anular_Pedido(pedido.intIdPedido) }}>
+                                                                                            <span><AiOutlineDelete size={20} /></span>
+                                                                                            <span>Anular pedido</span>
+                                                                                        </button>
+
+                                                                                    </>
+                                                                                )
+                                                                            }
+                                                                            <a
+                                                                                className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200 gap-x-10"
+                                                                                target="_blank"
+                                                                                href={`/#/pedidos/pdf/${pedido.intIdPedido}`}
+                                                                                onClick={() => {
+                                                                                    procesar_pedido(pedido.intIdPedido, pedido.intEstado, 2)
+                                                                                }}
+                                                                            >
+                                                                                <span><AiOutlinePrinter size={20} /></span>
+                                                                                <span>Imprimir pedido</span>
+                                                                            </a>
+
+                                                                            <a
+                                                                                className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200 gap-x-10"
+                                                                                target="_blank"
+                                                                                href={`/#/pedidos/revisar/${pedido.intIdPedido}`}
+                                                                                onClick={() => {
+                                                                                    procesar_pedido(pedido.intIdPedido, pedido.intEstado, 3)
+                                                                                }}
+                                                                            >
+
+                                                                                <span><FaEdit size={20} /></span>
+                                                                                <span>Revisar Pedido</span>
+                                                                            </a>
+
+                                                                            <button
+                                                                                className='flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10'
+                                                                                onClick={openModalSeguimiento(pedido)}
+                                                                            >
+                                                                                <span><FaFileContract size={20} /></span>
+                                                                                <span>Seguimiento de pedido</span>
+                                                                            </button>
+
+                                                                            {
+                                                                                pedido.strNombCliente.toLowerCase().includes("edixon") && (
+                                                                                    <button onClick={CambiarPrecioPedido(pedido.intIdPedido)} className='flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10'>
+                                                                                        <span><IoPricetag /></span>
+                                                                                        <span>Pasar a precio 1</span>
+                                                                                    </button>
+                                                                                )
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>) :
+                                    (
+                                        <h1>Cargando datos...</h1>
+                                    )}
+                            </div>
+                        </section>
+                    )
+                    : (
+                        <div>
+                            <Loader />
+                        </div>
+                    )
 
             }
 

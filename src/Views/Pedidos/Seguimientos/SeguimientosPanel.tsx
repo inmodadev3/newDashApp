@@ -6,6 +6,7 @@ import { MenuSelectedContext } from '../../../context/UseContextProviders'
 import { MenuSections, SubMenuSections } from '../../../Components/MenuLateral/MenuSections'
 import { CgArrowsExchangeAlt } from "react-icons/cg";
 import { Seguimientos } from './Seguimientos'
+import { Loader } from '../../../Components/LoadingPage/Loader'
 
 export type PropsSeguimientos = {
     "id": number,
@@ -35,6 +36,7 @@ export type PropsSeguimientos = {
     "id_encargadoFacturacion": number | null,
     "id_encargadoRevision": number | null,
     "Cartera": number | null
+    "pagoHGI": boolean
 }
 
 export const SeguimientosPanel: React.FC = () => {
@@ -44,6 +46,7 @@ export const SeguimientosPanel: React.FC = () => {
     const [seguimientosCopy, setseguimientosCopy] = useState<PropsSeguimientos[]>([])
     const [idEditar, setidEditar] = useState(0)
     const [IsViewModalSeguimiento, setIsViewModalSeguimiento] = useState(false)
+    const [loadingSeguimientos, setloadingSeguimientos] = useState(false)
 
 
     useEffect(() => {
@@ -53,12 +56,15 @@ export const SeguimientosPanel: React.FC = () => {
     }, [])
 
     const consultarSeguimientos = async () => {
+        setloadingSeguimientos(true)
         try {
             const response = await axios.get('/pedidos/seguimientos')
             setseguimientos(response.data.seguimientos)
             setseguimientosCopy(response.data.seguimientos)
         } catch (error) {
             console.error(error)
+        } finally {
+            setloadingSeguimientos(false)
         }
     }
 
@@ -74,8 +80,8 @@ export const SeguimientosPanel: React.FC = () => {
         if (seguimiento.estado !== 0 && seguimiento.estado !== null) {
             if (seguimiento.isDropi !== 0 && seguimiento.isDropi !== null) {
                 return {
-                    name: 'Pagado 💲',
-                    bg: 'bg-green-600'
+                    name: 'Pagado Dropi 💲',
+                    bg: 'bg-green-500'
                 }
             } else {
                 return {
@@ -112,7 +118,6 @@ export const SeguimientosPanel: React.FC = () => {
         setseguimientos(data)
     }
 
-
     return (
         <AppLayout>
             <div>
@@ -135,7 +140,7 @@ export const SeguimientosPanel: React.FC = () => {
 
                 </section>
                 {
-                    seguimientos.length > 0 ? (
+                    !loadingSeguimientos ? (
                         <table className="w-full my-2 bg-gray-100 border-2 border-black/30">
                             <thead >
                                 <tr className="border-b-2 border-b-black/30 text-center [&>th]:py-4">
@@ -169,8 +174,12 @@ export const SeguimientosPanel: React.FC = () => {
                                                 )}
                                             </td>
                                             <td>
-                                                <article className='flex'>
+                                                <article className='flex flex-col gap-y-3'>
                                                     <span className={`${validarEstadoSeguimiento(seguimiento)?.bg} px-2 py-1 rounded text-white w-full`}>{validarEstadoSeguimiento(seguimiento)?.name}</span>
+
+                                                    {seguimiento.pagoHGI && (
+                                                        <span className='w-full px-2 py-1 text-white rounded bg-cyan-500'>Pagado Hgi</span>
+                                                    )}
                                                 </article>
                                             </td>
                                             <td>
@@ -183,7 +192,7 @@ export const SeguimientosPanel: React.FC = () => {
                         </table>
                     ) : (
                         <div>
-                            <h3 className='text-xl font-bold'>No se han encontrado seguimientos</h3>
+                            <Loader/>
                         </div>
                     )
                 }
