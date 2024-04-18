@@ -455,6 +455,7 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                         <input
                             type={'checkbox'}
                             checked={seguimientoData.Estado}
+                            disabled={seguimientoData.Estado}
                             className={`px-2 py-1 rounded outline-gray-400 border gray-300 min-w-min`}
                             onChange={(e) => {
                                 handleChangeValueSeguimiento(e.target.checked, 'Estado')
