@@ -45,7 +45,7 @@ export const TablePortafolios: React.FC<Props> = ({ data, setviewGestionesClient
             <tbody>
                 {
                     data.map((tercero) => (
-                        <tr key={tercero.StrIdTercero} className={`${(moment(Date.now()).diff(moment(tercero.ultima_gestion).format('L'), 'days')) < 45 && "bg-cyan-200/80"}`}>
+                        <tr key={tercero.StrIdTercero} className={`${(moment(Date.now()).diff(moment(tercero.ultima_gestion).format('L'), 'days')) < 60 && "bg-cyan-200/80"}`}>
                             <td className={`estado`}>{tercero.Estado}</td>
                             <td>{tercero.StrIdTercero}</td>
                             <td>{tercero.Nombre_tercero}</td>
