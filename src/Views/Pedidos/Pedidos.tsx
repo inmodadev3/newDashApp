@@ -105,6 +105,7 @@ export type TEncargados = {
 
 export const Pedidos: React.FC = () => {
     const [pedidos, setpedidos] = useState<TPedidosProps[]>([] as TPedidosProps[])
+    const [pedidosCopy, setpedidosCopy] = useState<TPedidosProps[]>([] as TPedidosProps[])
     const [isLoadingData, setisLoadingData] = useState(false)
     const { setMenuSelected, setSubmenuSelected } = useContext(MenuSelectedContext)
     const { permisos } = useContext(PermisosContext)
@@ -112,7 +113,15 @@ export const Pedidos: React.FC = () => {
     const { createToast, alerts } = useAlert()
     const [isViewModalSeguimiento, setIsViewModalSeguimiento] = useState<boolean>(false)
     const [idPedidoSeguimiento, setidPedidoSeguimiento] = useState(0)
-    const [Loadingpedidos, setLoadingpedidos] = useState(false)
+    const [Loadingpedidos, setLoadingpedidos] = useState(true)
+
+
+    //FILTROS DE FECHAS
+    const [mes, setmes] = useState(0)
+    const [anio, setanio] = useState(0)
+    const [aniosSelect, setaniosSelect] = useState<string>('')
+    const [maxDate, setmaxDate] = useState('')
+
 
 
     const estados_pedidos: TEstadosPedidos[] = [
@@ -141,9 +150,16 @@ export const Pedidos: React.FC = () => {
     useEffect(() => {
         setMenuSelected(4)
         setSubmenuSelected(SubMenuSections.VER_PEDIDOS)
-        consultar_Pedidos()
+        CalcularAnios()
+
         window.document.title = "Panel - Pedidos"
     }, [])
+
+    useEffect(() => {
+        if (mes !== 0 && anio !== 0) {
+            consultar_Pedidos()
+        }
+    }, [mes])
 
     useEffect(() => {
         if (permisos.length > 1) {
@@ -158,9 +174,10 @@ export const Pedidos: React.FC = () => {
     const consultar_Pedidos = async () => {
         setLoadingpedidos(true)
         try {
-            let { data } = await axios.get(`/pedidos`)
+            let { data } = await axios.get(`/pedidos?anio=${anio}&mes=${mes}`)
             if (data.success) {
                 setpedidos(data.data)
+                setpedidosCopy(data.data)
             }
         } catch (error) {
             console.error(error)
@@ -204,6 +221,7 @@ export const Pedidos: React.FC = () => {
         }
 
     }
+
     const compararNombresAZ = (a: IDataProductosPdf, b: IDataProductosPdf) => {
         return a.strIdProducto.localeCompare(b.strIdProducto)
     }
@@ -284,6 +302,117 @@ export const Pedidos: React.FC = () => {
         return estado
 
     }
+
+    const CalcularAnios = () => {
+        let fechaActual = new Date();
+
+        // Obtén el año y el mes actual
+        let year = fechaActual.getFullYear();
+        let month = fechaActual.getMonth() + 1; // Se agrega 1 ya que los meses en JavaScript van de 0 a 11
+
+        // Formatea el año y el mes con ceros a la izquierda si es necesario
+        let formattedMonth = month < 10 ? '0' + month : month;
+        setmes(month)
+        setanio(year)
+        setmaxDate(year + '-' + formattedMonth)
+        setaniosSelect(year + '-' + formattedMonth)
+    }
+
+    const handleChangeDateSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const fecha_string = e.target.value;
+        setLoadingpedidos(true)
+        if (fecha_string) {
+            const [anio, mes] = fecha_string.split('-').map(Number);
+            const fecha = new Date(anio, mes - 1, 1);
+            fecha.setMonth(fecha.getMonth() + 1);
+            fecha.setDate(0);
+
+            const nuevoMes = fecha.getMonth() + 1;
+            const nuevoAnio = fecha.getFullYear();
+            const formattedMonth = nuevoMes < 10 ? '0' + nuevoMes : nuevoMes.toString();
+
+            console.log(nuevoMes)
+            console.log(nuevoAnio)
+
+            setmes(nuevoMes);
+            setanio(nuevoAnio);
+            setaniosSelect(`${nuevoAnio}-${formattedMonth}`);
+        } else {
+            console.error("La fecha proporcionada es undefined o null.");
+            setLoadingpedidos(false)
+        }
+    }
+
+    const FiltradorDeSeguimientos = (option: number) => {
+        const value = option
+
+
+        switch (value) {
+            case 1:
+                console.log(pedidosCopy)
+                setpedidos(pedidosCopy)
+                break;
+            case 2:
+                const despachados = pedidosCopy.filter((item) => {
+                    if (item.pago == 1 && item.isDropi == 0) {
+                        return item
+                    }
+                })
+                setpedidos(despachados)
+                break;
+            case 3:
+                const sinDespachar = pedidosCopy.filter((item) => {
+                    if ((item.pago == 0 || item.pago == null) && (item.isDropi == 0 || item.isDropi == null)) {
+                        return item
+                    }
+                })
+                setpedidos(sinDespachar)
+                break;
+            case 4:
+                const impresos = pedidosCopy.filter((item) => {
+                    if (item.intEstado == 2) {
+                        return item
+                    }
+                })
+                setpedidos(impresos)
+                break;
+            case 5:
+                const enRevision = pedidosCopy.filter((item) => {
+                    if (item.intEstado == 3) {
+                        return item
+                    }
+                })
+                setpedidos(enRevision)
+                break;
+            case 6:
+                const revisados = pedidosCopy.filter((item) => {
+                    if (item.intEstado == 4) {
+                        return item
+                    }
+                })
+                setpedidos(revisados)
+                break;
+            case 7:
+                const anulados = pedidosCopy.filter((item) => {
+                    if (item.intEstado == 0) {
+                        return item
+                    }
+                })
+                setpedidos(anulados)
+                break;
+            case 8:
+                const recibidos = pedidosCopy.filter((item) => {
+                    if (item.intEstado == 1) {
+                        return item
+                    }
+                })
+                setpedidos(recibidos)
+                break;
+            default:
+                break;
+        }
+    }
+
     return (
         <AppLayout>
             {
@@ -291,8 +420,41 @@ export const Pedidos: React.FC = () => {
                     (
                         <section className="flex justify-center w-full h-screen">
                             <div className="w-full my-5 mt-10 bg-gray-100 rounded h-6/6">
-                                <div className="my-2">
+                                <div className="flex flex-col my-2">
                                     <BuscadorPedidos ConsultarPedidosEnProceso={consultar_Pedidos} setdatos={setpedidos} setloadData={setisLoadingData} />
+                                    <section className='mx-6'>
+                                        <div className='flex justify-between gap-x-4'>
+                                            <label className='flex flex-col'>
+                                                Fecha
+                                                <input
+                                                    type='month'
+                                                    max={maxDate}
+                                                    className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                                                    value={aniosSelect}
+                                                    onChange={handleChangeDateSelected}
+                                                />
+                                            </label>
+                                            <label className='flex items-center justify-center gap-x-4'>
+                                                <p>Filtrar:</p>
+                                                <select
+                                                    className='px-2 py-1 border-2 border-gray-400 rounded outline-none'
+                                                    onChange={(e) => {
+                                                        FiltradorDeSeguimientos(parseInt(e.target.value))
+                                                    }}
+                                                >
+                                                    <option value={1}>Todos</option>
+                                                    <option value={8}>Recibidos</option>
+                                                    <option value={2}>Despachados</option>
+                                                    <option value={3}>Sin despachar</option>
+                                                    <option value={4}>Impresos</option>
+                                                    <option value={5}>En revision</option>
+                                                    <option value={6}>Revisados</option>
+                                                    <option value={7}>Anulados</option>
+                                                </select>
+                                            </label>
+
+                                        </div>
+                                    </section>
                                 </div>
                                 {!isLoadingData ?
                                     (
@@ -429,6 +591,7 @@ export const Pedidos: React.FC = () => {
                         setIsViewModalSeguimiento={setIsViewModalSeguimiento}
                         intIdPedido={idPedidoSeguimiento}
                         setpedidos={setpedidos}
+                        setpedidosCopy={setpedidosCopy}
                     />
                 )
             }
