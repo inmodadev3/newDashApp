@@ -7,6 +7,8 @@ import { MenuSections, SubMenuSections } from '../../../Components/MenuLateral/M
 import { CgArrowsExchangeAlt } from "react-icons/cg";
 import { Seguimientos } from './Seguimientos'
 import { Loader } from '../../../Components/LoadingPage/Loader'
+import { AgregarAlerta } from '../../../Utils/Helpers'
+import { useAlert } from '../../../hooks/useAlert'
 
 export type PropsSeguimientos = {
     "id": number,
@@ -47,7 +49,8 @@ export const SeguimientosPanel: React.FC = () => {
     const [idEditar, setidEditar] = useState(0)
     const [IsViewModalSeguimiento, setIsViewModalSeguimiento] = useState(false)
     const [loadingSeguimientos, setloadingSeguimientos] = useState(false)
-
+    const { createToast, alerts } = useAlert()
+    const [valorFiltro, setvalorFiltro] = useState(1)
 
     useEffect(() => {
         setMenuSelected(MenuSections.PEDIDOS)
@@ -108,15 +111,86 @@ export const SeguimientosPanel: React.FC = () => {
 
     const BuscarPorId = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
-        const data = seguimientosCopy.filter((seguimiento) =>
-            (seguimiento.intIdPedido.toString()).includes(value) ||
-            (seguimiento.NroFactura !== null && seguimiento.NroFactura.toString().includes(value)) ||
-            (seguimiento.cliente?.toLocaleLowerCase().includes(value.toLowerCase())) ||
-            (seguimiento.NroGuia !== null && seguimiento.NroGuia.toLowerCase().includes(value.toLowerCase())) || 
-            (seguimiento.Vendedor?.toLocaleLowerCase().includes(value.toLowerCase()))
-        )
-        setseguimientos(data)
+
+        if (value.toString().trim() !== "") {
+            const data = seguimientosCopy.filter((seguimiento) =>
+                (seguimiento.intIdPedido.toString()).includes(value) ||
+                (seguimiento.NroFactura !== null && seguimiento.NroFactura.toString().includes(value)) ||
+                (seguimiento.cliente?.toLocaleLowerCase().includes(value.toLowerCase())) ||
+                (seguimiento.NroGuia !== null && seguimiento.NroGuia.toLowerCase().includes(value.toLowerCase())) ||
+                (seguimiento.Vendedor?.toLocaleLowerCase().includes(value.toLowerCase()))
+            )
+            setseguimientos(data)
+        } else {
+            FiltradorDeSeguimientos(valorFiltro)
+        }
+
     }
+
+    const handleChangeFiltro = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = parseInt(e.target.value)
+        setvalorFiltro(value)
+    }
+
+    const FiltradorDeSeguimientos = (option: number) => {
+        const value = option
+
+        switch (value) {
+            case 1:
+                setseguimientos(seguimientosCopy)
+                break;
+            case 2:
+                const despachados = seguimientosCopy.filter((item) => {
+                    if (item.estado == 1 && item.isDropi == 0) {
+                        return item
+                    }
+                })
+
+                setseguimientos(despachados)
+                break;
+            case 3:
+                const noDepaschado = seguimientosCopy.filter((item) => {
+                    if ((item.estado == null || item.estado == 0) && item.isDropi == 0) {
+                        return item
+                    }
+                })
+
+                setseguimientos(noDepaschado)
+                break;
+            case 4:
+                const dropiPagados = seguimientosCopy.filter((item) => {
+                    if (item.isDropi == 1 && item.estado == 1) {
+                        return item
+                    }
+                })
+
+                setseguimientos(dropiPagados)
+                break;
+
+            case 5:
+                const dropiSinPagar = seguimientosCopy.filter((item) => {
+                    if (item.isDropi == 1 && item.estado == 0) {
+                        return item
+                    }
+                })
+
+                setseguimientos(dropiSinPagar)
+                break;
+            case 6:
+                const devoluciones = seguimientosCopy.filter((item) => {
+                    if (item.Devolucion == 1) {
+                        return item
+                    }
+                })
+
+                setseguimientos(devoluciones)
+                break;
+            default:
+                AgregarAlerta(createToast, 'Elija una opcion valida', 'warning')
+                break;
+        }
+    }
+
 
     return (
         <AppLayout>
@@ -128,15 +202,23 @@ export const SeguimientosPanel: React.FC = () => {
                         placeholder='Buscar por id'
                         onChange={BuscarPorId}
                     />
-                    {/*  <label className='flex gap-x-4'>
-                        <p>Ordenar por: </p>
-                        <select>
-                            <option>Id</option>
-                            <option>Estado</option>
-                            <option>Id</option>
-                            <option>Id</option>
+                    <label className='flex items-center justify-center gap-x-4'>
+                        <p>Filtrar:</p>
+                        <select
+                            className='px-2 py-1 border-2 border-gray-400 rounded outline-none'
+                            onChange={(e) => {
+                                handleChangeFiltro(e)
+                                FiltradorDeSeguimientos(parseInt(e.target.value))
+                            }}
+                        >
+                            <option value={1}>Todos</option>
+                            <option value={2}>Despachados</option>
+                            <option value={3}>Sin despachar</option>
+                            <option value={4}>Dropi Pagados</option>
+                            <option value={5}>Dropi Sin pagar</option>
+                            <option value={6}>Devoluciones</option>
                         </select>
-                    </label> */}
+                    </label>
 
                 </section>
                 {
@@ -192,7 +274,7 @@ export const SeguimientosPanel: React.FC = () => {
                         </table>
                     ) : (
                         <div>
-                            <Loader/>
+                            <Loader />
                         </div>
                     )
                 }
@@ -209,6 +291,8 @@ export const SeguimientosPanel: React.FC = () => {
                 }
 
             </div>
+
+            {alerts}
         </AppLayout>
     )
 }
