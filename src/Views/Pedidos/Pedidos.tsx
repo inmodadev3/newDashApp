@@ -283,8 +283,10 @@ export const Pedidos: React.FC = () => {
     }
 
     const openModalSeguimiento = (idPedido: TPedidosProps) => async () => {
-        setIsViewModalSeguimiento(true)
-        setidPedidoSeguimiento(idPedido.intIdPedido)
+        if (idPedido.intEstado !== 4) {
+            setIsViewModalSeguimiento(true)
+            setidPedidoSeguimiento(idPedido.intIdPedido)
+        }
     }
 
     const seguimientoPedido = (pedido: TPedidosProps) => {

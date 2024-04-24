@@ -310,7 +310,7 @@ export const Revision: React.FC = () => {
                                                 {
                                                     dataPedido.map((producto, key:number) => (
                                                         <tr
-                                                            key={producto.strIdProducto}
+                                                            key={producto.intIdPedDetalle}
                                                             className={`border-b-2 border-b-black/20 text-center [&>td]:py-4 [&>td]:text-sm group relative ${producto.intEstado == 2 && "table_checked"}`}
                                                         >
                                                             <td className='px-2'>{key + 1}</td>
