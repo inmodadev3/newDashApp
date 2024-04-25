@@ -219,7 +219,6 @@ export const Pedidos: React.FC = () => {
                 )
             );
         }
-
     }
 
     const compararNombresAZ = (a: IDataProductosPdf, b: IDataProductosPdf) => {
@@ -283,10 +282,8 @@ export const Pedidos: React.FC = () => {
     }
 
     const openModalSeguimiento = (idPedido: TPedidosProps) => async () => {
-        if (idPedido.intEstado !== 4) {
-            setIsViewModalSeguimiento(true)
-            setidPedidoSeguimiento(idPedido.intIdPedido)
-        }
+        setIsViewModalSeguimiento(true)
+        setidPedidoSeguimiento(idPedido.intIdPedido)
     }
 
     const seguimientoPedido = (pedido: TPedidosProps) => {
@@ -523,6 +520,7 @@ export const Pedidos: React.FC = () => {
                                                                                     </>
                                                                                 )
                                                                             }
+
                                                                             <a
                                                                                 className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200 gap-x-10"
                                                                                 target="_blank"
@@ -535,18 +533,24 @@ export const Pedidos: React.FC = () => {
                                                                                 <span>Imprimir pedido</span>
                                                                             </a>
 
-                                                                            <a
-                                                                                className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200 gap-x-10"
-                                                                                target="_blank"
-                                                                                href={`/#/pedidos/revisar/${pedido.intIdPedido}`}
-                                                                                onClick={() => {
-                                                                                    procesar_pedido(pedido.intIdPedido, pedido.intEstado, 3)
-                                                                                }}
-                                                                            >
 
-                                                                                <span><FaEdit size={20} /></span>
-                                                                                <span>Revisar Pedido</span>
-                                                                            </a>
+                                                                            {
+                                                                                (pedido.intEstado !== 4) && (
+                                                                                    <a
+                                                                                        className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200 gap-x-10"
+                                                                                        target="_blank"
+                                                                                        href={`/#/pedidos/revisar/${pedido.intIdPedido}`}
+                                                                                        onClick={() => {
+                                                                                            procesar_pedido(pedido.intIdPedido, pedido.intEstado, 3)
+                                                                                        }}
+                                                                                    >
+
+                                                                                        <span><FaEdit size={20} /></span>
+                                                                                        <span>Revisar Pedido</span>
+                                                                                    </a>
+                                                                                )
+                                                                            }
+
 
                                                                             <button
                                                                                 className='flex items-center px-4 py-3 hover:bg-gray-200 gap-x-10'
