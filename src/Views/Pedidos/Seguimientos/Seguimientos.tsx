@@ -49,6 +49,7 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
             if (data.Fecha_Envio !== null) {
                 fecha = new Date(data.Fecha_Envio);
             }
+            console.log(data)
 
             if (fecha) {
                 handleChangeValueSeguimiento(fecha, 'Fecha_Envio')
@@ -78,6 +79,7 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
             handleChangeValueSeguimiento(data.Recaudo, 'Recaudo')
             handleChangeValueSeguimiento(data.Estado, 'Estado')
             handleChangeValueSeguimiento(data.Cartera, 'Cartera')
+            handleChangeValueSeguimiento(data.PagoHGI, 'PagoHGI')
 
         } catch (error) {
             console.error(error)
@@ -94,18 +96,20 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
             const newPago = seguimientoData.Estado ? 1 : 0
             const newDevolucion = seguimientoData.Devolucion ? 1 : 0
             const estado = seguimientoData.Estado ? 1 : 0
+            console.log(seguimientoData.PagoHGI)
+            const newPagoHGI = seguimientoData.PagoHGI ? 1 : 0
 
             if (setpedidosCopy) {
                 setpedidosCopy((prevData: TPedidosProps[] | PropsSeguimientos[]) =>
                     prevData.map((pedido: any) =>
-                        pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta: seguimientoData.TipoVenta, Devolucion: newDevolucion, estado: estado } : pedido
+                        pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta: seguimientoData.TipoVenta, Devolucion: newDevolucion, estado: estado , PagoHGI:newPagoHGI } : pedido
                     )
                 );
             }
 
             setpedidos((prevData: TPedidosProps[] | PropsSeguimientos[]) =>
                 prevData.map((pedido: any) =>
-                    pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta: seguimientoData.TipoVenta, Devolucion: newDevolucion, estado: estado } : pedido
+                    pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta: seguimientoData.TipoVenta, Devolucion: newDevolucion, estado: estado , PagoHGI:newPagoHGI } : pedido
                 )
             );
 
@@ -132,7 +136,7 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                 className={`px-2 py-1 rounded outline-gray-400 border gray-300 min-w-min`}
                                 onChange={(e) => {
                                     handleChangeValueSeguimiento(e.target.checked, 'isDropi')
-                                    if(e.target.checked){
+                                    if (e.target.checked) {
                                         handleChangeValueSeguimiento("Dropi", 'TipoVenta')
                                     }
                                 }}
@@ -450,19 +454,38 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                 <hr className='my-2 border border-gray-300' />
                 <footer className='flex justify-between py-2'>
                     <button className='p-2 text-white bg-green-600 rounded' onClick={Actualizar_Seguimiento}>Actualizar</button>
+                    <div className='flex gap-x-3'>
+                        <label className={`flex justify-center items-center`}>
+                            <p className='m-1'>Pago HGI</p>
+                            <input
+                                type={'checkbox'}
+                                checked={seguimientoData.PagoHGI}
+                                disabled={seguimientoData.PagoHGI}
+                                className={`px-2 py-1 rounded outline-gray-400 border gray-300 min-w-min`}
+                                onChange={(e) => {
+                                    handleChangeValueSeguimiento(e.target.checked, 'PagoHGI')
+                                }}
+                            />
+                        </label>
 
-                    <label className={`flex justify-center items-center`}>
-                        <p className='m-1'>{seguimientoData.isDropi ? "Pagado" : "Despachado"}</p>
-                        <input
-                            type={'checkbox'}
-                            checked={seguimientoData.Estado}
-                            disabled={seguimientoData.Estado}
-                            className={`px-2 py-1 rounded outline-gray-400 border gray-300 min-w-min`}
-                            onChange={(e) => {
-                                handleChangeValueSeguimiento(e.target.checked, 'Estado')
-                            }}
-                        />
-                    </label>
+
+
+                        <label className={`flex justify-center items-center`}>
+                            <p className='m-1'>{seguimientoData.isDropi ? "Pagado" : "Despachado"}</p>
+                            <input
+                                type={'checkbox'}
+                                checked={seguimientoData.Estado}
+                                disabled={seguimientoData.Estado}
+                                className={`px-2 py-1 rounded outline-gray-400 border gray-300 min-w-min`}
+                                onChange={(e) => {
+                                    handleChangeValueSeguimiento(e.target.checked, 'Estado')
+                                }}
+                            />
+                        </label>
+                    </div>
+
+
+
                 </footer>
             </section>
         </ModalsLayout>

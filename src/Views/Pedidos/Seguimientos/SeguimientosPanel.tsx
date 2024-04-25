@@ -38,7 +38,8 @@ export type PropsSeguimientos = {
     "id_encargadoFacturacion": number | null,
     "id_encargadoRevision": number | null,
     "Cartera": number | null
-    "pagoHGI": boolean
+    "pagoHGI": boolean,
+    "PagoHGI": boolean | number
 }
 
 export const SeguimientosPanel: React.FC = () => {
@@ -259,9 +260,11 @@ export const SeguimientosPanel: React.FC = () => {
                                                 <article className='flex flex-col gap-y-3'>
                                                     <span className={`${validarEstadoSeguimiento(seguimiento)?.bg} px-2 py-1 rounded text-white w-full`}>{validarEstadoSeguimiento(seguimiento)?.name}</span>
 
-                                                    {seguimiento.pagoHGI && (
-                                                        <span className='w-full px-2 py-1 text-white rounded bg-cyan-500'>Pagado Hgi</span>
-                                                    )}
+                                                    {
+                                                        ((seguimiento.pagoHGI !== undefined) || (seguimiento.PagoHGI == 1)) && (
+                                                            <span className='w-full px-2 py-1 text-white rounded bg-cyan-500'>Pagado Hgi</span>
+                                                        )
+                                                    }
                                                 </article>
                                             </td>
                                             <td>

@@ -87,6 +87,7 @@ export type TSeguimiento = {
     Recaudo: string
     Estado: boolean
     Cartera: boolean
+    PagoHGI: boolean
 }
 
 export interface IEncargados {
