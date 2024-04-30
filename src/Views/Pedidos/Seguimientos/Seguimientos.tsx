@@ -14,17 +14,46 @@ interface ISeguimientosProps {
     setpedidosCopy?: React.Dispatch<React.SetStateAction<TPedidosProps[]>> | React.Dispatch<React.SetStateAction<PropsSeguimientos[]>>
 }
 
+const DATOS_INICIALES: TSeguimiento = {
+    NroPedido: "",
+    Cliente: "",
+    Pago: "",
+    Ciudad: "",
+    Vendedor: "",
+    TipoVenta: "",
+    Encargado_Alistamiento1: "",
+    Encargado_Alistamiento2: "",
+    Encargado_Alistamiento3: "",
+    Encargado_Revision: "",
+    Encargado_Facturacion: "",
+    NroFactura: "",
+    TipoEnvio: "",
+    NroGuia: "",
+    Despacho: "",
+    ValorEnvio: 0,
+    NroCajas: "",
+    Comentarios: "",
+    Fecha_Facura: null,
+    Fecha_Pedido: null,
+    Fecha_Envio: null,
+    isDropi: false,
+    Devolucion: false,
+    Recaudo: "",
+    Estado: false,
+    Cartera: false,
+    PagoHGI: false
+}
+
 
 export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSeguimiento, intIdPedido, setpedidos, setpedidosCopy }) => {
 
     const [encargados, setencargados] = useState<IEncargados>({} as IEncargados)
-    const [seguimientoData, setSeguimientoData] = useState<TSeguimiento>({} as TSeguimiento)
+    const [seguimientoData, setSeguimientoData] = useState<TSeguimiento>(DATOS_INICIALES as TSeguimiento)
 
     useEffect(() => {
         consultarEncargados()
         consultarInformacionSeguimientosBD(intIdPedido)
     }, [])
-
 
     const consultarEncargados = async () => {
         try {
@@ -36,6 +65,10 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
     }
 
     const handleChangeValueSeguimiento = (value: any, valueChange: string) => {
+        if (value == null) {
+            value = ""
+        }
+
         setSeguimientoData((prevData) => {
             return { ...prevData, [valueChange]: value }
         })
@@ -49,7 +82,6 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
             if (data.Fecha_Envio !== null) {
                 fecha = new Date(data.Fecha_Envio);
             }
-            console.log(data)
 
             if (fecha) {
                 handleChangeValueSeguimiento(fecha, 'Fecha_Envio')
@@ -102,14 +134,14 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
             if (setpedidosCopy) {
                 setpedidosCopy((prevData: TPedidosProps[] | PropsSeguimientos[]) =>
                     prevData.map((pedido: any) =>
-                        pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta: seguimientoData.TipoVenta, Devolucion: newDevolucion, estado: estado , PagoHGI:newPagoHGI } : pedido
+                        pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta: seguimientoData.TipoVenta, Devolucion: newDevolucion, estado: estado, PagoHGI: newPagoHGI } : pedido
                     )
                 );
             }
 
             setpedidos((prevData: TPedidosProps[] | PropsSeguimientos[]) =>
                 prevData.map((pedido: any) =>
-                    pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta: seguimientoData.TipoVenta, Devolucion: newDevolucion, estado: estado , PagoHGI:newPagoHGI } : pedido
+                    pedido.intIdPedido === intIdPedido ? { ...pedido, isDropi: newIsDropi, pago: newPago, TipoVenta: seguimientoData.TipoVenta, Devolucion: newDevolucion, estado: estado, PagoHGI: newPagoHGI } : pedido
                 )
             );
 
@@ -132,7 +164,7 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                             <p>Dropi</p>
                             <input
                                 type='checkbox'
-                                checked={seguimientoData.isDropi}
+                                checked={seguimientoData.isDropi ?? false}
                                 className={`px-2 py-1 rounded outline-gray-400 border gray-300 min-w-min`}
                                 onChange={(e) => {
                                     handleChangeValueSeguimiento(e.target.checked, 'isDropi')
@@ -143,13 +175,13 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                             />
                         </label>
                         {
-                            seguimientoData.isDropi && (
+                            (seguimientoData.isDropi == true) && (
                                 <>
                                     <label className={`flex justify-center items-center`}>
                                         <p className='m-1'>Devolución</p>
                                         <input
                                             type={'checkbox'}
-                                            checked={seguimientoData.Devolucion}
+                                            checked={seguimientoData.Devolucion ?? false}
                                             className={`px-2 py-1 rounded outline-gray-400 border gray-300 min-w-min`}
                                             onChange={(e) => {
                                                 handleChangeValueSeguimiento(e.target.checked, 'Devolucion')
@@ -160,7 +192,7 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                         <p className='m-1'>Cartera</p>
                                         <input
                                             type={'checkbox'}
-                                            checked={seguimientoData.Cartera}
+                                            checked={seguimientoData.Cartera ?? false}
                                             className={`px-2 py-1 rounded outline-gray-400 border gray-300 min-w-min`}
                                             onChange={(e) => {
                                                 handleChangeValueSeguimiento(e.target.checked, 'Cartera')
@@ -173,7 +205,7 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                             onChange={(e) => {
                                                 handleChangeValueSeguimiento(e.target.value, 'Recaudo')
                                             }}
-                                            value={seguimientoData.Recaudo}
+                                            value={seguimientoData.Recaudo !== null ? seguimientoData.Recaudo : ""}
                                             className='border-2 rounded border-slate-300 '
                                         >
                                             <option value={""}></option>
@@ -259,7 +291,6 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                         handleChangeValueSeguimiento(e.target.value, 'TipoVenta')
                                     }}
                                     value={seguimientoData.TipoVenta ? seguimientoData.TipoVenta : ""}
-                                    //disabled={seguimientoData.isDropi ? true : false}
                                     className='min-w-[250px] px-2 py-1 rounded outline-gray-400 border gray-300'
                                 >
                                     <option value={"Catalogo"}>Catalogo</option>
@@ -269,19 +300,6 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                     <option value={"Dropi"}>Dropi</option>
                                 </select>
                             </label>
-
-
-
-                            {/*  <LabelSeguimiento
-                                text={"Tipo de venta"}
-                                valueChange={'TipoVenta'}
-                                inputType={"text"}
-                                valueInput={seguimientoData.isDropi ? seguimientoData.TipoVenta = "Dropi" : seguimientoData.TipoVenta}
-                                handleChangeValueSeguimiento={handleChangeValueSeguimiento}
-                                disabled={seguimientoData.isDropi ? true : false}
-                            /> */}
-
-
 
                             <LabelSeguimiento
                                 text={"Pago"}
@@ -330,15 +348,6 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                 </select>
                             </label>
 
-
-                            {/*   <LabelSeguimiento
-                                text={"Tipo de envio"}
-                                valueChange={'TipoEnvio'}
-                                inputType={"text"}
-                                valueInput={seguimientoData.TipoEnvio}
-                                handleChangeValueSeguimiento={handleChangeValueSeguimiento}
-                            /> */}
-
                             <label>
                                 <p>Contraentrega/Asumido</p>
                                 <select
@@ -352,14 +361,6 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                     <option value={"Asumido"}>Asumido</option>
                                 </select>
                             </label>
-
-                            {/*  <LabelSeguimiento
-                                text={"Contraentrega/Asumido"}
-                                valueChange={'Despacho'}
-                                inputType={"text"}
-                                valueInput={seguimientoData.Despacho}
-                                handleChangeValueSeguimiento={handleChangeValueSeguimiento}
-                            /> */}
 
                             <LabelSeguimiento
                                 text={"Valor envio"}
@@ -385,7 +386,6 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                 handleChangeValueSeguimiento={handleChangeValueSeguimiento}
                                 disabled={false}
                             />
-
 
                         </article>
                     </section>
@@ -483,9 +483,6 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                             />
                         </label>
                     </div>
-
-
-
                 </footer>
             </section>
         </ModalsLayout>

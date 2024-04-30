@@ -56,6 +56,12 @@ export const BuscadorPedidos: React.FC<IBuscadorProps> = ({ ConsultarPedidosEnPr
         }, 1000);
     }
 
+    const handleNroPedidoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = event.target.value;
+        const filteredValue = inputValue.replace(/[.,]/g, '');
+        setnroPedido(filteredValue);
+    };
+
     return (
         <div className='buscadorPedidosContainer'>
             <input
@@ -63,12 +69,8 @@ export const BuscadorPedidos: React.FC<IBuscadorProps> = ({ ConsultarPedidosEnPr
                 placeholder='Buscar Nro de pedido'
                 className="w-1/2 px-4 py-2 mx-4 my-2 border-2 border-gray-400 rounded outline-none focus:border-sky-500"
                 value={nroPedido}
-                onChange={(e) => {
-                    setnroPedido(e.target.value)
-                }}
-                onKeyUp={() => {
-                    handleInputChange()
-                }}
+                onChange={handleNroPedidoChange}
+                onKeyUp={handleInputChange}
                 min={1}
                 ref={typingTime}
             />

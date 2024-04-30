@@ -17,7 +17,7 @@ export const LabelSeguimiento:React.FC<TLabelSeguimientoValue> =({text, valueCha
             <input
                 type={inputType}
                 disabled={disabled}
-                value={valueInput}
+                value={valueInput !== null ? valueInput : ""}
                 className={`min-w-[250px] px-2 py-1 rounded outline-gray-400 border gray-300 ${inputType == 'checkbox' && 'min-w-min'}`}
                 onChange={(e) => {
                     handleChangeValueSeguimiento(e.target.value, valueChange)

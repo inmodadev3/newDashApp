@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import axios from '../../../Utils/BaseUrlAxio'
 import moment from 'moment'
 import { AppLayout } from '../../../Components/AppLayout/AppLayout'
@@ -52,17 +52,26 @@ export const SeguimientosPanel: React.FC = () => {
     const [loadingSeguimientos, setloadingSeguimientos] = useState(false)
     const { createToast, alerts } = useAlert()
     const [valorFiltro, setvalorFiltro] = useState(1)
+    const [FechaFiltro, setFechaFiltro] = useState<string>(new Date().toISOString().slice(0, 10))
+    const typingTime = useRef<any>(null)
+    const [busqueda, setbusqueda] = useState('')
+
 
     useEffect(() => {
         setMenuSelected(MenuSections.PEDIDOS)
         setSubmenuSelected(SubMenuSections.VER_SEGUIMIENTOS)
-        consultarSeguimientos()
+
     }, [])
+
+    useEffect(() => {
+        consultarSeguimientos()
+        setvalorFiltro(1)
+    }, [FechaFiltro])
 
     const consultarSeguimientos = async () => {
         setloadingSeguimientos(true)
         try {
-            const response = await axios.get('/pedidos/seguimientos')
+            const response = await axios.get(`/pedidos/seguimientos?fecha=${FechaFiltro}`)
             setseguimientos(response.data.seguimientos)
             setseguimientosCopy(response.data.seguimientos)
         } catch (error) {
@@ -110,22 +119,21 @@ export const SeguimientosPanel: React.FC = () => {
         setidEditar(id)
     }
 
-    const BuscarPorId = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value
+    const BuscarPorId = async () => {
+        if (busqueda.toString().trim() !== "") {
+            setloadingSeguimientos(true)
+            try {
+                const response = await axios.get(`/pedidos/seguimientos/id/${busqueda}`)
+                setseguimientos(response.data.seguimientos)
+            } catch (error) {
 
-        if (value.toString().trim() !== "") {
-            const data = seguimientosCopy.filter((seguimiento) =>
-                (seguimiento.intIdPedido.toString()).includes(value) ||
-                (seguimiento.NroFactura !== null && seguimiento.NroFactura.toString().includes(value)) ||
-                (seguimiento.cliente?.toLocaleLowerCase().includes(value.toLowerCase())) ||
-                (seguimiento.NroGuia !== null && seguimiento.NroGuia.toLowerCase().includes(value.toLowerCase())) ||
-                (seguimiento.Vendedor?.toLocaleLowerCase().includes(value.toLowerCase()))
-            )
-            setseguimientos(data)
+            } finally {
+                setloadingSeguimientos(false)
+            }
+            
         } else {
             FiltradorDeSeguimientos(valorFiltro)
         }
-
     }
 
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -192,6 +200,25 @@ export const SeguimientosPanel: React.FC = () => {
         }
     }
 
+    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFechaFiltro(event.target.value);
+    };
+
+    const handleInputChange = () => {
+        if (typingTime.current) {
+            clearTimeout(typingTime.current);
+        }
+
+        typingTime.current = setTimeout(() => {
+            BuscarPorId()
+        }, 1000);
+    }
+
+    const handleBusquedaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = event.target.value;
+        const filteredValue = inputValue.replace(/[.,]/g, '');
+        setbusqueda(filteredValue);
+    };
 
     return (
         <AppLayout>
@@ -201,12 +228,17 @@ export const SeguimientosPanel: React.FC = () => {
                         type='text'
                         className='w-1/2 p-2 border-2 rounded outline-none border-slate-300'
                         placeholder='Buscar por id'
-                        onChange={BuscarPorId}
+                        onChange={handleBusquedaChange}
+                        ref={typingTime}
+                        onKeyUp={handleInputChange}
                     />
+
+
                     <label className='flex items-center justify-center gap-x-4'>
                         <p>Filtrar:</p>
                         <select
                             className='px-2 py-1 border-2 border-gray-400 rounded outline-none'
+                            value={valorFiltro}
                             onChange={(e) => {
                                 handleChangeFiltro(e)
                                 FiltradorDeSeguimientos(parseInt(e.target.value))
@@ -222,59 +254,80 @@ export const SeguimientosPanel: React.FC = () => {
                     </label>
 
                 </section>
+
+                <section>
+                    <div className='flex justify-between gap-x-4'>
+                        <label className='flex flex-col'>
+                            Fecha Pedido
+                            <input
+                                type='date'
+                                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                                value={FechaFiltro}
+                                onChange={handleDateChange}
+                            />
+                        </label>
+                    </div>
+
+                </section>
                 {
                     !loadingSeguimientos ? (
-                        <table className="w-full my-2 bg-gray-100 border-2 border-black/30">
-                            <thead >
-                                <tr className="border-b-2 border-b-black/30 text-center [&>th]:py-4">
-                                    <th>Pedido</th>
-                                    <th>Cliente</th>
-                                    <th>Vendedor</th>
-                                    <th>Venta</th>
-                                    <th>Factura</th>
-                                    <th>Estado</th>
-                                    <th>Información</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    seguimientos.map((seguimiento) => (
-                                        <tr
-                                            key={seguimiento.intIdPedido}
-                                            className='border-b-2 border-b-black/20 text-center py-12 [&>td]:py-8 [&>td]:text-sm'
-                                        >
-                                            <td className='flex flex-col'>
-                                                <span>{seguimiento.intIdPedido}</span>
-                                                <span>{moment(seguimiento.Fecha_Pedido).local().format('MMM. DD, YYYY')}</span>
-                                            </td>
-                                            <td className="w-60">{seguimiento.cliente}</td>
-                                            <td className="w-60">{seguimiento.Vendedor}</td>
-                                            <td>{seguimiento.TipoVenta}</td>
-                                            <td className='flex flex-col'>
-                                                <span>{seguimiento.NroFactura}</span>
-                                                {seguimiento.Fecha_Facura && (
-                                                    <span>{moment(seguimiento.Fecha_Facura).local().format('MMM. DD, YYYY')}</span>
-                                                )}
-                                            </td>
-                                            <td>
-                                                <article className='flex flex-col gap-y-3'>
-                                                    <span className={`${validarEstadoSeguimiento(seguimiento)?.bg} px-2 py-1 rounded text-white w-full`}>{validarEstadoSeguimiento(seguimiento)?.name}</span>
+                        seguimientos.length !== 0 ? (
+                            <table className="w-full my-2 bg-gray-100 border-2 border-black/30">
+                                <thead >
+                                    <tr className="border-b-2 border-b-black/30 text-center [&>th]:py-4">
+                                        <th>Pedido</th>
+                                        <th>Cliente</th>
+                                        <th>Vendedor</th>
+                                        <th>Venta</th>
+                                        <th>Factura</th>
+                                        <th>Estado</th>
+                                        <th>Información</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        seguimientos.map((seguimiento) => (
+                                            <tr
+                                                key={seguimiento.intIdPedido}
+                                                className='border-b-2 border-b-black/20 text-center py-12 [&>td]:py-8 [&>td]:text-sm'
+                                            >
+                                                <td className='flex flex-col'>
+                                                    <span>{seguimiento.intIdPedido}</span>
+                                                    <span>{moment(seguimiento.Fecha_Pedido).local().format('MMM. DD, YYYY')}</span>
+                                                </td>
+                                                <td className="w-60">{seguimiento.cliente}</td>
+                                                <td className="w-60">{seguimiento.Vendedor}</td>
+                                                <td>{seguimiento.TipoVenta}</td>
+                                                <td className='flex flex-col'>
+                                                    <span>{seguimiento.NroFactura}</span>
+                                                    {seguimiento.Fecha_Facura && (
+                                                        <span>{moment(seguimiento.Fecha_Facura).local().format('MMM. DD, YYYY')}</span>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    <article className='flex flex-col gap-y-3'>
+                                                        <span className={`${validarEstadoSeguimiento(seguimiento)?.bg} px-2 py-1 rounded text-white w-full`}>{validarEstadoSeguimiento(seguimiento)?.name}</span>
 
-                                                    {
-                                                        ((seguimiento.pagoHGI !== undefined) || (seguimiento.PagoHGI == 1)) && (
-                                                            <span className='w-full px-2 py-1 text-white rounded bg-cyan-500'>Pagado Hgi</span>
-                                                        )
-                                                    }
-                                                </article>
-                                            </td>
-                                            <td>
-                                                <span className='flex items-center justify-center'><span className='cursor-pointer ' onClick={openModalSeguimiento(seguimiento.intIdPedido)}><CgArrowsExchangeAlt size={32} /></span></span>
-                                            </td>
-                                        </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </table>
+                                                        {
+                                                            ((seguimiento.pagoHGI !== undefined) || (seguimiento.PagoHGI == 1)) && (
+                                                                <span className='w-full px-2 py-1 text-white rounded bg-cyan-500'>Pagado Hgi</span>
+                                                            )
+                                                        }
+                                                    </article>
+                                                </td>
+                                                <td>
+                                                    <span className='flex items-center justify-center'><span className='cursor-pointer ' onClick={openModalSeguimiento(seguimiento.intIdPedido)}><CgArrowsExchangeAlt size={32} /></span></span>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                        ) : (
+                            <div className='flex items-center justify-center my-12'>
+                                <h3 className='text-2xl'>No se encuentran seguimientos con los parametros establecidos</h3>
+                            </div>
+                        )
                     ) : (
                         <div>
                             <Loader />
