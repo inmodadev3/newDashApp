@@ -534,22 +534,19 @@ export const Pedidos: React.FC = () => {
                                                                                 <span>Imprimir pedido</span>
                                                                             </a>
 
-
                                                                             {
-                                                                                (pedido.intEstado !== 4) && (
-                                                                                    <a
-                                                                                        className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200 gap-x-10"
-                                                                                        target="_blank"
-                                                                                        href={`/#/pedidos/revisar/${pedido.intIdPedido}`}
-                                                                                        onClick={() => {
-                                                                                            procesar_pedido(pedido.intIdPedido, pedido.intEstado, 3)
-                                                                                        }}
-                                                                                    >
+                                                                                <a
+                                                                                    className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200 gap-x-10"
+                                                                                    target="_blank"
+                                                                                    href={`/#/pedidos/revisar/${pedido.intIdPedido}`}
+                                                                                    onClick={() => {
+                                                                                        procesar_pedido(pedido.intIdPedido, pedido.intEstado, 3)
+                                                                                    }}
+                                                                                >
 
-                                                                                        <span><FaEdit size={20} /></span>
-                                                                                        <span>Revisar Pedido</span>
-                                                                                    </a>
-                                                                                )
+                                                                                    <span><FaEdit size={20} /></span>
+                                                                                    <span>Revisar Pedido</span>
+                                                                                </a>
                                                                             }
 
 

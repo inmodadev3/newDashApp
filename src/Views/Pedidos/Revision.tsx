@@ -98,8 +98,12 @@ export const Revision: React.FC = () => {
                     pedido.intIdPedDetalle === intIdPedDetalle ? { ...pedido, valor_original: pedido.intCantidad, intCantidad: pedido.valor_original ? pedido.valor_original : 1 } : pedido
                 )
             )
-        } else {
 
+            setdataPedidoCopy((prevData) =>
+                prevData.map((pedido) =>
+                    pedido.intIdPedDetalle === intIdPedDetalle ? { ...pedido, valor_original: pedido.intCantidad, intCantidad: pedido.valor_original ? pedido.valor_original : 1 } : pedido
+                )
+            )
         }
 
         const precio = calcular_total()
@@ -136,11 +140,20 @@ export const Revision: React.FC = () => {
     }
 
     const eliminar_producto = async (intIdPedDetalle: number) => {
-        const dataProductos = dataPedido.filter((producto) => producto.intIdPedDetalle !== intIdPedDetalle)
-        setdataPedido(dataProductos)
+        const dataProductos = dataPedidoCopy.filter((producto) => producto.intIdPedDetalle !== intIdPedDetalle)
+        setdataPedido((prevData) =>
+            prevData.filter((producto) =>
+                producto.intIdPedDetalle !== intIdPedDetalle
+            )
+        )
+
+        setdataPedidoCopy((prevData) =>
+            prevData.filter((producto) =>
+                producto.intIdPedDetalle !== intIdPedDetalle
+            )
+        )
 
         await actualizar_estado_producto(intIdPedDetalle, -1, 1, dataProductos)
-
     }
 
     const calcular_total = () => {
@@ -197,7 +210,16 @@ export const Revision: React.FC = () => {
             setisViewModalProductos(false)
             setarrayProductos([])
 
-            await calcular_total()
+            let total = 0;
+
+            newData.map((producto) => {
+                let cantidad = (!Number.isNaN(producto.intCantidad) || producto.intCantidad !== 0) ? producto.intCantidad : 1
+                total += (cantidad) * (producto.intPrecio)
+            })
+
+            setheaderPedido((prevValue) => {
+                return { ...prevValue, intValorTotal: total }
+            })
 
         } catch (error) {
             console.error(error)
@@ -308,7 +330,7 @@ export const Revision: React.FC = () => {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    dataPedido.map((producto, key:number) => (
+                                                    dataPedido.map((producto, key: number) => (
                                                         <tr
                                                             key={producto.intIdPedDetalle}
                                                             className={`border-b-2 border-b-black/20 text-center [&>td]:py-4 [&>td]:text-sm group relative ${producto.intEstado == 2 && "table_checked"}`}
