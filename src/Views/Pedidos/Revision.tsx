@@ -117,7 +117,7 @@ export const Revision: React.FC = () => {
         })
     }
 
-    const actualizar_estado_producto = async (intIdPedDetalle: number, valor: number, tipo: number, dataProductos = dataPedido) => {
+    const actualizar_estado_producto = async (intIdPedDetalle: number, valor: number, tipo: number, dataProductos = dataPedidoCopy) => {
 
         let total = 0;
 
