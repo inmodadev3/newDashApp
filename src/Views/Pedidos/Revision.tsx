@@ -275,8 +275,8 @@ export const Revision: React.FC = () => {
     return (
         <AppLayout>
             <div className='w-full h-screen py-3'>
-                <section className='flex justify-between px-12 text-lg font-semibold tracking-wider'>
-                    <article>
+                <section className='flex justify-between px-2 text-lg font-semibold tracking-wider xl:px-12'>
+                    <article className='hidden xl:flex'>
                         <h3>IN MODA FANTASY S.A.S</h3>
                     </article>
                     <article>
@@ -292,8 +292,8 @@ export const Revision: React.FC = () => {
                             dataPedidoCopy.length > 0 ? (
                                 <>
                                     <div>
-                                        <section className='flex flex-col items-center justify-between gap-x-8 lg:flex-row'>
-                                            <label className='w-3/5 '>
+                                        <section className='flex flex-col px-4 xl:px-0 xl:items-center xl:justify-between gap-x-8 lg:flex-row'>
+                                            <label className='w-full xl:w-3/5'>
                                                 <input
                                                     type='text'
                                                     className='w-full px-4 py-2 my-2 border-2 border-gray-400 rounded outline-none focus:border-sky-500'
@@ -301,20 +301,20 @@ export const Revision: React.FC = () => {
                                                     onChange={handleChangeBuscador}
                                                 />
                                             </label>
-                                            <article className='flex justify-center w-2/5'>
-                                                <button onClick={Abrir_Modal_Productos} className='px-8 py-2 text-white duration-300 bg-blue-500 rounded hover:bg-blue-700'>Agregar producto</button>
+                                            <article className='flex w-full xl:justify-center xl:w-2/5 '>
+                                                <button onClick={Abrir_Modal_Productos} className='w-full py-2 text-white duration-300 bg-blue-500 rounded xl:w-fit xl:px-8 hover:bg-blue-700'>Agregar producto</button>
                                             </article>
                                         </section>
                                     </div>
                                     <br />
-                                    <article>
+                                    <article className='px-4 xl:px-0 xl:text-start'>
                                         <p className='font-bold'>Total: <span className='font-medium'>${FormateoNumberInt(headerPedido.intValorTotal.toString())}</span></p>
                                     </article>
                                     <br />
-                                    <div className='w-full'>
+                                    <div className='w-full px-4'>
                                         <table className='w-full border-2 bg-gray-50 border-black/30'>
-                                            <thead className="border-b-2 border-b-black/30 text-center [&>th]:py-4">
-                                                <tr>
+                                            <thead className="hidden xl:contents  border-b-black/30 text-center [&>th]:py-4">
+                                                <tr className='xl:border-b-2'>
                                                     <th>#</th>
                                                     <th>Revisado</th>
                                                     <th>Ver</th>
@@ -333,20 +333,31 @@ export const Revision: React.FC = () => {
                                                     dataPedido.map((producto, key: number) => (
                                                         <tr
                                                             key={producto.intIdPedDetalle}
-                                                            className={`border-b-2 border-b-black/20 text-center [&>td]:py-4 [&>td]:text-sm group relative ${producto.intEstado == 2 && "table_checked"}`}
+                                                            className={`border-b-2 border-b-black/20 xl:text-center [&>td]:py-2 [&>td]:px-4 xl:px-0 xl:[&>td]:py-4 [&>td]:text-sm group relative ${producto.intEstado == 2 && "table_checked"} flex flex-col xl:table-row`}
                                                         >
-                                                            <td className='px-2'>{key + 1}</td>
-                                                            <td className=''>
+                                                            <td className='hidden px-2 xl:inline'>{key + 1}</td>
+                                                            <td className='bg-green-500 xl:bg-transparent'>
                                                                 <input
                                                                     type="checkbox"
-                                                                    className='w-6 h-6 rounded'
+                                                                    className='hidden w-6 h-6 rounded xl:table-cell'
                                                                     checked={producto.intEstado == 2 ? true : false}
                                                                     onChange={(e) => {
                                                                         check_producto(e, producto.strIdProducto, producto.intIdPedDetalle)
                                                                     }}
                                                                 />
+
+                                                                <label className="table-cell switch md:hidden">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        checked={producto.intEstado == 2 ? true : false}
+                                                                        onChange={(e) => {
+                                                                            check_producto(e, producto.strIdProducto, producto.intIdPedDetalle)
+                                                                        }}
+                                                                    />
+                                                                    <span className="slider round"></span>
+                                                                </label>
                                                             </td>
-                                                            <td className='flex items-center justify-center mx-2'>
+                                                            <td className='hidden xl:table-cell xl:mx-2'>
                                                                 <span
                                                                     onClick={() => {
                                                                         setisViewModalInfoProducto(!isViewModalInfoProducto)
@@ -356,12 +367,12 @@ export const Revision: React.FC = () => {
                                                                     <AiFillEye size={20} />
                                                                 </span>
                                                             </td>
-                                                            <td>{producto.strIdProducto}</td>
-                                                            <td>{producto.strDescripcion}</td>
+                                                            <td className='flex text-white bg-green-500 gap-x-2 xl:table-cell xl:bg-transparent xl:text-black'><span className='flex xl:hidden'>Referencia: </span>{producto.strIdProducto.toUpperCase()}</td>
+                                                            <td className='font-bold text-center underline xl:font-normal xl:text-inherit xl:no-underline'>{producto.strDescripcion.toUpperCase()}</td>
                                                             <td>
                                                                 <input
                                                                     type='number'
-                                                                    className='w-20 px-4 py-2 text-center border-2 border-gray-500 rounded outline-none'
+                                                                    className='w-full px-4 py-2 text-center border-2 border-gray-500 rounded outline-none xl:w-20'
                                                                     value={producto.intCantidad}
                                                                     min={1}
                                                                     onChange={(e) => { handleChangeCantidad(e, producto.intIdPedDetalle) }}
@@ -370,10 +381,10 @@ export const Revision: React.FC = () => {
                                                                     }}
                                                                 />
                                                             </td>
-                                                            <td className='px-12'>${FormateoNumberInt(producto.intPrecio.toString())}</td>
-                                                            <td>{producto.strUnidadMedida}</td>
+                                                            <td className='xl:px-12'><span className='font-bold text-green-600 xl:hidden'>Precio: </span> ${FormateoNumberInt(producto.intPrecio.toString())}</td>
+                                                            <td><span className='font-bold text-green-600 xl:hidden'>Medida: </span>{producto.strUnidadMedida}</td>
                                                             <td>{producto.strColor}</td>
-                                                            <td>{producto.strObservacion}</td>
+                                                            <td><span className='font-bold text-green-600 xl:hidden'>{producto.strObservacion.toString() !== "" && 'Observación : ' }</span>{producto.strObservacion}</td>
                                                             <td className='flex justify-center'>
                                                                 <span onClick={() => { eliminar_producto(producto.intIdPedDetalle) }} className='cursor-pointer'><MdDelete size={26} color={'red'} /></span>
                                                             </td>
@@ -386,7 +397,7 @@ export const Revision: React.FC = () => {
                                     <br />
                                     {
                                         (permisos.find((item) => item.id_permiso == 3) || permisos.find((item) => item.id_permiso == 14)) && (
-                                            <div className='flex justify-end py-4'>
+                                            <div className='flex justify-center py-4 xl:justify-end'>
                                                 <button onClick={finalizar_revision} className='px-4 py-2 text-white duration-300 bg-green-500 rounded hover:bg-green-700'>Finalizar revision</button>
                                             </div>
                                         )

@@ -63,11 +63,11 @@ export const BuscadorPedidos: React.FC<IBuscadorProps> = ({ ConsultarPedidosEnPr
     };
 
     return (
-        <div className='buscadorPedidosContainer'>
+        <div className='p-2'>
             <input
                 type='text'
                 placeholder='Buscar Nro de pedido'
-                className="w-1/2 px-4 py-2 mx-4 my-2 border-2 border-gray-400 rounded outline-none focus:border-sky-500"
+                className="w-full xl:w-1/2 px-4 py-2 my-2 border-2 border-gray-400 rounded outline-none focus:border-sky-500"
                 value={nroPedido}
                 onChange={handleNroPedidoChange}
                 onKeyUp={handleInputChange}

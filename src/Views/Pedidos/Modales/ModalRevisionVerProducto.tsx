@@ -46,7 +46,7 @@ export const ModalRevisionVerProducto: React.FC<TProps> = ({
 
     return (
         <ModalsLayout CloseEvent={setisViewModalInfoProducto}>
-            <section className='z-30 flex w-auto px-12 py-4 bg-white rounded h-5/6 gap-x-5'>
+            <section className='z-30 flex flex-col xl:flex-row w-auto items-center xl:items-start xl:px-12 py-4 bg-white rounded h-5/6 gap-x-5 overflow-scroll'>
                 {
                     isLoadingData ? (
                         <Loader />

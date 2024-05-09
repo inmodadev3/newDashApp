@@ -331,9 +331,6 @@ export const Pedidos: React.FC = () => {
             const nuevoAnio = fecha.getFullYear();
             const formattedMonth = nuevoMes < 10 ? '0' + nuevoMes : nuevoMes.toString();
 
-            console.log(nuevoMes)
-            console.log(nuevoAnio)
-
             setmes(nuevoMes);
             setanio(nuevoAnio);
             setaniosSelect(`${nuevoAnio}-${formattedMonth}`);
@@ -349,7 +346,6 @@ export const Pedidos: React.FC = () => {
 
         switch (value) {
             case 1:
-                console.log(pedidosCopy)
                 setpedidos(pedidosCopy)
                 break;
             case 2:
@@ -423,7 +419,7 @@ export const Pedidos: React.FC = () => {
                                 <div className="flex flex-col my-2">
                                     <BuscadorPedidos ConsultarPedidosEnProceso={consultar_Pedidos} setdatos={setpedidos} setloadData={setisLoadingData} />
                                     <section className='mx-6'>
-                                        <div className='flex justify-between gap-x-4'>
+                                        <div className='flex justify-between gap-y-4 xl:gap-x-4 xl:flex-row flex-col'>
                                             <label className='flex flex-col'>
                                                 Fecha
                                                 <input
@@ -434,7 +430,7 @@ export const Pedidos: React.FC = () => {
                                                     onChange={handleChangeDateSelected}
                                                 />
                                             </label>
-                                            <label className='flex items-center justify-center gap-x-4'>
+                                            <label className='flex items-center xl:justify-center gap-x-4'>
                                                 <p>Filtrar:</p>
                                                 <select
                                                     className='px-2 py-1 border-2 border-gray-400 rounded outline-none'
@@ -460,7 +456,7 @@ export const Pedidos: React.FC = () => {
                                     (
                                         <div className="w-full px-4">
                                             <table className="w-full bg-gray-100 border-2 border-black/30">
-                                                <thead>
+                                                <thead className='hidden xl:contents'>
                                                     <tr className="border-b-2 border-b-black/30 text-center [&>th]:py-4">
                                                         <th>Documento</th>
                                                         <th>Fecha</th>
@@ -476,15 +472,15 @@ export const Pedidos: React.FC = () => {
                                                         pedidos?.map((pedido) => (
                                                             <tr
                                                                 key={pedido.intIdPedido}
-                                                                className="border-b-2 border-b-black/20 text-center py-12 [&>td]:py-8 [&>td]:text-sm"
+                                                                className=" flex flex-col gap-y-4 pb-4 xl:table-row border-b-2 border-b-black/20 xl:text-center xl:py-12 xl:[&>td]:pb-8 [&>td]:text-sm [&>td]:px-4 xl:[&>td]:px-0"
                                                             >
-                                                                <td>{pedido.intIdPedido}</td>
+                                                                <td className='bg-blue-500 text-white xl:bg-transparent xl:text-black py-4'>{pedido.intIdPedido}</td>
                                                                 <td className="flex flex-col">
                                                                     <span>{moment.utc(pedido.dtFechaEnvio).local().format("MMM. DD, YYYY")}</span>
                                                                     <span>{moment.utc(pedido.dtFechaEnvio).local().format("hh:mm A")}</span>
                                                                 </td>
                                                                 <td className="w-60">{pedido.strNombCliente}</td>
-                                                                <td>{FormateoNumberInt((pedido.intValorTotal).toString())}</td>
+                                                                <td className='flex gap-x-2 xl:inline'><span className='flex xl:hidden'>Total: </span>{FormateoNumberInt((pedido.intValorTotal).toString())}</td>
                                                                 <td className="w-60">{pedido.strNombVendedor}</td>
                                                                 <td>
                                                                     {
@@ -504,7 +500,7 @@ export const Pedidos: React.FC = () => {
                                                                         <span className="z-10 flex items-center justify-center w-10 h-10 rounded-full cursor-pointer bg-gray-400/30">
                                                                             <AiOutlineMore size={26} />
                                                                         </span>
-                                                                        <div className="absolute z-20 flex-col hidden p-2 transform -translate-x-1/2 bg-white border border-gray-300 rounded shadow-md top-full group-hover:flex w-60">
+                                                                        <div className="absolute z-20 flex-col hidden p-2 transform xl:-translate-x-1/2 bg-white border border-gray-300 rounded shadow-md top-full group-hover:flex w-60">
                                                                             {/* Contenido del cuadro de opciones */}
                                                                             {
                                                                                 (!revisionTrue) && (
