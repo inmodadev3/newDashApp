@@ -145,6 +145,10 @@ export const Pedidos: React.FC = () => {
         {
             nombre: "Revisado  🌟",
             estilo: "p-1 text-green-800 bg-green-300 "
+        },
+        {
+            nombre: "Alistado 📦",
+            estilo: "p-1 text-amber-800 bg-amber-300 "
         }
     ]
 
@@ -419,7 +423,7 @@ export const Pedidos: React.FC = () => {
                                 <div className="flex flex-col my-2">
                                     <BuscadorPedidos ConsultarPedidosEnProceso={consultar_Pedidos} setdatos={setpedidos} setloadData={setisLoadingData} />
                                     <section className='mx-6'>
-                                        <div className='flex justify-between gap-y-4 xl:gap-x-4 xl:flex-row flex-col'>
+                                        <div className='flex flex-col justify-between gap-y-4 xl:gap-x-4 xl:flex-row'>
                                             <label className='flex flex-col'>
                                                 Fecha
                                                 <input
@@ -474,13 +478,13 @@ export const Pedidos: React.FC = () => {
                                                                 key={pedido.intIdPedido}
                                                                 className=" flex flex-col gap-y-4 pb-4 xl:table-row border-b-2 border-b-black/20 xl:text-center xl:py-12 xl:[&>td]:pb-8 [&>td]:text-sm [&>td]:px-4 xl:[&>td]:px-0"
                                                             >
-                                                                <td className='bg-blue-500 text-white xl:bg-transparent xl:text-black py-4'>{pedido.intIdPedido}</td>
+                                                                <td className='py-4 text-white bg-blue-500 xl:bg-transparent xl:text-black'>{pedido.intIdPedido}</td>
                                                                 <td className="flex flex-col">
                                                                     <span>{moment.utc(pedido.dtFechaEnvio).local().format("MMM. DD, YYYY")}</span>
                                                                     <span>{moment.utc(pedido.dtFechaEnvio).local().format("hh:mm A")}</span>
                                                                 </td>
                                                                 <td className="w-60">{pedido.strNombCliente}</td>
-                                                                <td className='flex gap-x-2 xl:inline'><span className='flex xl:hidden'>Total: </span>{FormateoNumberInt((pedido.intValorTotal).toString())}</td>
+                                                                <td className='flex gap-x-2 xl:table-cell'><span className='flex xl:hidden'>Total: </span>{FormateoNumberInt((pedido.intValorTotal).toString())}</td>
                                                                 <td className="w-60">{pedido.strNombVendedor}</td>
                                                                 <td>
                                                                     {
@@ -496,11 +500,11 @@ export const Pedidos: React.FC = () => {
                                                                     }
                                                                 </td>
                                                                 <td>
-                                                                    <div className="relative flex items-center justify-center w-full h-full group">
+                                                                    <div className="relative flex items-center justify-center w-full h-full group xl:table-cell">
                                                                         <span className="z-10 flex items-center justify-center w-10 h-10 rounded-full cursor-pointer bg-gray-400/30">
                                                                             <AiOutlineMore size={26} />
                                                                         </span>
-                                                                        <div className="absolute z-20 flex-col hidden p-2 transform xl:-translate-x-1/2 bg-white border border-gray-300 rounded shadow-md top-full group-hover:flex w-60">
+                                                                        <div className="absolute z-20 flex-col hidden p-2 transform bg-white border border-gray-300 rounded shadow-md xl:-translate-x-1/2 top-full group-hover:flex w-60">
                                                                             {/* Contenido del cuadro de opciones */}
                                                                             {
                                                                                 (!revisionTrue) && (

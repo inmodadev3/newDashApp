@@ -18,9 +18,14 @@ import { PermisosContext } from '../../context/permisosContext'
 
 export const Revision: React.FC = () => {
 
+    //HOOKS
     const { pedidoId } = useParams()
     const { setMenuSelected } = useContext(MenuSelectedContext)
     const { permisos } = useContext(PermisosContext)
+    const navigate = useNavigate()
+
+
+    //ESTADOS
     const [headerPedido, setheaderPedido] = useState<IHeaderPdf>({} as IHeaderPdf)
     const [dataPedido, setdataPedido] = useState<IDataProductosPdf[]>([] as IDataProductosPdf[])
     const [loadingData, setloadingData] = useState<boolean>(true)
@@ -30,7 +35,7 @@ export const Revision: React.FC = () => {
     const [isLoadingDataProductos, setisLoadingDataProductos] = useState<boolean>(false)
     const [isViewModalInfoProducto, setisViewModalInfoProducto] = useState(false)
     const [referenciaInfoProducto, setreferenciaInfoProducto] = useState('')
-    const navigate = useNavigate()
+    const [opcionLista, setopcionLista] = useState(0)
 
     useEffect(() => {
 
@@ -227,12 +232,25 @@ export const Revision: React.FC = () => {
     }
 
     const finalizar_revision = async () => {
-        await axios.put('/pedidos/actualizar_estado', {
-            id: headerPedido.intIdpedido,
-            estado: 4
-        })
 
-        navigate(ROUTES_PATHS.PEDIDOS)
+        try {
+            let estado = 4;
+            
+            if (opcionLista == 1) {
+                estado = 5
+            }
+            
+            await axios.put('/pedidos/actualizar_estado', {
+                id: headerPedido.intIdpedido,
+                estado: estado
+            })
+
+            navigate(ROUTES_PATHS.PEDIDOS)
+        } catch (error) {
+            console.error(error)
+        }
+
+
     }
 
     const check_producto = async (e: React.ChangeEvent<HTMLInputElement>, strIdProducto: string, intIdPedDetalle: number) => {
@@ -240,20 +258,42 @@ export const Revision: React.FC = () => {
 
         if (checkValue) {
 
-            await actualizar_estado_producto(intIdPedDetalle, 2, 1)
+            switch (opcionLista) {
+                case 0:
+                    await actualizar_estado_producto(intIdPedDetalle, 2, 1)
 
-            setdataPedido((PrevValue) =>
-                PrevValue.map((producto) => (
-                    producto.strIdProducto == strIdProducto ? { ...producto, intEstado: 2 } : producto
-                ))
-            )
+                    setdataPedido((PrevValue) =>
+                        PrevValue.map((producto) => (
+                            producto.strIdProducto == strIdProducto ? { ...producto, intEstado: 2 } : producto
+                        ))
+                    )
 
-            setdataPedidoCopy((PrevValue) =>
-                PrevValue.map((producto) => (
-                    producto.strIdProducto == strIdProducto ? { ...producto, intEstado: 2 } : producto
-                ))
-            )
+                    setdataPedidoCopy((PrevValue) =>
+                        PrevValue.map((producto) => (
+                            producto.strIdProducto == strIdProducto ? { ...producto, intEstado: 2 } : producto
+                        ))
+                    )
+                    break;
 
+                case 1:
+                    await actualizar_estado_producto(intIdPedDetalle, 3, 1)
+
+                    setdataPedido((PrevValue) =>
+                        PrevValue.map((producto) => (
+                            producto.strIdProducto == strIdProducto ? { ...producto, intEstado: 3 } : producto
+                        ))
+                    )
+
+                    setdataPedidoCopy((PrevValue) =>
+                        PrevValue.map((producto) => (
+                            producto.strIdProducto == strIdProducto ? { ...producto, intEstado: 3 } : producto
+                        ))
+                    )
+                    break;
+
+                default:
+                    break;
+            }
         } else {
 
             await actualizar_estado_producto(intIdPedDetalle, 1, 1)
@@ -306,9 +346,19 @@ export const Revision: React.FC = () => {
                                             </article>
                                         </section>
                                     </div>
-                                    <br />
-                                    <article className='px-4 xl:px-0 xl:text-start'>
+                                    <article className='flex flex-col items-start px-4 my-2 gap-x-6 gap-y-3 xl:items-center xl:px-0 xl:text-start xl:flex-row xl:justify-start'>
                                         <p className='font-bold'>Total: <span className='font-medium'>${FormateoNumberInt(headerPedido.intValorTotal.toString())}</span></p>
+
+                                        <select
+                                            className='w-full px-4 py-2 my-2 border-2 rounded outline-none border-slate-400 xl:w-fit'
+                                            value={opcionLista}
+                                            onChange={(e) => {
+                                                setopcionLista(parseInt(e.target.value))
+                                            }}
+                                        >
+                                            <option value={0}>Revisión</option>
+                                            <option value={1}>Alistamiento</option>
+                                        </select>
                                     </article>
                                     <br />
                                     <div className='w-full px-4'>
@@ -333,14 +383,14 @@ export const Revision: React.FC = () => {
                                                     dataPedido.map((producto, key: number) => (
                                                         <tr
                                                             key={producto.intIdPedDetalle}
-                                                            className={`border-b-2 border-b-black/20 xl:text-center [&>td]:py-2 [&>td]:px-4 xl:px-0 xl:[&>td]:py-4 [&>td]:text-sm group relative ${producto.intEstado == 2 && "table_checked"} flex flex-col xl:table-row`}
+                                                            className={`border-b-2 border-b-black/20 xl:text-center [&>td]:py-2 [&>td]:px-4 xl:px-0 xl:[&>td]:py-4 [&>td]:text-sm group relative ${(opcionLista == 0) ? producto.intEstado == 2 && "table_checked" : producto.intEstado == 3 && "table_checked"} flex flex-col xl:table-row`}
                                                         >
                                                             <td className='hidden px-2 xl:inline'>{key + 1}</td>
                                                             <td className='bg-green-500 xl:bg-transparent'>
                                                                 <input
                                                                     type="checkbox"
                                                                     className='hidden w-6 h-6 rounded xl:table-cell'
-                                                                    checked={producto.intEstado == 2 ? true : false}
+                                                                    checked={(opcionLista == 0) ? producto.intEstado == 2 ? true : false : producto.intEstado == 3 ? true : false}
                                                                     onChange={(e) => {
                                                                         check_producto(e, producto.strIdProducto, producto.intIdPedDetalle)
                                                                     }}
@@ -349,7 +399,7 @@ export const Revision: React.FC = () => {
                                                                 <label className="table-cell switch md:hidden">
                                                                     <input
                                                                         type="checkbox"
-                                                                        checked={producto.intEstado == 2 ? true : false}
+                                                                        checked={(opcionLista == 0) ? producto.intEstado == 2 ? true : false : producto.intEstado == 3 ? true : false}
                                                                         onChange={(e) => {
                                                                             check_producto(e, producto.strIdProducto, producto.intIdPedDetalle)
                                                                         }}
@@ -384,7 +434,7 @@ export const Revision: React.FC = () => {
                                                             <td className='xl:px-12'><span className='font-bold text-green-600 xl:hidden'>Precio: </span> ${FormateoNumberInt(producto.intPrecio.toString())}</td>
                                                             <td><span className='font-bold text-green-600 xl:hidden'>Medida: </span>{producto.strUnidadMedida}</td>
                                                             <td>{producto.strColor}</td>
-                                                            <td><span className='font-bold text-green-600 xl:hidden'>{producto.strObservacion.toString() !== "" && 'Observación : ' }</span>{producto.strObservacion}</td>
+                                                            <td><span className='font-bold text-green-600 xl:hidden'>{producto.strObservacion.toString() !== "" && 'Observación : '}</span>{producto.strObservacion}</td>
                                                             <td className='flex justify-center'>
                                                                 <span onClick={() => { eliminar_producto(producto.intIdPedDetalle) }} className='cursor-pointer'><MdDelete size={26} color={'red'} /></span>
                                                             </td>
@@ -398,7 +448,7 @@ export const Revision: React.FC = () => {
                                     {
                                         (permisos.find((item) => item.id_permiso == 3) || permisos.find((item) => item.id_permiso == 14)) && (
                                             <div className='flex justify-center py-4 xl:justify-end'>
-                                                <button onClick={finalizar_revision} className='px-4 py-2 text-white duration-300 bg-green-500 rounded hover:bg-green-700'>Finalizar revision</button>
+                                                <button onClick={finalizar_revision} className={`px-4 py-2 text-white duration-300  rounded  ${opcionLista == 0 ? "bg-green-500 hover:bg-green-700" : "bg-orange-500 hover:bg-orange-700"}`}>{opcionLista == 0 ? "Finalizar Revisión" : "Finalizar Alistamiento"}</button>
                                             </div>
                                         )
                                     }
