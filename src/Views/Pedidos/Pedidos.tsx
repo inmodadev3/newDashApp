@@ -479,7 +479,7 @@ export const Pedidos: React.FC = () => {
                                                                 className=" flex flex-col gap-y-4 pb-4 xl:table-row border-b-2 border-b-black/20 xl:text-center xl:py-12 xl:[&>td]:pb-8 [&>td]:text-sm [&>td]:px-4 xl:[&>td]:px-0"
                                                             >
                                                                 <td className='py-4 text-white bg-blue-500 xl:bg-transparent xl:text-black'>{pedido.intIdPedido}</td>
-                                                                <td className="flex flex-col">
+                                                                <td className="flex flex-col h-full">
                                                                     <span>{moment.utc(pedido.dtFechaEnvio).local().format("MMM. DD, YYYY")}</span>
                                                                     <span>{moment.utc(pedido.dtFechaEnvio).local().format("hh:mm A")}</span>
                                                                 </td>
@@ -500,7 +500,7 @@ export const Pedidos: React.FC = () => {
                                                                     }
                                                                 </td>
                                                                 <td>
-                                                                    <div className="relative flex items-center justify-center w-full h-full group xl:table-cell">
+                                                                    <div className="relative flex items-center justify-center w-full h-full group">
                                                                         <span className="z-10 flex items-center justify-center w-10 h-10 rounded-full cursor-pointer bg-gray-400/30">
                                                                             <AiOutlineMore size={26} />
                                                                         </span>

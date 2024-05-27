@@ -7,7 +7,7 @@ import axios from '../../Utils/BaseUrlAxio'
 import { IDataProductosPdf, IHeaderPdf } from '../pdfs/pedidos/PedidosPDF'
 import { LoaderInfo } from '../../Components/LoaderInfo/LoaderInfo'
 import { MdDelete } from 'react-icons/md'
-import { FormateoNumberInt } from '../../Utils/Helpers'
+import { AgregarAlerta, FormateoNumberInt } from '../../Utils/Helpers'
 import { IArrayProductos } from '../../Utils/GlobalInterfaces'
 import ROUTES_PATHS from '../../routers/Paths'
 import './styles/styles.css'
@@ -15,6 +15,9 @@ import { AiFillEye } from 'react-icons/ai'
 import { ModalRevisionAgregarProducto } from './Modales/ModalRevisionAgregarProducto'
 import { ModalRevisionVerProducto } from './Modales/ModalRevisionVerProducto'
 import { PermisosContext } from '../../context/permisosContext'
+import { IEncargados, TSeguimiento } from './Pedidos'
+import { useAlert } from '../../hooks/useAlert'
+
 
 export const Revision: React.FC = () => {
 
@@ -23,6 +26,7 @@ export const Revision: React.FC = () => {
     const { setMenuSelected } = useContext(MenuSelectedContext)
     const { permisos } = useContext(PermisosContext)
     const navigate = useNavigate()
+    const { createToast, alerts } = useAlert()
 
 
     //ESTADOS
@@ -37,14 +41,31 @@ export const Revision: React.FC = () => {
     const [referenciaInfoProducto, setreferenciaInfoProducto] = useState('')
     const [opcionLista, setopcionLista] = useState(0)
 
-    useEffect(() => {
+    const [encargados, setencargados] = useState<IEncargados>({} as IEncargados)
+    const [encargadoRevisionId, setencargadoRevisionId] = useState(0)
+    const [encargadoAlistamiento1Id, setencargadoAlistamiento1Id] = useState(0)
+    const [encargadoAlistamiento2Id, setencargadoAlistamiento2Id] = useState(0)
+    const [encargadoAlistamiento3Id, setencargadoAlistamiento3Id] = useState(0)
+    const [nroCajas, setnroCajas] = useState("0")
 
+    useEffect(() => {
         GetInfoPedido()
         setMenuSelected(MenuSections.PEDIDOS)
+        consultarEncargados()
+        consultarInformacionEncargadosEnSeguimientos()
     }, [])
 
     const compararNombresAZ = (a: IDataProductosPdf, b: IDataProductosPdf) => {
         return a.strIdProducto.localeCompare(b.strIdProducto)
+    }
+
+    const consultarEncargados = async () => {
+        try {
+            const encargados = await axios.get('/pedidos/encargados')
+            setencargados(encargados.data)
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const GetInfoPedido = () => {
@@ -235,11 +256,11 @@ export const Revision: React.FC = () => {
 
         try {
             let estado = 4;
-            
+
             if (opcionLista == 1) {
                 estado = 5
             }
-            
+
             await axios.put('/pedidos/actualizar_estado', {
                 id: headerPedido.intIdpedido,
                 estado: estado
@@ -312,6 +333,69 @@ export const Revision: React.FC = () => {
         }
     }
 
+    const consultarInformacionEncargadosEnSeguimientos = async () => {
+        try {
+            if (pedidoId) {
+                const response = await axios.get(`/pedidos/seguimiento?idPedido=${pedidoId}`);
+                const data: TSeguimiento = response.data.data;
+                console.log(data)
+                setencargadoRevisionId(data.Encargado_Revision ? parseInt(data.Encargado_Revision) : 0)
+                setencargadoAlistamiento1Id(data.Encargado_Alistamiento1 ? parseInt(data.Encargado_Alistamiento1) : 0)
+                setencargadoAlistamiento2Id(data.Encargado_Alistamiento2 ? parseInt(data.Encargado_Alistamiento2) : 0)
+                setencargadoAlistamiento3Id(data.Encargado_Alistamiento3 ? parseInt(data.Encargado_Alistamiento3) : 0)
+                setnroCajas(data.NroCajas ? data.NroCajas : "")
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const actualizarEncargadosSeguimientoPedido = async () => {
+        if (pedidoId) {
+            try {
+                await axios.post('/pedidos/seguimiento/encargados', {
+                    idEncargado1: encargadoAlistamiento1Id,
+                    idEncargado2: encargadoAlistamiento2Id,
+                    idEncargado3: encargadoAlistamiento3Id,
+                    idEncargadoRevision: encargadoRevisionId,
+                    nroCajas,
+                    idPedido: pedidoId
+                })
+
+                AgregarAlerta(createToast, 'Encargados Actualizados con exito', 'success')
+            } catch (error) {
+                AgregarAlerta(createToast, 'Error al actualizar los encargados', 'danger')
+                console.log(error)
+            }
+        } else {
+            AgregarAlerta(createToast, 'Error con el Nro del pedido', 'danger')
+        }
+
+
+    }
+
+    const handleChangeEncargados = (e: React.ChangeEvent<HTMLSelectElement>, encargado: number) => {
+        const value = parseInt(e.target.value)
+
+        switch (encargado) {
+            case 1:
+                setencargadoAlistamiento1Id(value)
+                break;
+            case 2:
+                setencargadoAlistamiento2Id(value)
+                break;
+            case 3:
+                setencargadoAlistamiento3Id(value)
+                break;
+            case 4:
+                setencargadoRevisionId(value)
+                break;
+
+            default:
+                break;
+        }
+    }
+
     return (
         <AppLayout>
             <div className='w-full h-screen py-3'>
@@ -346,6 +430,96 @@ export const Revision: React.FC = () => {
                                             </article>
                                         </section>
                                     </div>
+                                    <div>
+                                        <h3 className='my-2 text-2xl font-semibold'>Datos Pedido</h3>
+                                        <section className='grid content-center grid-cols-2 gap-x-4 xl:grid-cols-4'>
+                                            <label>
+                                                <p>Revisión</p>
+                                                <select
+                                                    className='min-w-[250px] px-2 py-1 rounded outline-gray-400 border-gray-500 border-2'
+                                                    value={encargadoRevisionId}
+                                                    onChange={(e) => {
+                                                        handleChangeEncargados(e, 4)
+                                                    }}
+                                                >
+                                                    <option value={0}>Sin encargado</option>
+                                                    {
+                                                        encargados.revision.map((encargado) => (
+                                                            <option value={encargado.id} key={encargado.id}>{encargado.nombre.toUpperCase()}</option>
+                                                        ))
+                                                    }
+                                                </select>
+                                            </label>
+
+                                            <label>
+                                                <p>Alistamiento 1</p>
+                                                <select
+                                                    className='min-w-[250px] px-2 py-1 rounded outline-gray-400 border-gray-500 border-2'
+                                                    value={encargadoAlistamiento1Id}
+                                                    onChange={(e) => {
+                                                        handleChangeEncargados(e, 1)
+                                                    }}
+                                                >
+                                                    <option value={0}>Sin encargado</option>
+                                                    {
+                                                        encargados.alistamiento.map((encargado) => (
+                                                            <option value={encargado.id} key={encargado.id}>{encargado.nombre.toUpperCase()}</option>
+                                                        ))
+                                                    }
+                                                </select>
+                                            </label>
+                                            <label>
+                                                <p>Alistamiento 2</p>
+                                                <select
+                                                    className='min-w-[250px] px-2 py-1 rounded outline-gray-400 border-gray-500 border-2'
+                                                    value={encargadoAlistamiento2Id}
+                                                    onChange={(e) => {
+                                                        handleChangeEncargados(e, 2)
+                                                    }}
+                                                >
+                                                    <option value={0}>Sin encargado</option>
+                                                    {
+                                                        encargados.alistamiento.map((encargado) => (
+                                                            <option value={encargado.id} key={encargado.id}>{encargado.nombre.toUpperCase()}</option>
+                                                        ))
+                                                    }
+                                                </select>
+                                            </label>
+                                            <label>
+                                                <p>Alistamiento 3</p>
+                                                <select
+                                                    className='min-w-[250px] px-2 py-1 rounded outline-gray-400 border-gray-500 border-2'
+                                                    value={encargadoAlistamiento3Id}
+                                                    onChange={(e) => {
+                                                        handleChangeEncargados(e, 3)
+                                                    }}
+                                                >
+                                                    <option value={0}>Sin encargado</option>
+                                                    {
+                                                        encargados.alistamiento.map((encargado) => (
+                                                            <option value={encargado.id} key={encargado.id}>{encargado.nombre.toUpperCase()}</option>
+                                                        ))
+                                                    }
+                                                </select>
+                                            </label>
+
+                                            <label>
+                                                <p>Nro cajas</p>
+                                                <input
+                                                    type='text'
+                                                    className='min-w-[250px] px-2 py-1 rounded outline-gray-400 border-gray-500 border-2'
+                                                    value={nroCajas}
+                                                    onChange={(e) => {
+                                                        setnroCajas(e.target.value)
+                                                    }}
+                                                />
+                                            </label>
+                                        </section>
+                                        <div className='my-6'>
+                                            <span onClick={actualizarEncargadosSeguimientoPedido} className='px-4 py-2 text-center text-white duration-150 bg-green-500 rounded cursor-pointer hover:bg-green-600'>Actualizar Datos</span>
+                                        </div>
+                                    </div>
+                                    <h3 className='my-2 text-2xl font-semibold'>Pedido</h3>
                                     <article className='flex flex-col items-start px-4 my-2 gap-x-6 gap-y-3 xl:items-center xl:px-0 xl:text-start xl:flex-row xl:justify-start'>
                                         <p className='font-bold'>Total: <span className='font-medium'>${FormateoNumberInt(headerPedido.intValorTotal.toString())}</span></p>
 
@@ -445,6 +619,30 @@ export const Revision: React.FC = () => {
                                         </table>
                                     </div>
                                     <br />
+                                    <div className='flex px-4 gap-x-4'>
+                                        <label className='w-full'>
+                                            <p>Observación pedido</p>
+                                            <textarea
+                                                disabled={true}
+                                                value={headerPedido.strObservacion}
+                                                className='w-full p-4 border rounded outline-none resize-none border-slate-500'
+                                            />
+                                        </label>
+
+                                        {
+                                            headerPedido.observacionTercero !== "" && (
+                                                <label className='w-full'>
+                                                    <p>Observación Tercero</p>
+                                                    <textarea
+                                                        disabled={true}
+                                                        value={headerPedido.observacionTercero}
+                                                        className='w-full p-4 border rounded outline-none resize-none border-slate-500'
+                                                    />
+                                                </label>
+                                            )
+                                        }
+
+                                    </div>
                                     {
                                         (permisos.find((item) => item.id_permiso == 3) || permisos.find((item) => item.id_permiso == 14)) && (
                                             <div className='flex justify-center py-4 xl:justify-end'>
@@ -466,6 +664,7 @@ export const Revision: React.FC = () => {
                         )
                     }
                 </section>
+
             </div >
 
             {
@@ -489,6 +688,7 @@ export const Revision: React.FC = () => {
                     />
                 )
             }
+            {alerts}
         </AppLayout >
     )
 }
