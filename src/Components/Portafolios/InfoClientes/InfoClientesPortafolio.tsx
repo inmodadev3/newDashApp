@@ -61,6 +61,7 @@ export const InfoClientesPortafolio: React.FC<InfoProps> = ({ setviewInfoCliente
     const [loadingGrafico, setloadingGrafico] = useState(true)
     const [Observacion, setObservacion] = useState("")
     const [contactos, setcontactos] = useState<contactos[]>([])
+    const [ultimoPedido, setultimoPedido] = useState<number | null>(null)
     const { permisos } = useContext(PermisosContext)
     const [colors, setColors] = useState<string[]>([]);
     const [colorsInitialized, setColorsInitialized] = useState<boolean>(false);
@@ -94,6 +95,7 @@ export const InfoClientesPortafolio: React.FC<InfoProps> = ({ setviewInfoCliente
                 setdataCliente(response.data.data)
                 setdataGraficaProductos(response.data.grafica)
                 setloadingGrafico(false)
+                setultimoPedido(response.data.Ultimo_Pedido)
             }).catch((err) => {
                 console.error(err)
             })
@@ -120,9 +122,9 @@ export const InfoClientesPortafolio: React.FC<InfoProps> = ({ setviewInfoCliente
                 strIdCliente: dataCliente.idTercero
             })
             dataCliente.observacion = Observacion
-            AgregarAlerta(createToast,'OBSERVACIÓN ACTUALIZADA','success')
+            AgregarAlerta(createToast, 'OBSERVACIÓN ACTUALIZADA', 'success')
         } catch (error) {
-            AgregarAlerta(createToast,'Error al actualizar la observacion','danger')
+            AgregarAlerta(createToast, 'Error al actualizar la observacion', 'danger')
             console.error(error)
         }
     }
@@ -195,6 +197,17 @@ export const InfoClientesPortafolio: React.FC<InfoProps> = ({ setviewInfoCliente
                                 <span className='mr-5'><FaMoneyBillWave size={20} /></span>
                                 <span>Precio {dataCliente.precioTercero}</span>
                             </div>
+                            {
+                                ultimoPedido !== null && (
+                                    <div className='flex items-center justify-center w-full mt-5'>
+                                        <a
+                                            href={`#/pedidos/pdf/${ultimoPedido}`}
+                                            target='_blank'
+                                            className='mx-5 font-bold text-center text-orange-500 underline'
+                                        >Ver ultimo Pedido</a>
+                                    </div>
+                                )
+                            }
                         </div>
                         <button className='w-auto px-12 py-2 my-12 text-white rounded bg-sky-800' onClick={() => { setviewInfoCliente(false) }}>Cerrar</button>
 
