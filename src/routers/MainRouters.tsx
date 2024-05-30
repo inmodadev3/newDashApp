@@ -24,6 +24,7 @@ import { Revision } from "../Views/Pedidos/Revision"
 import { SeguimientosPanel } from "../Views/Pedidos/Seguimientos/SeguimientosPanel"
 import { Encargados } from "../Views/Pedidos/Encargados/Encargados"
 import { AgregarEncargado } from "../Views/Pedidos/Encargados/AgregarEncargado"
+import { ReportesDropiPDF } from "../Views/pdfs/pedidos/ReportesDropiPDF"
 
 const MainRouters = () => {
     return(
@@ -54,6 +55,7 @@ const MainRouters = () => {
 
 
                 <Route path="/pedidos/pdf/:pedidoId" Component={PedidosPDF}/>
+                <Route path="/pedidos/reporte/dropi" Component={ReportesDropiPDF}/>
                 <Route path="/pedidos/revisar/:pedidoId" Component={Revision}/>
             </Routes>
         </HashRouter>
