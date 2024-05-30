@@ -63,17 +63,27 @@ export const BuscadorPedidos: React.FC<IBuscadorProps> = ({ ConsultarPedidosEnPr
     };
 
     return (
-        <div className='p-2'>
+        <div className='flex items-center justify-between p-2'>
             <input
                 type='text'
                 placeholder='Buscar Nro de pedido'
-                className="w-full xl:w-1/2 px-4 py-2 my-2 border-2 border-gray-400 rounded outline-none focus:border-sky-500"
+                className="w-full px-4 py-2 my-2 border-2 border-gray-400 rounded outline-none xl:w-1/2 focus:border-sky-500"
                 value={nroPedido}
                 onChange={handleNroPedidoChange}
                 onKeyUp={handleInputChange}
                 min={1}
                 ref={typingTime}
             />
+
+            <a
+                href='/#/pedidos/reporte/dropi'
+                className='px-4 py-2 mx-2 text-white duration-300 bg-blue-500 rounded cursor-pointer hover:bg-blue-600'
+                target={'_blank'}
+            >
+                <span className='text-white'>
+                    Generar reporte droppi
+                </span>
+            </a>
         </div>
     )
 }
