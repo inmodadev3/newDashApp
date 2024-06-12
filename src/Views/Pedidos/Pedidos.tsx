@@ -476,10 +476,10 @@ export const Pedidos: React.FC = () => {
                                                         pedidos?.map((pedido) => (
                                                             <tr
                                                                 key={pedido.intIdPedido}
-                                                                className=" flex flex-col gap-y-4 pb-4 xl:table-row border-b-2 border-b-black/20 xl:text-center xl:py-12 xl:[&>td]:pb-8 [&>td]:text-sm [&>td]:px-4 xl:[&>td]:px-0"
+                                                                className=" flex flex-col gap-y-4 pb-4 xl:table-row border-b-2 border-b-black/20 xl:text-center  [&>td]:text-sm [&>td]:px-4 xl:[&>td]:px-0 xl:[&>td]:py-6"
                                                             >
-                                                                <td className='py-4 text-white bg-blue-500 xl:bg-transparent xl:text-black'>{pedido.intIdPedido}</td>
-                                                                <td className="flex flex-col h-full">
+                                                                <td className='text-white bg-blue-500 xl:bg-transparent xl:text-black'>{pedido.intIdPedido}</td>
+                                                                <td className="flex flex-col">
                                                                     <span>{moment.utc(pedido.dtFechaEnvio).local().format("MMM. DD, YYYY")}</span>
                                                                     <span>{moment.utc(pedido.dtFechaEnvio).local().format("hh:mm A")}</span>
                                                                 </td>
