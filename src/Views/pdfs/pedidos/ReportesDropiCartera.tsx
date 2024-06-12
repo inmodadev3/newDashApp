@@ -3,23 +3,11 @@ import { MenuSelectedContext } from '../../../context/UseContextProviders'
 import axios from '../../../Utils/BaseUrlAxio'
 import { AppLayout } from '../../../Components/AppLayout/AppLayout'
 import { PDFViewer } from '@react-pdf/renderer'
-import { TemplateReportes } from '../../../templates/pedidos/TemplateReportes'
+import { PropsReportes } from './ReportesDropiPDF'
+import { TemplateReportesCartera } from '../../../templates/pedidos/TemplateReportesCartera'
 
-export type PropsReportes = {
-    intIdPedido: number,
-    strIdPedidoVendedor: number,
-    strNombVendedor: string,
-    strNombCliente: string,
-    dtFechaFinalizacion: string,
-    dtFechaEnvio: string,
-    intValorTotal: number,
-    intEstado: number,
-    pago: number,
-    isDropi: number
-}
 
-export const ReportesDropiPDF:React.FC = () => {
-
+export const ReportesDropiCartera: React.FC = () => {
     const { setMenuSelected } = useContext(MenuSelectedContext)
     const [reportes, setreportes] = useState<PropsReportes[]>([])
     const [isLoadingData, setisLoadingData] = useState(false)
@@ -32,7 +20,7 @@ export const ReportesDropiPDF:React.FC = () => {
     const obtenerReporte = async () => {
         setisLoadingData(true)
         try {
-            const response = await axios.get('/pedidos/reportes/dropi/pendientes')
+            const response = await axios.get(`/pedidos/reportes/dropi/cartera`)
             console.log(response)
             setreportes(response.data.reporte)
         } catch (error) {
@@ -51,7 +39,7 @@ export const ReportesDropiPDF:React.FC = () => {
                         (!isLoadingData && reportes) &&
                         (
                             <PDFViewer style={{ flex: 1, width: '99%', height: '99%' }}>
-                                <TemplateReportes datos={reportes} />
+                                <TemplateReportesCartera datos={reportes} />
                             </PDFViewer>
                         )
                     }

@@ -25,6 +25,8 @@ import { SeguimientosPanel } from "../Views/Pedidos/Seguimientos/SeguimientosPan
 import { Encargados } from "../Views/Pedidos/Encargados/Encargados"
 import { AgregarEncargado } from "../Views/Pedidos/Encargados/AgregarEncargado"
 import { ReportesDropiPDF } from "../Views/pdfs/pedidos/ReportesDropiPDF"
+import { ReportesDropiFechasPDF } from "../Views/pdfs/pedidos/ReportesDropiFechasPDF"
+import { ReportesDropiCartera } from "../Views/pdfs/pedidos/ReportesDropiCartera"
 
 const MainRouters = () => {
     return(
@@ -54,8 +56,10 @@ const MainRouters = () => {
                 <Route path={ROUTES_PATHS.CREAR_ENCARGADOS} Component={AgregarEncargado}/>
 
 
+                <Route path="/pedidos/reporte/dropi/pendientes" Component={ReportesDropiPDF}/>
+                <Route path="/pedidos/reporte/dropi" Component={ReportesDropiFechasPDF}/>
+                <Route path="/pedidos/reporte/dropi/cartera" Component={ReportesDropiCartera}/>
                 <Route path="/pedidos/pdf/:pedidoId" Component={PedidosPDF}/>
-                <Route path="/pedidos/reporte/dropi" Component={ReportesDropiPDF}/>
                 <Route path="/pedidos/revisar/:pedidoId" Component={Revision}/>
             </Routes>
         </HashRouter>

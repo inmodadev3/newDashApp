@@ -1,5 +1,6 @@
 import axios from '../../Utils/BaseUrlAxio'
 import React, { useState, useRef } from 'react'
+import { ReportesDropi } from './ReportesDropi/ReportesDropi'
 
 interface IBuscadorProps {
     ConsultarPedidosEnProceso: () => void
@@ -75,15 +76,7 @@ export const BuscadorPedidos: React.FC<IBuscadorProps> = ({ ConsultarPedidosEnPr
                 ref={typingTime}
             />
 
-            <a
-                href='/#/pedidos/reporte/dropi'
-                className='px-4 py-2 mx-2 text-white duration-300 bg-blue-500 rounded cursor-pointer hover:bg-blue-600'
-                target={'_blank'}
-            >
-                <span className='text-white'>
-                    Generar reporte droppi
-                </span>
-            </a>
+            <ReportesDropi />
         </div>
     )
 }

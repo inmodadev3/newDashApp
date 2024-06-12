@@ -3,26 +3,29 @@ import { MenuSelectedContext } from '../../../context/UseContextProviders'
 import axios from '../../../Utils/BaseUrlAxio'
 import { AppLayout } from '../../../Components/AppLayout/AppLayout'
 import { PDFViewer } from '@react-pdf/renderer'
-import { TemplateReportes } from '../../../templates/pedidos/TemplateReportes'
+import { useLocation } from 'react-router-dom'
+import { TemplateReportesFechas } from '../../../templates/pedidos/TemplateReportesFechas'
 
 export type PropsReportes = {
     intIdPedido: number,
     strIdPedidoVendedor: number,
     strNombVendedor: string,
     strNombCliente: string,
-    dtFechaFinalizacion: string,
+    dtFechaFinalizacion: '',
     dtFechaEnvio: string,
     intValorTotal: number,
     intEstado: number,
     pago: number,
-    isDropi: number
+    isDropi: number,
+    devolucion: number
 }
 
-export const ReportesDropiPDF:React.FC = () => {
 
+export const ReportesDropiFechasPDF: React.FC = () => {
     const { setMenuSelected } = useContext(MenuSelectedContext)
     const [reportes, setreportes] = useState<PropsReportes[]>([])
     const [isLoadingData, setisLoadingData] = useState(false)
+    const queryParams = useLocation().search
 
     useEffect(() => {
         setMenuSelected(4)
@@ -32,8 +35,7 @@ export const ReportesDropiPDF:React.FC = () => {
     const obtenerReporte = async () => {
         setisLoadingData(true)
         try {
-            const response = await axios.get('/pedidos/reportes/dropi/pendientes')
-            console.log(response)
+            const response = await axios.get(`/pedidos/reportes/dropi${queryParams}`)
             setreportes(response.data.reporte)
         } catch (error) {
             alert("Ha ocurrido un error")
@@ -45,13 +47,13 @@ export const ReportesDropiPDF:React.FC = () => {
 
     return (
         <AppLayout>
-            <section>
+             <section>
                 <div className='w-full h-screen py-2'>
                     {
                         (!isLoadingData && reportes) &&
                         (
                             <PDFViewer style={{ flex: 1, width: '99%', height: '99%' }}>
-                                <TemplateReportes datos={reportes} />
+                                <TemplateReportesFechas datos={reportes} />
                             </PDFViewer>
                         )
                     }
