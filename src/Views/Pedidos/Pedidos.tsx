@@ -111,6 +111,7 @@ export const Pedidos: React.FC = () => {
     const { setMenuSelected, setSubmenuSelected } = useContext(MenuSelectedContext)
     const { permisos } = useContext(PermisosContext)
     const [revisionTrue, setrevisionTrue] = useState(false)
+    const [pagoHgi, setpagoHgi] = useState(false)
     const { createToast, alerts } = useAlert()
     const [isViewModalSeguimiento, setIsViewModalSeguimiento] = useState<boolean>(false)
     const [idPedidoSeguimiento, setidPedidoSeguimiento] = useState(0)
@@ -169,10 +170,17 @@ export const Pedidos: React.FC = () => {
     useEffect(() => {
         if (permisos.length > 1) {
             let revision = permisos.find(permiso => permiso.id_permiso == 14)
+            let pagoHGI = permisos.find(permiso => permiso.id_permiso == 17)
 
             if (revision !== null && revision !== undefined) {
                 setrevisionTrue(true)
             }
+
+            if (pagoHGI !== null && pagoHGI !== undefined) {
+                setpagoHgi(true)
+            }
+
+
         }
     }, [permisos])
 
@@ -596,6 +604,7 @@ export const Pedidos: React.FC = () => {
                         intIdPedido={idPedidoSeguimiento}
                         setpedidos={setpedidos}
                         setpedidosCopy={setpedidosCopy}
+                        enablePagoHGI={pagoHgi}
                     />
                 )
             }

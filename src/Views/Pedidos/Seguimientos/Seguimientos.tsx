@@ -12,6 +12,7 @@ interface ISeguimientosProps {
     intIdPedido: number
     setpedidos: React.Dispatch<React.SetStateAction<TPedidosProps[]>> | React.Dispatch<React.SetStateAction<PropsSeguimientos[]>>
     setpedidosCopy?: React.Dispatch<React.SetStateAction<TPedidosProps[]>> | React.Dispatch<React.SetStateAction<PropsSeguimientos[]>>
+    enablePagoHGI?: boolean
 }
 
 const DATOS_INICIALES: TSeguimiento = {
@@ -45,10 +46,11 @@ const DATOS_INICIALES: TSeguimiento = {
 }
 
 
-export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSeguimiento, intIdPedido, setpedidos, setpedidosCopy }) => {
+export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSeguimiento, intIdPedido, setpedidos, setpedidosCopy, enablePagoHGI = false }) => {
 
     const [encargados, setencargados] = useState<IEncargados>({} as IEncargados)
     const [seguimientoData, setSeguimientoData] = useState<TSeguimiento>(DATOS_INICIALES as TSeguimiento)
+
 
     useEffect(() => {
         consultarEncargados()
@@ -456,20 +458,23 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                 <footer className='flex justify-between py-2'>
                     <button className='p-2 text-white bg-green-600 rounded' onClick={Actualizar_Seguimiento}>Actualizar</button>
                     <div className='flex gap-x-3'>
-                        <label className={`flex justify-center items-center`}>
-                            <p className='m-1'>Pago HGI</p>
-                            <input
-                                type={'checkbox'}
-                                checked={seguimientoData.PagoHGI}
-                                disabled={seguimientoData.PagoHGI}
-                                className={`px-2 py-1 rounded outline-gray-400 border gray-300 min-w-min`}
-                                onChange={(e) => {
-                                    handleChangeValueSeguimiento(e.target.checked, 'PagoHGI')
-                                }}
-                            />
-                        </label>
 
-
+                        {
+                            enablePagoHGI && (
+                                <label className={`flex justify-center items-center`}>
+                                    <p className='m-1'>Pago HGI</p>
+                                    <input
+                                        type={'checkbox'}
+                                        checked={seguimientoData.PagoHGI}
+                                        disabled={seguimientoData.PagoHGI}
+                                        className={`px-2 py-1 rounded outline-gray-400 border gray-300 min-w-min`}
+                                        onChange={(e) => {
+                                            handleChangeValueSeguimiento(e.target.checked, 'PagoHGI')
+                                        }}
+                                    />
+                                </label>
+                            )
+                        }
 
                         <label className={`flex justify-center items-center`}>
                             <p className='m-1'>{seguimientoData.isDropi ? "Pagado" : "Despachado"}</p>
