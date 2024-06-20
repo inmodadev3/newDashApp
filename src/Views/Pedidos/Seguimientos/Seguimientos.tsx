@@ -348,6 +348,7 @@ export const Seguimientos: React.FC<ISeguimientosProps> = ({ setIsViewModalSegui
                                     <option value={"Brasilia"}>Brasilia</option>
                                     <option value={"472"}>472</option>
                                     <option value={"Domina"}>Domina</option>
+                                    <option value={"TCC"}>TCC</option>
                                 </select>
                             </label>
 
