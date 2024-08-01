@@ -20,14 +20,24 @@ export const quitarAcentos = (texto: string): string => {
 };
 
 export const fechaParseada = (fecha: Date | string): string => {
-    // Parsea la fecha en formato ISO
-    let fechaString = fecha.toString().substring(0, 10)
-    const fechaISO = parseISO(fechaString);
+    if (fecha) {
+        // Parsea la fecha en formato ISO
+        let fechaString = fecha.toString().substring(0, 10)
+        const fechaISO = parseISO(fechaString);
 
-    // Formatea la fecha en el formato deseado (mes y día de la semana)
-    const fechaFormateada = format(fechaISO, 'eee d MMM yyyy', { locale: es }).toUpperCase();
+        console.log(fechaISO)
+        // Formatea la fecha en el formato deseado (mes y día de la semana)
+        if (fecha.toString().length < 25) {
+            const fechaFormateada = format(fechaISO, 'eee d MMM yyyy', { locale: es }).toUpperCase();
+            return fechaFormateada;
+        } else {
+            return ""
+        }
+    } else {
+        return ""
+    }
 
-    return fechaFormateada;
+
 }
 
 export const AgregarAlerta = (createToast: any, texto: string, variante: "success" | "danger" | "warning") => {
