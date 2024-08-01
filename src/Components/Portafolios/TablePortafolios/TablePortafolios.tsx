@@ -30,7 +30,7 @@ type Props = {
 
 export const TablePortafolios: React.FC<Props> = ({ data, setviewGestionesCliente, setidClienteGestiones, setviewInfoCliente }) => {
     return (
-        <table className='table text-xs table_portafolio'>
+        <table className='table text-md table_portafolio'>
             <thead>
                 <tr>
                     <th>Estado</th>
