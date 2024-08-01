@@ -3,6 +3,7 @@ import './stylesTablePortafolio.css'
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
 import moment from 'moment';
+import { fechaParseada } from '../../../Utils/Helpers';
 
 export type PropsTercero = {
     stridCedula: string,
@@ -15,8 +16,9 @@ interface IDataPropsPortafolio {
     StrIdTercero: string
     Viaja: string
     ciudad: string
+    barrio: string
     ultima_Compra: number
-    ultima_gestion:Date
+    ultima_gestion: Date
 }
 
 type Props = {
@@ -28,7 +30,7 @@ type Props = {
 
 export const TablePortafolios: React.FC<Props> = ({ data, setviewGestionesCliente, setidClienteGestiones, setviewInfoCliente }) => {
     return (
-        <table className='table table_portafolio'>
+        <table className='table text-xs table_portafolio'>
             <thead>
                 <tr>
                     <th>Estado</th>
@@ -46,27 +48,40 @@ export const TablePortafolios: React.FC<Props> = ({ data, setviewGestionesClient
                 {
                     data.map((tercero) => (
                         <tr key={tercero.StrIdTercero} className={`${(moment(Date.now()).diff(moment(tercero.ultima_gestion).format('L'), 'days')) < 60 && "bg-cyan-200/80"}`}>
+
                             <td className={`estado`}>{tercero.Estado}</td>
                             <td>{tercero.StrIdTercero}</td>
                             <td>{tercero.Nombre_tercero}</td>
                             <td className='text-center'>{tercero.Viaja}</td>
-                            <td>{tercero.ultima_Compra !== null ? moment(tercero.ultima_Compra).local().format('DD-MM-yy') : ""}</td>
-                            <td>{tercero.ultima_gestion !== null ? moment.utc(tercero.ultima_gestion).local().format('DD-MM-yy') : ""}</td>
-                            <td>{tercero.ciudad}</td>
-                            <td className='w-12 text-center'><span className='flex cursor-pointer w-fit' onClick={() => {
+                            <td>{tercero.ultima_Compra !== null ? fechaParseada(tercero.ultima_Compra.toString()) : ""}</td>
+                            <td>{tercero.ultima_gestion !== null ? fechaParseada(tercero.ultima_gestion) : ""}</td>
+                            <td className='flex flex-col items-center justify-center'>
+                                <span>{tercero.ciudad}</span>
+                                {
+                                    (tercero.ciudad == "MEDELLÍN" && tercero.barrio == "LA CANDELARIA") && (
+                                        <span>HUECO</span>
+                                    )
+                                }
+                                {
+                                    (tercero.ciudad == "MEDELLÍN" && tercero.barrio !== "LA CANDELARIA") && (
+                                        <span>PERIFERIA</span>
+                                    )
+                                }
+                            </td>
+                            <td className='text-center w-fit'><span className='flex items-center justify-center cursor-pointer w-fit' onClick={() => {
                                 setviewGestionesCliente(true)
                                 setidClienteGestiones({
-                                    strNombre:tercero.Nombre_tercero,
+                                    strNombre: tercero.Nombre_tercero,
                                     stridCedula: tercero.StrIdTercero
                                 });
-                            }}><MdOutlineManageAccounts size={28} className="optionP" /></span></td>
-                            <td className='text-center w-fit'><span className='flex cursor-pointer w-fit' onClick={() => {
+                            }}><MdOutlineManageAccounts size={22} className="optionP" /></span></td>
+                            <td className='text-center w-fit'><span className='flex items-center justify-center cursor-pointer w-fit' onClick={() => {
                                 setviewInfoCliente(true)
                                 setidClienteGestiones({
-                                    strNombre:tercero.Nombre_tercero,
+                                    strNombre: tercero.Nombre_tercero,
                                     stridCedula: tercero.StrIdTercero
                                 });
-                            }}><AiOutlineUser size={28} className="optionP" /></span></td>
+                            }}><AiOutlineUser size={22} className="optionP" /></span></td>
                         </tr>
                     ))
                 }

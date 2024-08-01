@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { LoaderInfo } from '../../Components/LoaderInfo/LoaderInfo'
-import { AgregarAlerta, FormateoNumberInt } from '../../Utils/Helpers'
+import { AgregarAlerta, fechaParseada, FormateoNumberInt } from '../../Utils/Helpers'
 import { useAlert } from '../../hooks/useAlert'
 import axios from '../../Utils/BaseUrlAxio'
-import moment from 'moment'
 
 type PropsRecaudosMovimientos = {
     setLoadingMovimiento: React.Dispatch<React.SetStateAction<boolean>>
@@ -72,13 +71,13 @@ export const Recaudos_Movimientos: React.FC<PropsRecaudosMovimientos> = ({ setLo
         <div className='min-w-full'>
             {
                 LoadingMovimiento ? (
-                    <div className='flex items-center w-full mt-32 flex-col space-y-2'>
+                    <div className='flex flex-col items-center w-full mt-32 space-y-2'>
                         <LoaderInfo />
-                        <span className='text-md font-medium text-gray-600'>Cargando Recaudos...</span>
+                        <span className='font-medium text-gray-600 text-md'>Cargando Recaudos...</span>
                     </div>
                 ) : (
                     <section className='h-[430px] overflow-y-scroll'>
-                        <table className=' w-full border-b border-b-gray-800 '>
+                        <table className='w-full border-b border-b-gray-800'>
                             <thead className='border-b border-gray-400'>
                                 <tr className='[&>th]:font-semibold [&>th]:text-start [&>th]:py-2'>
 
@@ -94,8 +93,8 @@ export const Recaudos_Movimientos: React.FC<PropsRecaudosMovimientos> = ({ setLo
                                     recaudos.map((recaudo, index) => (
                                         <tr key={index} className='[&>td]:py-4 border-b border-b-gray-300 [&>td]:font-medium [&>td]:text-sm hover:bg-gray-300'>
                                             <td>{recaudo.Doc_Venta}</td>
-                                            <td>{moment(recaudo.Fecha_Doc).format('ll')}</td>
-                                            <td>{moment(recaudo.Fecha_Recaudo).format('ll')}</td>
+                                            <td>{fechaParseada(recaudo.Fecha_Doc)}</td>
+                                            <td>{fechaParseada(recaudo.Fecha_Recaudo)}</td>
                                             <td>{FormateoNumberInt(recaudo.valor.toFixed(0))}</td>
                                             <td>{FormateoNumberInt(recaudo.descuento.toFixed(0))}</td>
                                         </tr>

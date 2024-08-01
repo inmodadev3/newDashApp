@@ -9,6 +9,7 @@ interface IDataPropsPortafolio {
     StrIdTercero: string
     Viaja: string
     ciudad: string
+    barrio:string
     ultima_Compra: number
     ultima_gestion: Date
 }
@@ -87,6 +88,7 @@ export const BuscadorPortafolios: React.FC<propsBuscador> = ({ setdatosClientes,
             vendedorId: cedulaVendedor,
             clienteNombre: inputValue
         }).then((response) => {
+            console.log(response.data.data)
             setPaginas(response.data.pags)
             setdatosClientes(response.data.data)
         }).catch((err) => {
@@ -178,7 +180,7 @@ export const BuscadorPortafolios: React.FC<propsBuscador> = ({ setdatosClientes,
     const handleCiudadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedDescripcion = e.target.value;
 
-        if(selectedDescripcion.toLowerCase() == "todas"){
+        if (selectedDescripcion.toLowerCase() == "todas") {
             setciudadIdSelected("0")
             setciudadSelected("Todas");
             return;
@@ -218,7 +220,7 @@ export const BuscadorPortafolios: React.FC<propsBuscador> = ({ setdatosClientes,
                                     list="ciudades"
                                     name="ciudades"
                                     value={ciudadSelected}
-                                    className='w-full outline-none h-full'
+                                    className='w-full h-full outline-none'
                                     onChange={handleCiudadChange}
                                 />
 
@@ -287,18 +289,18 @@ export const BuscadorPortafolios: React.FC<propsBuscador> = ({ setdatosClientes,
                 }
             </div>
             <div className='flex gap-x-6'>
-                <p>Paginas: <span className=' font-bold'>{paginas}</span></p>
+                <p>Paginas: <span className='font-bold '>{paginas}</span></p>
                 <label className='flex gap-x-4'>
-                    <button onClick={PaginaAnterior} className='bg-blue-600 text-white px-4 py-1 rounded'>Anterior</button>
+                    <button onClick={PaginaAnterior} className='px-4 py-1 text-white bg-blue-600 rounded'>Anterior</button>
                     <input
                         type='number'
                         value={pagina}
-                        className=' outline-none w-12 text-center border border-gray-300'
+                        className='w-12 text-center border border-gray-300 outline-none '
                         min={0}
                         max={paginas}
                         onChange={HandleChangePagina}
                     />
-                    <button onClick={PaginaSiguiente} className='bg-blue-600 text-white px-4 py-1 rounded'>Siguiente</button>
+                    <button onClick={PaginaSiguiente} className='px-4 py-1 text-white bg-blue-600 rounded'>Siguiente</button>
 
                 </label>
             </div>

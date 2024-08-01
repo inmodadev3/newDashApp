@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { LoaderInfo } from '../../Components/LoaderInfo/LoaderInfo'
 import { useAlert } from '../../hooks/useAlert'
-import { AgregarAlerta, FormateoNumberInt, quitarAcentos } from '../../Utils/Helpers'
+import { AgregarAlerta, fechaParseada, FormateoNumberInt, quitarAcentos } from '../../Utils/Helpers'
 import axios from '../../Utils/BaseUrlAxio'
-import moment from 'moment'
 
 type PropsCartera = {
     setLoadingMovimiento: React.Dispatch<React.SetStateAction<boolean>>
@@ -52,7 +51,6 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
     const [texto_buscador_oportunidades, settexto_buscador_oportunidades] = useState('')
 
     useEffect(() => {
-        moment.locale('es-mx')
         ConsultarCarteraVendedor()
     }, [])
 
@@ -164,7 +162,7 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
                         <h3 className='text-2xl'>Propias</h3>
                         <section className='h-[450px] overflow-y-scroll'>
 
-                            <table className='w-full border-b  border-b-gray-800'>
+                            <table className='w-full border-b border-b-gray-800'>
                                 <thead className='border-b border-gray-400'>
                                     <tr className='[&>th]:font-semibold [&>th]:text-start [&>th]:py-2'>
                                         <th className='w-20'>Doc</th>
@@ -183,8 +181,8 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
                                             <tr key={index} className='[&>td]:py-4 border-b border-b-gray-300 [&>td]:font-medium [&>td]:text-sm'>
                                                 <td>{cartera.IntDocumento}</td>
                                                 <td>{cartera.StrNombre}</td>
-                                                <td>{moment(cartera.DatFecha).format('lll')}</td>
-                                                <td>{moment(cartera.DatVencimiento).format('lll')}</td>
+                                                <td>{fechaParseada(cartera.DatFecha)}</td>
+                                                <td>{fechaParseada(cartera.DatVencimiento)}</td>
                                                 <td>{FormateoNumberInt(cartera.IntSaldoF.toFixed(0))}</td>
                                                 <td>{cartera.StrDescripcion}</td>
                                                 <td className={`${cartera.IntEdadDoc < -9 && 'bg-lime-300'} ${(cartera.IntEdadDoc < -2 && cartera.IntEdadDoc > -10) && 'bg-yellow-200'} ${cartera.IntEdadDoc > -2 && 'bg-red-200'}`}>
@@ -210,7 +208,7 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
                         />
                         <section className='h-[450px] overflow-y-scroll'>
 
-                            <table className='w-full border-b  border-b-gray-800'>
+                            <table className='w-full border-b border-b-gray-800'>
                                 <thead className='border-b border-gray-400'>
                                     <tr className='[&>th]:font-semibold [&>th]:text-start [&>th]:py-2'>
                                         <th className='w-20'>Doc</th>
@@ -229,8 +227,8 @@ export const Cartera_Movimientos: React.FC<PropsCartera> = ({ setLoadingMovimien
                                             <tr key={index} className='[&>td]:py-4 border-b border-b-gray-300 [&>td]:font-medium [&>td]:text-sm'>
                                                 <td>{cartera.IntDocumento}</td>
                                                 <td>{cartera.StrNombre}</td>
-                                                <td>{moment(cartera.DatFecha).format('lll')}</td>
-                                                <td>{moment(cartera.DatVencimiento).format('lll')}</td>
+                                                <td>{fechaParseada(cartera.DatFecha)}</td>
+                                                <td>{fechaParseada(cartera.DatVencimiento)}</td>
                                                 <td>{FormateoNumberInt(cartera.IntSaldoF.toFixed(0))}</td>
                                                 <td>{cartera.StrDescripcion}</td>
                                                 <td className={`${cartera.IntEdadDoc < -9 && 'bg-lime-300'} ${(cartera.IntEdadDoc < -2 && cartera.IntEdadDoc > -10) && 'bg-yellow-200'} ${cartera.IntEdadDoc > -2 && 'bg-red-200'}`}>
