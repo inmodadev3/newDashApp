@@ -18,6 +18,7 @@ export interface IDataPropsPortafolio {
     StrIdTercero: string
     Viaja: string
     ciudad: string
+    barrio: string
     ultima_Compra: number
     ultima_gestion: Date
 }

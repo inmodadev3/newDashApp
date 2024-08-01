@@ -1,4 +1,6 @@
 import NotFound from '../../assets/img/img-no-disponible.jpg'
+import { format, parseISO } from 'date-fns'
+import { es } from 'date-fns/locale'
 
 export const URLAPI = 'https://panel.inmodafantasy.com.co:8083/api'
 export const URLAPIPruebas = 'https://localhost:8083/api'
@@ -15,12 +17,23 @@ export const FormateoNumberInt = (num: string): string => {
 
 export const quitarAcentos = (texto: string): string => {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}; 
+};
 
-export const AgregarAlerta = (createToast:any,texto:string,variante: "success" | "danger" | "warning") =>{
+export const fechaParseada = (fecha: Date | string): string => {
+    // Parsea la fecha en formato ISO
+    let fechaString = fecha.toString().substring(0, 10)
+    const fechaISO = parseISO(fechaString);
+
+    // Formatea la fecha en el formato deseado (mes y día de la semana)
+    const fechaFormateada = format(fechaISO, 'eee d MMM yyyy', { locale: es }).toUpperCase();
+
+    return fechaFormateada;
+}
+
+export const AgregarAlerta = (createToast: any, texto: string, variante: "success" | "danger" | "warning") => {
     createToast({
-        text:texto,
-        variant:variante
+        text: texto,
+        variant: variante
     })
 }
 
