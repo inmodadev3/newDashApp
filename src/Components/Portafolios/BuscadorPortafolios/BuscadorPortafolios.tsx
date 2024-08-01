@@ -88,7 +88,6 @@ export const BuscadorPortafolios: React.FC<propsBuscador> = ({ setdatosClientes,
             vendedorId: cedulaVendedor,
             clienteNombre: inputValue
         }).then((response) => {
-            console.log(response.data.data)
             setPaginas(response.data.pags)
             setdatosClientes(response.data.data)
         }).catch((err) => {
